@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFT3911 | Rapport 2</title>
+    <link rel="shortcut icon" href="./../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <style>
+        html,
+        body {
+            position: relative;
+            height: 100%;
+            font: normal 10px 'Segoe UI', 'Droid Sans', Ubuntu, 'Lucida Grande', Arial, Helvetica, sans-serif;
+            scroll-behavior: smooth;
+            background: #f5f5f5;
+            overflow-x: hidden;
+
+        }
+
+        h1,
+        h2 {
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: normal;
+        }
+
+        h2 {
+            font-size: 3em;
+        }
+
+        h3 {
+            font-size: 2.2em;
+            font-weight: normal;
+        }
+
+        h4 {
+            font-size: 1.8em
+        }
+
+        h5 {
+            font-size: 1.6em;
+        }
+
+        h6 {
+            font-size: 1.5em;
+            margin-top: 0;
+        }
+
+        p,
+        li,
+        td,
+        th {
+            font-size: 1.5em;
+        }
+
+        td p,
+        td li,
+        th li,
+        li li,
+        li p,
+        li td,
+        li th {
+            font-size: 1em;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #555;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: center;
+        }
+
+        .btn {
+            font-family: 'Segoe UI', 'Droid Sans', Ubuntu, 'Lucida Grande', Arial, sans-serif;
+            text-decoration: none;
+            text-align: center;
+            border: none;
+            background: none;
+            outline-width: 0;
+        }
+
+        .font-ui {
+            font-family: 'Segoe UI', 'Droid Sans', Ubuntu, 'Lucida Grande', Arial, sans-serif;
+        }
+
+
+        /* Organization
+        ---------------------------------------------------------------------------- */
+
+        .left {
+            float: left;
+        }
+
+        .right {
+            float: right;
+        }
+
+        .clear-fix {
+            clear: both;
+            display: block;
+        }
+
+        .clear-fix:after {
+            content: ".";
+            clear: both;
+            display: block;
+            height: 0;
+            visibility: hidden;
+        }
+
+        .row {
+            display: table-row;
+        }
+
+        .cell {
+            display: table-cell;
+        }
+
+        /* Reset */
+
+        .bare-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .bare-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .bare-table {
+            border: none;
+            table-layout: fixed;
+        }
+
+        .bare-table td,
+        .bare-table th {
+            border: none;
+        }
+
+        .bare-table th {
+            vertical-align: top;
+            text-align: left;
+        }
+
+
+        .inline-link {
+            text-decoration: underline;
+        }
+
+        .output {
+            text-decoration: none;
+            font-style: normal;
+        }
+
+        /* State
+        ---------------------------------------------------------------------------- */
+
+        .hidden {
+            display: none;
+        }
+
+        .fit-content {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .helper {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 60px;
+            padding: 3px 6px 4px;
+            border-radius: 1px;
+            font-size: 1.3rem;
+            font-weight: 500;
+            font-style: normal;
+            color: #555;
+            background-color: #e5e4e2;
+            box-shadow: 0 1px 2px -1px #999;
+            opacity: 0;
+            transition: .2s;
+            transform: scale(0);
+            transition-property: opacity, transform;
+            z-index: 20;
+        }
+
+        .ico-helper {
+            display: inline-block;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            height: 18px;
+            width: 18px;
+            color: #fff;
+            border-radius: 50%;
+            background-color: #6667AB;
+            font-style: normal;
+        }
+
+        .has-helper {
+            position: relative;
+        }
+
+        .has-helper:hover>.helper {
+            opacity: 1;
+            transform: scale(1) translateY(2px);
+        }
+
+        .ico-helper:focus+.helper {
+            opacity: 1;
+            transform: scale(1) translateY(2px);
+        }
+
+        .has-def {
+            position: relative;
+            display: inline-block;
+        }
+
+        .def-term {
+            position: relative;
+            display: flex;
+            align-items: center;
+            color: #6667AB;
+            padding-left: 2px;
+            padding-right: 2px;
+            border-bottom: 3px solid currentColor;
+            cursor: default;
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        .def-term:after {
+            content: "?";
+            text-align: center;
+            font-weight: bold;
+            margin-left: 3px;
+            height: 18px;
+            width: 18px;
+            font-size: 1.2rem;
+            border-radius: 50%;
+            background-color: #6667AB;
+            color: #fff;
+        }
+
+
+        .def {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 300px;
+            padding: 3px 6px 4px;
+            border-radius: 1px;
+            font-size: 1.3rem;
+            font-weight: 500;
+            font-style: normal;
+            color: #fff;
+            background-color: #232425;
+            box-shadow: 0 1px 2px -1px #999;
+            opacity: 0;
+            transform: scale(0);
+            transition: .2s;
+            transition-property: opacity, transform;
+            z-index: 20;
+        }
+
+        .has-def:hover>.def {
+            opacity: 1;
+            transform: scale(1) translateY(2px);
+        }
+
+        .report-header {
+            padding-top: 24px;
+            padding-bottom: 24px;
+            background-color: #fff;
+        }
+
+        .title-section {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding-left: 5vw;
+            padding-right: 5vw;
+        }
+
+        .report-title {
+            color: royalblue;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        .report-summary {
+            max-width: 800px;
+            font-size: 1.4em;
+            color: #555;
+        }
+
+        .report-resources {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .report-resource {
+            margin-left: 12px;
+        }
+
+        .report-resource-link {
+            padding: 8px 12px;
+            font-weight: bold;
+            color: #fff;
+            border-radius: 2px;
+            text-decoration: none;
+            background-color: #232425;
+        }
+
+        .report-resource-link:hover {
+            background-color: #1b1f23;
+        }
+
+        .section-title {
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            font-size: 4em;
+            font-weight: 300;
+        }
+
+        .subsection-title {
+            margin-bottom: 3px;
+            font-size: 3em;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .team-section {
+            padding-left: 5vw;
+            padding-right: 5vw;
+        }
+
+        .team-title {
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #1C3A94;
+        }
+
+        .members {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .member {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .member:not(:last-child) {
+            margin-right: 12px;
+        }
+
+        .member-pic {
+            display: block;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+        }
+
+        .member-role {
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .report-body {
+            flex-wrap: wrap;
+        }
+
+        .report-aside {
+            max-width: 550px;
+            padding: 10px;
+            background-color: #6667AB;
+        }
+
+        .report-aside .section-title {
+            color: #fff;
+        }
+
+        .report-main {
+            padding-top: 24px;
+            padding-left: 2%;
+            padding-right: 5vw;
+            flex: 1;
+        }
+
+        .main-section {
+            margin-bottom: 24px;
+        }
+
+        .nav {
+            color: #E87429;
+        }
+
+        .nav-item-title {
+            font-size: 1.1em;
+            margin: 0;
+        }
+
+        .nav-item-title__link {
+            display: block;
+            color: #fff;
+            font-weight: 500;
+            padding: 6px;
+            text-decoration: none;
+        }
+
+        .nav-item-details {
+            color: #f5f5f5;
+            padding-left: 6px;
+            line-height: 1.5;
+        }
+
+        .glossary-term {
+            font-weight: bold;
+            background: #222;
+            padding: 3px 6px;
+            display: inline-block;
+            border-radius: 2px;
+            color: #fff;
+        }
+
+        .glossary-def {
+            margin-top: -6px;
+            margin-left: 6px;
+            margin-bottom: 6px;
+            padding: 12px 6px 4px;
+            background-color: #e5e4e2;
+            border-radius: 4px;
+        }
+
+        .personas {
+            display: flex;
+        }
+
+        .persona {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin-right: 12px;
+            max-width: 360px;
+            padding: 6px 12px;
+            border-radius: 2px;
+            box-shadow: 0 1px 2px -1px #999;
+            background-color: #fff;
+            z-index: 2;
+        }
+
+        .persona-stat {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .persona-type {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            width: 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50%;
+        }
+
+        .persona-type--pp {
+            background-color: #FF6F61;
+        }
+
+        .persona-type--eco {
+            background-color: #88B04B;
+        }
+
+        .persona-market {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 6px;
+            height: 40px;
+            width: 40px;
+            color: #444;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50%;
+            background-color: #d5d5d5;
+        }
+
+        .persona-color {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #FF6F61;
+            height: 42px;
+            width: 42px;
+            font-weight: bold;
+            justify-self: center;
+            align-self: center;
+            font-size: 1.3rem;
+            border-radius: 50%;
+        }
+
+        .persona-identity {
+            display: flex;
+        }
+
+        .persona-name {
+            font-size: 1.2em;
+            font-weight: 300;
+            flex-grow: 2;
+        }
+
+        .persona-demography-line {
+            display: flex;
+        }
+
+        .persona-background {
+            padding: 6px;
+            color: #555;
+        }
+
+        .persona-title {
+            margin-top: 6px;
+            margin-bottom: 3px;
+            color: #222;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .use-case {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .use-case-diagram {
+            display: block;
+            height: 100%;
+            width: auto;
+            min-height: 800px;
+            min-width: 600px;
+            border-radius: 4px;
+            background-color: #d5d5d5;
+        }
+
+        .use-case-notes {
+            margin-left: 12px;
+        }
+
+        .scenario {
+            display: flex;
+            margin-bottom: 12px;
+            background-color: #fff;
+            border-radius: 3px;
+            box-shadow: 0 1px 2px #a9a9a9;
+        }
+
+        .scenario-meta {
+            padding: 12px;
+            max-width: 40%;
+            background-color: #e5e4e2;
+        }
+
+        .scenario-main {
+            flex-grow: 2;
+            padding: 12px;
+            margin-left: 12px;
+        }
+
+        .scenario-main-title {
+            margin: 0;
+            color: royalblue;
+        }
+
+        .scenario-alt-title {
+            margin: 0;
+            color: #FF6F61;
+        }
+
+        .cu-actors {
+            display: flex;
+        }
+
+        .cu-actor {
+            margin-right: 6px;
+            padding: 4px 6px;
+            color: #fff;
+            font-weight: 500;
+            background-color: #6667AB;
+            border-radius: 1px;
+        }
+
+        .cu-name {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .cu-goal {
+            margin: 0;
+            font-size: 1.6em;
+        }
+
+        .cu-part--notes {
+            margin-top: 12px;
+        }
+
+        .cu-part-title {
+            margin: 0;
+            margin-top: 6px;
+        }
+
+        .cu-conditions {
+            font-weight: 500;
+        }
+
+        .cu-notes {
+            color: #555;
+            margin: 0;
+            font-size: 1.4em;
+        }
+
+        .scenario-main-steps {
+            margin: 0;
+            padding-left: 16px;
+        }
+
+        .scenario-alt {
+            margin-top: 6px;
+        }
+
+        .scenario-alt p {
+            margin: 0;
+        }
+
+        .scenario-alt-steps {
+            counter-reset: topLevel;
+        }
+
+        .scenario-alt-steps:not(:last-child) {
+            margin-bottom: 6px;
+        }
+
+        .scenario-alt-step {
+            counter-increment: topLevel;
+            font-weight: 500;
+        }
+
+        .scenario-alt-step:before {
+            content: attr(value) counter(topLevel, lower-alpha) '. ';
+        }
+
+        .scenario-alt-steps ol {
+            font-weight: 400;
+            counter-reset: secondLevel;
+        }
+
+        .scenario-alt-steps ol li {
+            counter-increment: secondLevel;
+            margin-left: 12px;
+        }
+
+        .scenario-alt-steps ol li:before {
+            content: attr(value) counter(topLevel, lower-alpha) '.' counter(secondLevel, decimal) '. '
+        }
+
+        .glossary {
+            font-size: 1.4em;
+        }
+
+        .preview-img {
+            display: block;
+            width: 600px;
+            height: auto;
+        }
+
+        .report-footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 24px 5vw 24px;
+            color: #fff;
+            background-color: #292723;
+        }
+
+        .report-footer p {
+            margin: 0;
+            margin-bottom: 6px;
+        }
+
+        .activity-diagram {
+            display: block;
+
+            /* Minimum usable size */
+            min-width: 300px;
+            min-height: 300px;
+
+            /* Maximum size: never exceed viewport */
+            max-width: 100vw;
+            max-height: 100vh;
+
+            /* Scale nicely */
+
+            height: auto;
+
+            background-color: #d5d5d5;
+
+            /* Prevent overflow */
+            overflow: auto;
+        }
+
+        .dash:before {
+            content: '-';
+            margin-left: 4px;
+            margin-right: 8px;
+            font-weight: bold;
+            color: currentColor;
+        }
+
+        .check:before {
+            margin-left: 2px;
+            margin-right: 4px;
+            font-weight: bold;
+            content: '🗸';
+            color: currentColor;
+        }
+        #link{
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header class="report-header">
+        <div class="title-section">
+            <div>
+                <h1 class="report-title" id="up">Rapport du livrable 3 - Patrons de Conception</h1>
+                <p>Ce troisième rapport s’articule autour de cinquième axes majeurs :</p>
+
+                <ul>
+                   
+                </ul>
+            </div>
+
+            <ul class="bare-list report-resources">
+                <li class="report-resource">
+                    <a class="report-resource-link" href="https://github.com/likeskymore/3911-devoir3"
+                        target="_blank">
+                        Répertoire GitHub
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="team-section">
+            <h2 class="team-title">Équipe</h2>
+            <ul class="bare-list members">
+                <li class="member">
+                    <img class="member-pic" src="Assets/defaultPfp.png" alt="">
+                    <div class="member-identification">
+                        <span class="member-name">Dawson ZHANG</span>
+                        <span class="member-id">20268585</span>
+                    </div>
+                    <a href="mailto:prenom.nom@umontreal.ca">dawson.zhang@umontreal.ca</a>
+                    <span class="">Temps mis: 12h</span>
+                </li>
+                <li class="member">
+                    <img class="member-pic" src="Assets/defaultPfp.png" alt="">
+                    <div class="member-identification">
+                        <span class="member-name">Tien TRAN</span>
+                        <span class="member-id">20246669</span>
+                    </div>
+                    <a href="mailto:prenom.nom@umontreal.ca">tien.tran@umontreal.ca</a>
+                    <span class="">Temps mis: 12h</span>
+                </li>
+                <li class="member">
+                    <img class="member-pic" src="Assets/defaultPfp.png" alt="">
+                    <div class="member-identification">
+                        <span class="member-name">Trung NGUYEN</span>
+                        <span class="member-id">20238006</span>
+                    </div>
+                    <a href="mailto:prenom.nom@umontreal.ca">trung.nguyen@umontreal.ca</a>
+                    <span class="">Temps mis: 12h</span>
+                </li>
+            </ul>
+        </div>
+        <table cellpadding="7px" style="margin: 2em 0 0 10em">
+        <thead>
+            <tr>
+                <th class="first_col">
+                    Tâche
+                </th>
+                <th>
+                    Dawson Zhang
+                </th>
+                <th>
+                    Tien Tran
+                </th>
+                <th>
+                    Trung Nguyen
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="first_col">
+                    Patrons de conception requis
+                </td>
+                <td>
+                    33%
+                </td>
+                <td>
+                    33%
+                </td>
+                <td>
+                    33%
+                </td>
+            </tr>
+            <tr>
+                <td class="first_col">
+                    Patrons de conception extra
+                </td>
+                <td>
+                    33%
+                </td>
+                <td>
+                    33%
+                </td>
+                <td>
+                    33%
+                </td>
+            </tr>
+            <tr>
+                <td class="first_col">
+                    Diagramme de paquets
+                </td>
+                <td>
+                    33%
+                </td>
+                <td>
+                    33%
+                </td>
+                <td>
+                    33%
+                </td>
+            </tr>
+            <tr>
+                <td class="first_col">
+                    Qualité du design
+                </td>
+                <td>
+                    33%
+                </td>
+                <td>
+                    33%
+                </td>
+                <td>
+                    33%
+                </td>
+            </tr>
+            <tr>
+                <td class="first_col">
+                    Code
+                </td>
+                <td>
+                    33%
+                </td>
+                <td>
+                    33%
+                </td>
+                <td>
+                    33%
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </header>
+    <main class="report-body">
+        <aside class="report-aside">
+            <nav>
+                <h2 class="section-title">Contenu</h2>
+                <ul class="bare-list nav">
+                    <li class="nav-item">
+                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#petri">PATRONS DE CONCEPTION REQUIS (tâche 1)</a></h3>
+                        <ul class="bare-list nav-item-details">
+                            <a class="nav-item-title__link" href=""><li class="dash">Fabrique Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">Fabrique Diagramme de Séquence</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">Singleton Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">État Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">État Diagramme de Séquence</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">Observateur Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">ObservateurDiagramme de Séquence</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">Commande Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">Commande Diagramme de Séquence</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Séquence</li></a>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#statechart">PATRONS DE CONCEPTION AU CHOIX (tâche 2)</a></h3>
+                        <ul class="bare-list nav-item-details">
+                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Séquence</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Séquence</li></a>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#amelioration">DIAGRAMME DE PAQUETS (tâche 3)</a></h3>
+                        <ul class="bare-list nav-item-details">
+                            <a class="nav-item-title__link" href=""><li class="dash">diagramme de paquets</li></a>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#justification">DISCUSSION DE LA QUALITÉ DU DESIGN (tâche 4)</a></h3>
+                        <ul class="bare-list nav-item-details">
+                            <a class="nav-item-title__link" href=""><li class="dash">Discussion du couplage et de la cohésion des modules</li></a>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#justification">IMPLÉMENTATION (tâche 5)</a></h3>
+                        <ul class="bare-list nav-item-details">
+                            <a class="nav-item-title__link" href=""><li class="dash">Code</li></a>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <div class="report-main">
+
+
+        </div>
+    </main>
+    <footer class="report-footer">
+        <p>
+            Devoir 3 <br>
+            IFT3911 <br>
+            Hiver 2026
+        </p>
+
+        <p><a href="#up" id="link">Go up</a></p>
+    </footer>
+</body>
+
+</html>
