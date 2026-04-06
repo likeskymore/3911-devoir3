@@ -945,8 +945,35 @@
             </nav>
         </aside>
         <div class="report-main">
-
-
+            <h3 class="subsection-title" id="">Patrons de Conception</h3>
+            <h3 class="subsection-title" id="">Patrons de Conception au Choix</h3>
+            <h3 class="subsection-title" id="">Diagramme de Paquets</h3>
+            <h3 class="subsection-title" id="">Discussion et justification de la qualité du design</h3>
+            <p>
+                <strong>Discussion du couplage et de la cohésion des modules</strong>
+                Avec l introduction des patrons de conceptions dans notre projet, nous avons pu améliorer significativement la qualité de notre design. 
+                En effet, les patrons de conception nous ont permis de résoudre des problèmes de conception récurrents de manière efficace et élégante, tout en respectant les principes SOLID.
+                Cette approche a transformé l'architecture de nos couches logicielles, nous permettant d'évoluer d'une cohésion accidentelle ou logique vers une cohésion fonctionnelle optimale. 
+                À titre d'exemple, notre TripController, qui regroupait initialement des fonctionnalités disparates, a été refactorisé pour se concentrer exclusivement sur la logique des trajets ; 
+                les responsabilités de création ont, quant à elles, été déléguées à des Fabriques dédiées. Parallèlement, l'introduction du patron Observateur a permis de substituer le couplage par 
+                contenu par un couplage par données plus sain. Les classes n'ont désormais plus besoin d'accéder aux attributs internes de leurs voisines pour réagir aux changements, mais s'abonnent 
+                simplement à des notifications, renforçant ainsi la modularité et la flexibilité du système.
+                
+                <ul>
+                    <li>
+                        <strong>Fabrique: </strong> Le patron de conception de la fabrique nous a permis de centraliser la création d'instances d'objets, 
+                        ce qui a réduit le couplage entre les classes qui utilisent ces objets et les classes qui les créent. En delegant la responsabilité de la création d'objets à une fabrique, 
+                        on augmente le SRP et on respecte le principe OCP, ce qui améliore la maintenabilité et la flexibilité de notre code. Une generalisation via le DIP
+                        nous a aussi permis de réduire le couplage entre les modules en introduisant des interfaces claires et des abstractions appropriées.
+                    </li>
+                    <li>
+                        <strong>Singleton: </strong> Le patron Singleton assure qu'une classe n'est instanciée qu'une seule fois, offrant un contrôle rigoureux sur les ressources communes. 
+                        En dédiant un Singleton à chaque Fabrique, nous avons regroupé les fonctionnalités de création, ce qui améliore la cohésion de ces classes concernées. De plus, Ce mécanisme 
+                        sert de point d'accès global, réduisant la complexité liée à la gestion de l'état partagé (ID unique des entités par example) et facilitant la maintenance du code.
+                    </li>
+                </ul>
+            </p>
+            <h3 class="subsection-title" id="">Implémentation</h3>
         </div>
     </main>
     <footer class="report-footer">
