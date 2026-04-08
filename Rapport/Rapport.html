@@ -8,6 +8,7 @@
     <title>IFT3911 | Rapport 2</title>
     <link rel="shortcut icon" href="./../favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         html,
         body {
@@ -341,7 +342,7 @@
 
         .subsection-title {
             margin-bottom: 3px;
-            font-size: 3em;
+            font-size: 5em;
             font-weight: bold;
             color: #555;
         }
@@ -904,56 +905,125 @@
                 <h2 class="section-title">Contenu</h2>
                 <ul class="bare-list nav">
                     <li class="nav-item">
-                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#petri">PATRONS DE CONCEPTION REQUIS (tâche 1)</a></h3>
+                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#requis">PATRONS DE CONCEPTION REQUIS (tâche 1)</a></h3>
                         <ul class="bare-list nav-item-details">
-                            <a class="nav-item-title__link" href=""><li class="dash">Fabrique Diagramme de Classe</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">Fabrique Diagramme de Séquence</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">Singleton Diagramme de Classe</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">État Diagramme de Classe</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">État Diagramme de Séquence</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">Observateur Diagramme de Classe</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">ObservateurDiagramme de Séquence</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">Commande Diagramme de Classe</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">Commande Diagramme de Séquence</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Classe</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Séquence</li></a>
+                            <a class="nav-item-title__link" href="#FabriqueClass"><li class="dash">Fabrique Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href="#FabriqueSequence"><li class="dash">Fabrique Diagramme de Séquence</li></a>
+                            <a class="nav-item-title__link" href="#SingletonClass"><li class="dash">Singleton Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href="#EtatClass"><li class="dash">État Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href="#EtatSequence"><li class="dash">État Diagramme de Séquence</li></a>
+                            <a class="nav-item-title__link" href="#ObservateurClass"><li class="dash">Observateur Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href="#ObservateurSequence"><li class="dash">ObservateurDiagramme de Séquence</li></a>
+                            <a class="nav-item-title__link" href="#CommandeClass"><li class="dash">Commande Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href="#CommandeSequence"><li class="dash">Commande Diagramme de Séquence</li></a>
+                            <a class="nav-item-title__link" href="#VisiteurClass"><li class="dash">Visiteur Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href="#VisiteurSequence"><li class="dash">Visiteur Diagramme de Séquence</li></a>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#statechart">PATRONS DE CONCEPTION AU CHOIX (tâche 2)</a></h3>
+                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#au_choix">PATRONS DE CONCEPTION AU CHOIX (tâche 2)</a></h3>
                         <ul class="bare-list nav-item-details">
-                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Classe</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Séquence</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Classe</li></a>
-                            <a class="nav-item-title__link" href=""><li class="dash">Visiteur Diagramme de Séquence</li></a>
+                            <a class="nav-item-title__link" href="#MediateurClass"><li class="dash">Médiateur Diagramme de Classe</li></a>
+                            <a class="nav-item-title__link" href="#MediateurSequence"><li class="dash">Médiateur Diagramme de Séquence</li></a>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#amelioration">DIAGRAMME DE PAQUETS (tâche 3)</a></h3>
+                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#Paquets">DIAGRAMME DE PAQUETS (tâche 3)</a></h3>
                         <ul class="bare-list nav-item-details">
-                            <a class="nav-item-title__link" href=""><li class="dash">diagramme de paquets</li></a>
+                            <a class="nav-item-title__link" href="#Paquets"><li class="dash">diagramme de paquets</li></a>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#justification">DISCUSSION DE LA QUALITÉ DU DESIGN (tâche 4)</a></h3>
+                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#Justification">DISCUSSION DE LA QUALITÉ DU DESIGN (tâche 4)</a></h3>
                         <ul class="bare-list nav-item-details">
-                            <a class="nav-item-title__link" href=""><li class="dash">Discussion du couplage et de la cohésion des modules</li></a>
+                            <a class="nav-item-title__link" href="#Justification"><li class="dash">Discussion du couplage et de la cohésion des modules</li></a>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#justification">IMPLÉMENTATION (tâche 5)</a></h3>
+                        <h3 class="nav-item-title"><a class="nav-item-title__link" href="#Implementation">IMPLÉMENTATION (tâche 5)</a></h3>
                         <ul class="bare-list nav-item-details">
-                            <a class="nav-item-title__link" href=""><li class="dash">Code</li></a>
+                            <a class="nav-item-title__link" href="#Implementation"><li class="dash">Code</li></a>
                         </ul>
                     </li>
                 </ul>
             </nav>
         </aside>
         <div class="report-main">
-            <h3 class="subsection-title" id="">Patrons de Conception</h3>
-            <h3 class="subsection-title" id="">Patrons de Conception au Choix</h3>
-            <h3 class="subsection-title" id="">Diagramme de Paquets</h3>
-            <h3 class="subsection-title" id="">Discussion et justification de la qualité du design</h3>
+            <h3 class="subsection-title" id="requis">Patrons de conception</h3>
+            <br>
+            <h1>Patron de Fabrique</h1>
+            <br>
+            <div class=" flex flex-col justify-center">
+                <a href="../Rapport/Assets/FabriqueClass.svg"><img src="/Rapport/Assets/FabriqueClass.svg" alt="Patron de Fabrique" id="FabriqueClass"/></a>
+                <br>
+                <a href="../Rapport/Assets/FabriqueSequence.svg"><img src="/Rapport/Assets/FabriqueSequence.svg" alt="Patron de Fabrique" id="FabriqueSequence"/></a>
+            </div>
+            <br>
+            <h1>Patron Singleton</h1>
+            <br>
+            <div>
+                <h3 class="text-red-500">Ici, les classes Singleton correspondent aux classes du patron de Fabrique, mais avec leurs attributs et méthodes propres au Singleton. Nous n’avons pas représenté les liens, mais vous pouvez vous référer au même diagramme que celui de la fabrique, en remplaçant les classes concrètes de la fabrique par celles-ci. Elles sont donc techniquement reliées aux classes abstraites ...Factory, lesquelles seront ensuite connectées au DisplayMenu ainsi qu’aux classes concrètes qu’elles instancient.</h3>
+                <br>
+                <a href="../Rapport/Assets/SingletonsClass.svg"><img src="/Rapport/Assets/SingletonsClass.svg" alt="Patron Singleton" id="SingletonClass"/></a>
+                <br>
+                <h3 class="text-red-500">Dans la grille de correction, on ne voit pas de diagramme de séquence pour le singleton</h3>
+            </div>
+            <br>
+            <h1>Patron État</h1>
+            <br>
+            <div>
+                <a href="../Rapport/Assets/EtatClass.svg"><img src="/Rapport/Assets/EtatClass.svg" alt="Patron État" id="EtatClass"/></a>
+                <br>
+                <a href="../Rapport/Assets/EtatSequence.svg"><img src="/Rapport/Assets/EtatSequence.svg" alt="Patron État" id="EtatSequence"/></a> 
+            </div>
+            <br>
+            <h1>Patron Observateur</h1>
+            <br>
+            <div>
+                <a href="../Rapport/Assets/ObservateurClass.svg"><img src="/Rapport/Assets/ObservateurClass.svg" alt="Patron Observateur" id="ObservateurClass"/></a>
+                <br>
+                <a href="../Rapport/Assets/ObservateurSequence.svg"><img src="/Rapport/Assets/ObservateurSequence.svg" alt="Patron Observateur" id="ObservateurSequence"/></a>
+               
+            </div>
+            <br>
+            <h1>Patron Commande</h1>
+            <br>
+            <div>
+                <a href="../Rapport/Assets/CommandeClass.svg"><img src="/Rapport/Assets/CommandeClass.svg" alt="Patron Commande" id="CommandeClass"/></a>
+                <br>
+                <h3 class="text-red-500">Nous avons conçu plusieurs diagrammes de séquence pour illustrer l'utilisation du patron Commande, mais aussi du patron Memento, car dans l'énoncé on parle de la fonctionnalité undo.</h3>
+                <h3 id="CommandeSequence">Commande pour toutes les fonctionnalités trips/location/company</h3>
+                <a href="../Rapport/Assets/CommandeSeq1.svg"><img src="/Rapport/Assets/CommandeSeq1.svg" alt="Patron Commande" id="CommandeSeq1"/></a>
+                <h3>Commande pour l’ajustement de prix</h3>
+                <a href="../Rapport/Assets/CommandeSeq2.svg"><img src="/Rapport/Assets/CommandeSeq2.svg" alt="Patron Commande" id="CommandeSeq2"/></a>
+                <h3>Memento pour toutes les fonctionnalités trips/location/company</h3>
+                <a href="../Rapport/Assets/MementoSeq1.svg"><img src="/Rapport/Assets/MementoSeq1.svg" alt="Patron Commande" id="MementoSeq1"/></a>
+                <h3>Memento pour l’ajustement de prix</h3>
+                <a href="../Rapport/Assets/MementoSeq2.svg"><img src="/Rapport/Assets/MementoSeq2.svg" alt="Patron Commande" id="MementoSeq2"/></a>
+            </div>
+            <br>
+            <h1>Patron Visiteur</h1>
+            <br>
+            <div>
+                <a href="../Rapport/Assets/VisiteurClass.svg"><img src="/Rapport/Assets/VisiteurClass.svg" alt="Patron Visiteur" id="VisiteurClass"/></a>
+                <br>
+                <a href="../Rapport/Assets/VisiteurSequence.svg"><img src="/Rapport/Assets/VisiteurSequence.svg" alt="Patron Visiteur" id="VisiteurSequence"/></a>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <h3 class="subsection-title" id="au_choix">Patrons de conception au choix</h3>
+            <h1>Patron Médiateur</h1>
+            <br>
+            <div>
+                <a href="../Rapport/Assets/MediateurClass.svg"><img src="/Rapport/Assets/MediateurClass.svg" alt="Patron Médiateur" id="MediateurClass"/></a>
+                <br>
+            </div>
+
+            <h3 class="subsection-title" id="Paquets">Diagramme de Paquets</h3>
+            <h3 class="subsection-title" id="Justification">Discussion et justification de la qualité du design</h3>
             <p>
                 <strong>Discussion du couplage et de la cohésion des modules</strong>
                 Avec l introduction des patrons de conceptions dans notre projet, nous avons pu améliorer significativement la qualité de notre design. 
@@ -981,11 +1051,10 @@
                     <li><strong>État: </strong></li>
                     <li><strong>Observateur: </strong></li>
                     <li><strong>Commande: </strong></li>
-                    <li><strong>Visiteur: </strong> Le patron Visiteur permet de séparer les algorithmes de parcours (traversal) des objets sur lesquels ils opèrent. Il contribue ainsi au respect du principe ouvert/fermé (OCP), puisqu’il devient possible d’ajouter de nouvelles fonctionnalités sans modifier les classes existantes.
-
-En dissociant davantage les données des traitements, ce patron améliore la cohésion en clarifiant les responsabilités de chaque composant. De plus, les classes du projet n’ont plus besoin de connaître les détails d’implémentation des algorithmes qui s’appliquent à elles.
-
-Un niveau d’abstraction supplémentaire est ainsi introduit entre les algorithmes et les objets manipulés, ce qui favorise également le respect du principe d’inversion des dépendances (DIP). En effet, les classes dépendent désormais d’abstractions, telles que des interfaces définissant les méthodes d’acceptation des visiteurs, plutôt que d’implémentations concrètes.
+                    <li><strong>Visiteur: </strong> Le patron Visiteur permet de séparer les algorithmes de parcours (traversal) des objets sur lesquels ils opèrent. Il contribue ainsi au respect du principe ouvert/fermé (OCP), 
+                        puisqu’il devient possible d’ajouter de nouvelles fonctionnalités sans modifier les classes existantes. En dissociant davantage les données des traitements, ce patron améliore la cohésion en clarifiant 
+                        les responsabilités de chaque composant. De plus, les classes du projet n’ont plus besoin de connaître les détails d’implémentation des algorithmes qui s’appliquent à elles. Un niveau d’abstraction supplémentaire 
+                        est ainsi introduit entre les algorithmes et les objets manipulés, ce qui favorise également le respect du principe d’inversion des dépendances (DIP). En effet, les classes dépendent désormais d’abstractions, telles que des interfaces définissant les méthodes d’acceptation des visiteurs, plutôt que d’implémentations concrètes.
                         
                     </li>
                     <li><strong>Médiateur: </strong>Le patron Médiateur est un modèle que nous avions en partie déjà appliqué dans nos devoirs précédents à travers la structure MVC de notre diagramme. 
@@ -1000,7 +1069,7 @@ Un niveau d’abstraction supplémentaire est ainsi introduit entre les algorith
 
                 </ul>
             </p>
-            <h3 class="subsection-title" id="">Implémentation</h3>
+            <h3 class="subsection-title" id="Implementation">Implémentation</h3>
         </div>
     </main>
     <footer class="report-footer">
