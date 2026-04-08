@@ -756,6 +756,11 @@
                 <p>Ce troisième rapport s’articule autour de cinquième axes majeurs :</p>
 
                 <ul>
+                    <li> L'importance des patrons de conception à travers l'implémentation de 6 patrons requis</li>
+                    <li> L'implémentation de 2 patrons de conception au choix</li>
+                    <li> La création d'un diagramme de paquets pour illustrer l'architecture du projet</li>
+                    <li> Une discussion approfondie sur la qualité du design, mettant en lumière les améliorations apportées par les patrons de conception</li>
+                    <li> L'implémentation du code, démontrant l'application concrète des concepts abordés dans les sections précédentes</li>
                    
                 </ul>
             </div>
@@ -963,14 +968,36 @@
                     <li>
                         <strong>Fabrique: </strong> Le patron de conception de la fabrique nous a permis de centraliser la création d'instances d'objets, 
                         ce qui a réduit le couplage entre les classes qui utilisent ces objets et les classes qui les créent. En delegant la responsabilité de la création d'objets à une fabrique, 
-                        on augmente le SRP et on respecte le principe OCP, ce qui améliore la maintenabilité et la flexibilité de notre code. Une generalisation via le DIP
+                        on augmente le SRP et on respecte le principe OCP. Une generalisation via le DIP
                         nous a aussi permis de réduire le couplage entre les modules en introduisant des interfaces claires et des abstractions appropriées.
                     </li>
                     <li>
-                        <strong>Singleton: </strong> Le patron Singleton assure qu'une classe n'est instanciée qu'une seule fois, offrant un contrôle rigoureux sur les ressources communes. 
-                        En dédiant un Singleton à chaque Fabrique, nous avons regroupé les fonctionnalités de création, ce qui améliore la cohésion de ces classes concernées. De plus, Ce mécanisme 
-                        sert de point d'accès global, réduisant la complexité liée à la gestion de l'état partagé (ID unique des entités par example) et facilitant la maintenance du code.
+                        <strong>Singleton: </strong> Le patron Singleton garantit qu’une classe ne possède qu’une seule instance, offrant ainsi un contrôle strict sur les ressources partagées (comme la gestion d’un identifiant unique pour les entités, par exemple). 
+                        En associant un Singleton à chaque fabrique, nous centralisons les responsabilités de création, ce qui améliore la cohésion des classes concernées. 
+                        De plus, ce patron fournit un point d’accès global et contrôlé à ces ressources, ce qui simplifie la gestion de l’état partagé et réduit les risques d’incohérence. 
+                        
                     </li>
+
+                    <li><strong>État: </strong></li>
+                    <li><strong>Observateur: </strong></li>
+                    <li><strong>Commande: </strong></li>
+                    <li><strong>Visiteur: </strong> Le patron Visiteur permet de séparer les algorithmes de parcours (traversal) des objets sur lesquels ils opèrent. Il contribue ainsi au respect du principe ouvert/fermé (OCP), puisqu’il devient possible d’ajouter de nouvelles fonctionnalités sans modifier les classes existantes.
+
+En dissociant davantage les données des traitements, ce patron améliore la cohésion en clarifiant les responsabilités de chaque composant. De plus, les classes du projet n’ont plus besoin de connaître les détails d’implémentation des algorithmes qui s’appliquent à elles.
+
+Un niveau d’abstraction supplémentaire est ainsi introduit entre les algorithmes et les objets manipulés, ce qui favorise également le respect du principe d’inversion des dépendances (DIP). En effet, les classes dépendent désormais d’abstractions, telles que des interfaces définissant les méthodes d’acceptation des visiteurs, plutôt que d’implémentations concrètes.
+                        
+                    </li>
+                    <li><strong>Médiateur: </strong>Le patron Médiateur est un modèle que nous avions en partie déjà appliqué dans nos devoirs précédents à travers la structure MVC de notre diagramme. 
+                        Il constitue une base importante pour la réduction du couplage en simplifiant les interactions entre les classes. Au lieu d’avoir un grand nombre de connexions directes entre 
+                        les objets, toutes les communications passent désormais par un point central. Ainsi, le couplage par contenu (les objets ne référencent plus directement d’autres objets) et le couplage 
+                        par contrôle (un objet ne contrôle plus directement le comportement d’un autre) sont considérablement réduits. Comme mentionné dans les devoirs précédents, notre structure MVC contribue 
+                        également à améliorer la cohésion des différentes classes, puisque chaque objet se concentre sur sa propre logique métier, qu’il soit une vue, un contrôleur ou un modèle. Leur roles sont clairement
+                        définis et séparés, ce qui facilite la maintenance et l'évolution du code.
+                    </li>
+                    <li><strong></strong></li>
+
+
                 </ul>
             </p>
             <h3 class="subsection-title" id="">Implémentation</h3>
