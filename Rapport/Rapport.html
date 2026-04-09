@@ -955,26 +955,35 @@
             <h1>Patron Singleton</h1>
             <br>
             <div>
-                <h3 class="text-red-500">Ici, les classes Singleton correspondent aux classes du patron de Fabrique, mais avec leurs attributs et méthodes propres au Singleton. Nous n’avons pas représenté les liens, mais vous pouvez vous référer au même diagramme que celui de la fabrique, en remplaçant les classes concrètes de la fabrique par celles-ci. Elles sont donc techniquement reliées aux classes abstraites ...Factory, lesquelles seront ensuite connectées au DisplayMenu ainsi qu’aux classes concrètes qu’elles instancient.</h3>
+                <p class="text-red-500">Ici, les classes Singleton correspondent aux classes du patron de Fabrique, mais avec leurs attributs et méthodes propres au Singleton. Nous n’avons pas représenté les liens, mais vous pouvez vous référer au même diagramme que celui de la fabrique, en remplaçant les classes concrètes de la fabrique par celles-ci. Elles sont donc techniquement reliées aux classes abstraites ...Factory, lesquelles seront ensuite connectées au DisplayMenu ainsi qu’aux classes concrètes qu’elles instancient.</p>
                 <br>
                 <a href="../Rapport/Assets/SingletonsClass.svg"><img src="/Rapport/Assets/SingletonsClass.svg" alt="Patron Singleton" id="SingletonClass"/></a>
                 <br>
-                <h3 class="text-red-500">Dans la grille de correction, on ne voit pas de diagramme de séquence pour le singleton</h3>
+                <p class="text-red-500">Dans la grille de correction, on ne voit pas de diagramme de séquence pour le singleton</p>
             </div>
             <br>
             <h1>Patron État</h1>
             <br>
             <div>
+                <p>L'utilisation du patron d'État améliore le principe SRP en séparant les responsabilités comportementales, 
+                    le principe OCP en permettant l'ajout de nouveaux états sans modifier le contexte, 
+                    et le principe DIP en assurant une dépendance vers une abstraction plutôt que vers des implémentations concrètes.
+                 De plus, il favorise le CRP en regroupant les comportements liés aux états dans un module cohérent et faiblement couplé.</p>
                 <a href="../Rapport/Assets/EtatClass.svg"><img src="/Rapport/Assets/EtatClass.svg" alt="Patron État" id="EtatClass"/></a>
                 <br>
+                <p>Diagramme de séquence pour simuler les 3 états de <b>Seat</b></p>
                 <a href="../Rapport/Assets/EtatSequence.svg"><img src="/Rapport/Assets/EtatSequence.svg" alt="Patron État" id="EtatSequence"/></a> 
             </div>
             <br>
             <h1>Patron Observateur</h1>
             <br>
             <div>
+                <p>L'utilisation du patron d'Observateur introduit un mécanisme de notification pour les utilisateurs ce qui n'a pas existé dans notre design auparavant, 
+                    ca respecte aussi le principe de conception DIP en permettant des dépendances vers des abstractions,
+                     et le principe OCP grâce à la possibilité d'ajouter de nouveaux observateurs sans modifier le sujet.</p>
                 <a href="../Rapport/Assets/ObservateurClass.svg"><img src="/Rapport/Assets/ObservateurClass.svg" alt="Patron Observateur" id="ObservateurClass"/></a>
                 <br>
+                <p>Diagramme de séquence pour la simulation de l'observateur lors qu'un événement se produit</p>
                 <a href="../Rapport/Assets/ObservateurSequence.svg"><img src="/Rapport/Assets/ObservateurSequence.svg" alt="Patron Observateur" id="ObservateurSequence"/></a>
                
             </div>
@@ -992,16 +1001,16 @@
                 </p>
             </div>
             <div>
-                <a href="../Rapport/Assets/CommandeClass.svg"><img src="/Rapport/Assets/CommandeClass.svg" alt="Patron Commande" id="CommandeClass"/></a>
+                <a href="../Rapport/Assets/CommandeClass.svg"><img class="activity-diagram" src="/Rapport/Assets/CommandeClass.svg" alt="Patron Commande" id="CommandeClass"/></a>
                 <br>
-                <h3 class="text-red-500">Nous avons conçu plusieurs diagrammes de séquence pour illustrer l'utilisation du patron Commande, mais aussi du patron Memento, car dans l'énoncé on parle de la fonctionnalité undo.</h3>
+                <p class="text-red-500">Nous avons conçu plusieurs diagrammes de séquence pour illustrer l'utilisation du patron Commande, mais aussi du patron Memento, car dans l'énoncé on parle de la fonctionnalité undo.</p>
                 <h3 id="CommandeSequence">Commande pour toutes les fonctionnalités trips/location/company</h3>
                 <a href="../Rapport/Assets/CommandeSeq1.svg"><img src="/Rapport/Assets/CommandeSeq1.svg" alt="Patron Commande" id="CommandeSeq1"/></a>
-                <h3>Commande pour l’ajustement de prix</h3>
+                <p>Commande pour l’ajustement de prix</p>
                 <a href="../Rapport/Assets/CommandeSeq2.svg"><img src="/Rapport/Assets/CommandeSeq2.svg" alt="Patron Commande" id="CommandeSeq2"/></a>
-                <h3>Memento pour toutes les fonctionnalités trips/location/company</h3>
+                <p>Memento pour toutes les fonctionnalités trips/location/company</p>
                 <a href="../Rapport/Assets/MementoSeq1.svg"><img src="/Rapport/Assets/MementoSeq1.svg" alt="Patron Commande" id="MementoSeq1"/></a>
-                <h3>Memento pour l’ajustement de prix</h3>
+                <p>Memento pour l’ajustement de prix</p>
                 <a href="../Rapport/Assets/MementoSeq2.svg"><img src="/Rapport/Assets/MementoSeq2.svg" alt="Patron Commande" id="MementoSeq2"/></a>
             </div>
             <br>
