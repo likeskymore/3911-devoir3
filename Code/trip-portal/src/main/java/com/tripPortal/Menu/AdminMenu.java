@@ -1,5 +1,9 @@
+import com.tripPortal.Model.Company;
+import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Trip;
 import com.tripPortal.Model.User;
+
+import java.util.ArrayList;
 
 public class AdminMenu {
 
@@ -8,7 +12,7 @@ public class AdminMenu {
 	 * @param user
 	 */
 	public void displayEditProfile(User user) {
-		// TODO - implement AdminMenu.displayEditProfile
+		// TODO - implement com.tripPortal.Menu.AdminMenu.displayEditProfile
 		throw new UnsupportedOperationException();
 	}
 
@@ -16,8 +20,8 @@ public class AdminMenu {
 	 * 
 	 * @param companies
 	 */
-	public void displayCompanies(ListArray<Company> companies) {
-		// TODO - implement AdminMenu.displayCompanies
+	public void displayCompanies(ArrayList<Company> companies) {
+		// TODO - implement com.tripPortal.Menu.AdminMenu.displayCompanies
 		throw new UnsupportedOperationException();
 	}
 
@@ -25,8 +29,8 @@ public class AdminMenu {
 	 * 
 	 * @param trips
 	 */
-	public void displayTrips(ListArray<Trip> trips) {
-		// TODO - implement AdminMenu.displayTrips
+	public void displayTrips(ArrayList<Trip> trips) {
+		// TODO - implement com.tripPortal.Menu.AdminMenu.displayTrips
 		throw new UnsupportedOperationException();
 	}
 
@@ -34,8 +38,8 @@ public class AdminMenu {
 	 * 
 	 * @param location
 	 */
-	public void displayLocations(ListArray<Locations> location) {
-		// TODO - implement AdminMenu.displayLocations
+	public void displayLocations(ArrayList<Location> location) {
+		// TODO - implement com.tripPortal.Menu.AdminMenu.displayLocations
 		throw new UnsupportedOperationException();
 	}
 

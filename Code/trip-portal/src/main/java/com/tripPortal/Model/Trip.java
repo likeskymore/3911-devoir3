@@ -1,9 +1,13 @@
-public class Trip {
+package com.tripPortal.Model;
 
-	private string id;
+import java.time.LocalTime;
+
+public abstract class Trip {
+
+	private String id;
 	private Company servicedBy;
-	private DateTime departureTime;
-	private DateTime arrivalTime;
+	private LocalTime departureTime;
+	private LocalTime arrivalTime;
 	private float price;
 	private LocalTime tripDuration;
 

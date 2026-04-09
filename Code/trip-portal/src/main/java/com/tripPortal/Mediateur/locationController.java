@@ -1,3 +1,5 @@
+import com.tripPortal.Model.Location;
+
 public class locationController {
 
 	/**
@@ -5,7 +7,7 @@ public class locationController {
 	 * @param location
 	 * @param city
 	 */
-	public void editCity(genericType<Location> location, string city) {
+	public void editCity(Location location, String city) {
 		// TODO - implement locationController.editCity
 		throw new UnsupportedOperationException();
 	}
@@ -14,7 +16,7 @@ public class locationController {
 	 * 
 	 * @param location
 	 */
-	public void deleteLocation(genericType<Location> location) {
+	public void deleteLocation(Location location) {
 		// TODO - implement locationController.deleteLocation
 		throw new UnsupportedOperationException();
 	}

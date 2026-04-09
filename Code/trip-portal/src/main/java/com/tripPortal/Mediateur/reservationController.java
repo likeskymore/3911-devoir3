@@ -1,3 +1,7 @@
+import com.sun.jdi.connect.Transport;
+import com.tripPortal.Model.Seat;
+import com.tripPortal.Model.Trip;
+
 public class reservationController {
 
 	/**

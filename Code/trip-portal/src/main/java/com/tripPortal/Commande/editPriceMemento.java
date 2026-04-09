@@ -1,13 +1,11 @@
 public class editPriceMemento {
 
-	private State state;
-
-	public state getState() {
+	public float getState() {
 		// TODO - implement editPriceMemento.getState
 		throw new UnsupportedOperationException();
 	}
 
-	public state setState() {
+	public float setState() {
 		// TODO - implement editPriceMemento.setState
 		throw new UnsupportedOperationException();
 	}

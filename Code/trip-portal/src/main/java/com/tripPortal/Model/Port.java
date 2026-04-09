@@ -1,5 +1,7 @@
-public class Port extends BoatTrip {
+package com.tripPortal.Model;
 
-	private string city;
+public class Port extends Location {
+
+	private String city;
 
 }

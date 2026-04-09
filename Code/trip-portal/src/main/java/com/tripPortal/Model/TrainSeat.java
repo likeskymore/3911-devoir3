@@ -1,4 +1,4 @@
-import com.tripPortal.Model.Seat;
+package com.tripPortal.Model;
 
 public class TrainSeat extends Seat {
 }

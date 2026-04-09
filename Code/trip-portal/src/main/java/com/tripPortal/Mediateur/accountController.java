@@ -1,3 +1,5 @@
+import com.tripPortal.Model.User;
+
 public class accountController {
 
 	/**
@@ -8,7 +10,7 @@ public class accountController {
 	 * @param password
 	 * @param email
 	 */
-	public bool editUserInfo(string firstname, string lastName, string username, string password, string email) {
+	public boolean editUserInfo(String firstname, String lastName, String username, String password, String email) {
 		// TODO - implement accountController.editUserInfo
 		throw new UnsupportedOperationException();
 	}
@@ -26,7 +28,7 @@ public class accountController {
 	 * 
 	 * @param password
 	 */
-	public void authenticate(string password) {
+	public void authenticate(String password) {
 		// TODO - implement accountController.authenticate
 		throw new UnsupportedOperationException();
 	}
@@ -35,7 +37,7 @@ public class accountController {
 	 * 
 	 * @param email
 	 */
-	public void confirmEmail(string email) {
+	public void confirmEmail(String email) {
 		// TODO - implement accountController.confirmEmail
 		throw new UnsupportedOperationException();
 	}

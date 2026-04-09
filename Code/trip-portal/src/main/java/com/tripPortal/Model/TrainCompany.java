@@ -1,4 +1,4 @@
-import com.tripPortal.Model.Route;
+package com.tripPortal.Model;
 
 import java.util.ArrayList;
 

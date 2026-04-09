@@ -1,4 +1,4 @@
 package com.tripPortal.Model;
 
-public class Transport {
+public abstract class Transport {
 }

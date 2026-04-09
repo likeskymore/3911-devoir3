@@ -1,10 +1,12 @@
-public class User {
+package com.tripPortal.Model;
+
+public abstract class User {
 
 	private int id;
-	private string firstName;
-	private string lastName;
-	private string username;
-	private string password;
-	private string email;
+	private String firstName;
+	private String lastName;
+	private String username;
+	private String password;
+	private String email;
 
 }

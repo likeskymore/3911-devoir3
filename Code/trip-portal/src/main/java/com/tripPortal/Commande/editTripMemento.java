@@ -1,13 +1,15 @@
+package com.tripPortal.Commande;
+import com.tripPortal.Model.Trip;
+
 public class editTripMemento {
 
-	private State state;
 
-	public state getState() {
+	public Trip getState() {
 		// TODO - implement editTripMemento.getState
 		throw new UnsupportedOperationException();
 	}
 
-	public state setState() {
+	public Trip setState() {
 		// TODO - implement editTripMemento.setState
 		throw new UnsupportedOperationException();
 	}

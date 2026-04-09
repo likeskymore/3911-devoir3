@@ -1,4 +1,6 @@
-public class Flight extends PlaneTrip {
+package com.tripPortal.Model;
+
+public class Flight extends Trip {
 
 	private Airport departure;
 	private Airport destination;

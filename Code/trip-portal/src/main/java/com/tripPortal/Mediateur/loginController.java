@@ -1,3 +1,5 @@
+import com.tripPortal.Model.User;
+
 public class loginController {
 
 	/**
@@ -5,7 +7,7 @@ public class loginController {
 	 * @param username
 	 * @param password
 	 */
-	public User login(string username, string password) {
+	public User login(String username, String password) {
 		// TODO - implement loginController.login
 		throw new UnsupportedOperationException();
 	}

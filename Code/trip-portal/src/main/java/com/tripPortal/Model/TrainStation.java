@@ -1,5 +1,7 @@
-public class TrainStation extends TrainTrip {
+package com.tripPortal.Model;
 
-	private string city;
+public class TrainStation extends Location {
+
+	private String city;
 
 }

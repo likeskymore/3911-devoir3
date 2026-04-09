@@ -1,3 +1,5 @@
+package com.tripPortal.Visiteur;
+
 public class ConcreteCruiseLineVisitor {
 
 	public void visitTrips() {

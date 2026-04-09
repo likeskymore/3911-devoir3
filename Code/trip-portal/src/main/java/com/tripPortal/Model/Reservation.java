@@ -1,3 +1,7 @@
+package com.tripPortal.Model;
+
+import java.time.LocalTime;
+
 public class Reservation {
 
 	private Client client;

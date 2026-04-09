@@ -1,3 +1,5 @@
+package com.tripPortal.Visiteur;
+
 public class ConcreteRouteVisitor {
 
 	public void visitTrips() {

@@ -1,4 +1,6 @@
-package ObservateurClasse;
+package com.tripPortal.Observateur;
+
+import java.util.ArrayList;
 
 public interface Subject {
 

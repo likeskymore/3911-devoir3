@@ -1,3 +1,5 @@
+import com.tripPortal.Model.Seat;
+
 public class Controller {
 
 	/**

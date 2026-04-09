@@ -1,3 +1,5 @@
+package com.tripPortal.Commande;
+import com.tripPortal.Model.Company;
 public class companyMemento {
 
 	private Company state;

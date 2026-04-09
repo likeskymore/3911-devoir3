@@ -1,3 +1,10 @@
+import com.sun.jdi.connect.Transport;
+import com.tripPortal.Model.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+
 public class tripController {
 
 	/**
@@ -5,7 +12,7 @@ public class tripController {
 	 * @param trip
 	 * @param company
 	 */
-	public void editCompany(genericType<Trip> trip, Company company) {
+	public void editCompany(Trip trip, Company company) {
 		// TODO - implement tripController.editCompany
 		throw new UnsupportedOperationException();
 	}
@@ -15,7 +22,7 @@ public class tripController {
 	 * @param trip
 	 * @param departureTime
 	 */
-	public void editDepartureTime(genericType<Trip> trip, DateTime departureTime) {
+	public void editDepartureTime(Trip trip, LocalTime departureTime) {
 		// TODO - implement tripController.editDepartureTime
 		throw new UnsupportedOperationException();
 	}
@@ -25,7 +32,7 @@ public class tripController {
 	 * @param trip
 	 * @param price
 	 */
-	public void editPrice(genericType<Trip> trip, float price) {
+	public void editPrice(Trip trip, float price) {
 		// TODO - implement tripController.editPrice
 		throw new UnsupportedOperationException();
 	}
@@ -35,7 +42,7 @@ public class tripController {
 	 * @param trip
 	 * @param transport
 	 */
-	public void editTransport(genericType<Trip> trip, Transport transport) {
+	public void editTransport(Trip trip, Transport transport) {
 		// TODO - implement tripController.editTransport
 		throw new UnsupportedOperationException();
 	}
@@ -65,7 +72,7 @@ public class tripController {
 	 * @param trip
 	 * @param newPath
 	 */
-	public void editTripRoute(genericType<Trip> trip, ListArray<genericType<Location>> newPath) {
+	public void editTripRoute(Trip trip, ArrayList<Location> newPath) {
 		// TODO - implement tripController.editTripRoute
 		throw new UnsupportedOperationException();
 	}
@@ -74,7 +81,7 @@ public class tripController {
 	 * 
 	 * @param trip
 	 */
-	public void deleteTrip(genericType<Trip> trip) {
+	public void deleteTrip(Trip trip) {
 		// TODO - implement tripController.deleteTrip
 		throw new UnsupportedOperationException();
 	}
@@ -86,7 +93,7 @@ public class tripController {
 	 * @param departureDate
 	 * @param section
 	 */
-	public ArrayList<Trip> searchTrips(genericType<Location> departure, genericType<Location> destination, Date departureDate, sectionPlane section) {
+	public ArrayList<Trip> searchTrips(Location departure, Location destination, LocalDate departureDate, SectionPlane section) {
 		// TODO - implement tripController.searchTrips
 		throw new UnsupportedOperationException();
 	}
@@ -95,7 +102,7 @@ public class tripController {
 	 * 
 	 * @param trip
 	 */
-	public boolean checkReservation(genericType<Trip> trip) {
+	public boolean checkReservation(Trip trip) {
 		// TODO - implement tripController.checkReservation
 		throw new UnsupportedOperationException();
 	}

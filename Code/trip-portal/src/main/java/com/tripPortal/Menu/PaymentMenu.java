@@ -1,3 +1,7 @@
+package com.tripPortal.Menu;
+import com.tripPortal.Model.Payment;
+import com.tripPortal.Model.User;
+
 public class PaymentMenu {
 
 	/**
@@ -5,7 +9,7 @@ public class PaymentMenu {
 	 * @param payment
 	 */
 	public void displayConfirmationPage(Payment payment) {
-		// TODO - implement PaymentMenu.displayConfirmationPage
+		// TODO - implement com.tripPortal.Menu.PaymentMenu.displayConfirmationPage
 		throw new UnsupportedOperationException();
 	}
 
@@ -14,7 +18,7 @@ public class PaymentMenu {
 	 * @param user
 	 */
 	public void displayPayment(User user) {
-		// TODO - implement PaymentMenu.displayPayment
+		// TODO - implement com.tripPortal.Menu.PaymentMenu.displayPayment
 		throw new UnsupportedOperationException();
 	}
 

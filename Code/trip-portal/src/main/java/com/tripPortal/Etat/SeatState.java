@@ -1,3 +1,6 @@
+package com.tripPortal.Etat;
+import com.tripPortal.Model.Seat;
+
 public interface SeatState {
 
 	/**
@@ -5,6 +8,6 @@ public interface SeatState {
 	 * @param context
 	 * @param e
 	 */
-	void event(Seat context, string e);
+	void event(Seat context, String e);
 
 }

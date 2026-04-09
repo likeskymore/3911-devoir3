@@ -1,5 +1,9 @@
+package com.tripPortal.Menu;
+
 import com.tripPortal.Model.Trip;
 import com.tripPortal.Model.User;
+
+import java.util.ArrayList;
 
 public class ClientMenu {
 
@@ -7,8 +11,8 @@ public class ClientMenu {
 	 * 
 	 * @param trip
 	 */
-	public void displaySearchTrips(ListArray<Trip> trip) {
-		// TODO - implement ClientMenu.displaySearchTrips
+	public void displaySearchTrips(ArrayList<Trip> trip) {
+		// TODO - implement com.tripPortal.Menu.ClientMenu.displaySearchTrips
 		throw new UnsupportedOperationException();
 	}
 
@@ -17,7 +21,7 @@ public class ClientMenu {
 	 * @param trip
 	 */
 	public void displayReservationForm(Trip trip) {
-		// TODO - implement ClientMenu.displayReservationForm
+		// TODO - implement com.tripPortal.Menu.ClientMenu.displayReservationForm
 		throw new UnsupportedOperationException();
 	}
 
@@ -26,7 +30,7 @@ public class ClientMenu {
 	 * @param user
 	 */
 	public void displayEditProfile(User user) {
-		// TODO - implement ClientMenu.displayEditProfile
+		// TODO - implement com.tripPortal.Menu.ClientMenu.displayEditProfile
 		throw new UnsupportedOperationException();
 	}
 

@@ -1,6 +1,10 @@
-public class FlightCompany extends PlaneTrip {
+package com.tripPortal.Model;
 
-	private string name;
+import java.util.ArrayList;
+
+public class FlightCompany {
+
+	private String name;
 	private ArrayList<Plane> vehicules;
 	private ArrayList<Flight> trips;
 

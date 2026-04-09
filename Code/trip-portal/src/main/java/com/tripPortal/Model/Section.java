@@ -1,4 +1,4 @@
 package com.tripPortal.Model;
 
-public class Section {
+public abstract class Section {
 }

@@ -1,7 +1,9 @@
+import com.tripPortal.Model.Trip;
+
 public class editTripCommand {
 
 	private Trip trip;
-	private State state;
+	private Trip state;
 
 	public void execute() {
 		// TODO - implement editTripCommand.execute

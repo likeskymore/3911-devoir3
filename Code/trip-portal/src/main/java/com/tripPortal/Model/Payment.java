@@ -1,8 +1,10 @@
+package com.tripPortal.Model;
+
 public class Payment {
 
-	private string cardNumber;
-	private string name;
-	private string email;
+	private String cardNumber;
+	private String name;
+	private String email;
 	private int reservationNumber;
 	private float Total;
 

@@ -1,3 +1,5 @@
+import com.tripPortal.Model.Reservation;
+
 public abstract class paymentController {
 
 	/**
@@ -6,7 +8,7 @@ public abstract class paymentController {
 	 * @param email
 	 * @param passeportNumber
 	 */
-	public void VerifyInfo(string name, string email, string passeportNumber) {
+	public void VerifyInfo(String name, String email, String passeportNumber) {
 		// TODO - implement paymentController.VerifyInfo
 		throw new UnsupportedOperationException();
 	}
@@ -16,7 +18,7 @@ public abstract class paymentController {
 	 * @param reservation
 	 * @param cardNumber
 	 */
-	public boolean makePayment(Reservation reservation, string cardNumber) {
+	public boolean makePayment(Reservation reservation, String cardNumber) {
 		// TODO - implement paymentController.makePayment
 		throw new UnsupportedOperationException();
 	}

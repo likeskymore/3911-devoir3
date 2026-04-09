@@ -1,5 +1,7 @@
-public class Airport extends PlaneTrip {
+package com.tripPortal.Model;
 
-	private string city;
+public class Airport extends Location {
+
+	private String city;
 
 }
