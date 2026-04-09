@@ -1,0 +1,16 @@
+public class editTripCommand {
+
+	private Trip trip;
+	private State state;
+
+	public void execute() {
+		// TODO - implement editTripCommand.execute
+		throw new UnsupportedOperationException();
+	}
+
+	public void undo() {
+		// TODO - implement editTripCommand.undo
+		throw new UnsupportedOperationException();
+	}
+
+}
