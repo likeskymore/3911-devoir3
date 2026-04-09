@@ -1,4 +1,4 @@
-package com.trip-portal;
+package com.tripPortal;
 
 /**
  * Hello world!
