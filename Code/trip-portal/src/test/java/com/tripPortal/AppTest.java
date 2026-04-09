@@ -1,4 +1,4 @@
-package com.trip-portal;
+package com.tripPortal;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
