@@ -1,3 +1,5 @@
+package com.tripPortal.Etat;
+
 import com.tripPortal.Model.Seat;
 
 public class Controller {

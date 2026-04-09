@@ -1,3 +1,5 @@
+package com.tripPortal.Factory;
+
 import com.tripPortal.Model.Company;
 
 public class BoatCompanyFactory extends BoatTripFactory {

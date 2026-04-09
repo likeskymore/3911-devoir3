@@ -1,3 +1,5 @@
+package com.tripPortal.Mediateur;
+
 import com.tripPortal.Model.User;
 
 public class loginController {

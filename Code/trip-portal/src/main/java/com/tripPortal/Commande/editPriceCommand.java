@@ -1,3 +1,5 @@
+package com.tripPortal.Commande;
+
 public class editPriceCommand {
 	public void execute() {
 		// TODO - implement editPriceCommand.execute

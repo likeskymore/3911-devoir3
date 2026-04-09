@@ -1,3 +1,5 @@
+package com.tripPortal.Mediateur;
+
 import com.sun.jdi.connect.Transport;
 import com.tripPortal.Model.Seat;
 import com.tripPortal.Model.Trip;

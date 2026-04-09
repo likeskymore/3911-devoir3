@@ -1,5 +1,5 @@
+package com.tripPortal.Commande;
 
-import java.util.ArrayList;
 import com.tripPortal.Model.Location;
 
 public class editLocationCommand {

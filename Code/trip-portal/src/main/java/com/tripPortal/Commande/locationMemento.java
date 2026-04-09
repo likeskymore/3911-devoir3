@@ -1,3 +1,4 @@
+package com.tripPortal.Commande;
 
 import com.tripPortal.Model.Location;
 

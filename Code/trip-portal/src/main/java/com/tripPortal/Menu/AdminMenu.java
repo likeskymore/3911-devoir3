@@ -1,3 +1,5 @@
+package com.tripPortal.Menu;
+
 import com.tripPortal.Model.Company;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Trip;

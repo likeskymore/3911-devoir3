@@ -1,3 +1,5 @@
+package com.tripPortal.Mediateur;
+
 public class LoginMenu {
 
 	public void displayLogin() {

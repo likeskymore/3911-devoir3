@@ -1,3 +1,5 @@
+package com.tripPortal.Factory;
+
 import com.tripPortal.Model.Location;
 
 public class PortFactory extends BoatTripFactory {

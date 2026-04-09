@@ -1,3 +1,5 @@
+package com.tripPortal.Mediateur;
+
 import com.tripPortal.Model.Location;
 
 public class locationController {
