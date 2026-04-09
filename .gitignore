@@ -24,3 +24,6 @@ hs_err_pid*
 replay_pid*
 
 *.vpp.*
+Code/trip-portal/target/
+.idea/
+.vscode/
