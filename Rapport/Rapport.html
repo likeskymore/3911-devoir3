@@ -703,25 +703,19 @@
             margin: 0;
             margin-bottom: 6px;
         }
-
         .activity-diagram {
             display: block;
 
-            /* Minimum usable size */
             min-width: 300px;
             min-height: 300px;
 
-            /* Maximum size: never exceed viewport */
-            max-width: 100vw;
+            max-width: 100%;
             max-height: 100vh;
-
-            /* Scale nicely */
 
             height: auto;
 
             background-color: #d5d5d5;
 
-            /* Prevent overflow */
             overflow: auto;
         }
 
@@ -1016,7 +1010,7 @@
             <div>
                 <a href="../Rapport/Assets/VisiteurClass.svg"><img src="/Rapport/Assets/VisiteurClass.svg" alt="Patron Visiteur" id="VisiteurClass"/></a>
                 <br>
-                <a href="../Rapport/Assets/VisiteurSequence.svg"><img src="/Rapport/Assets/VisiteurSequence.svg" alt="Patron Visiteur" id="VisiteurSequence"/></a>
+                <a href="../Rapport/Assets/VisiteurSequence.svg"><img class="activity-diagram" src="/Rapport/Assets/VisiteurSequence.svg" alt="Patron Visiteur" id="VisiteurSequence"/></a>
             </div>
             <br>
             <br>
