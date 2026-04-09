@@ -1,3 +1,6 @@
+import com.tripPortal.Model.Trip;
+import com.tripPortal.Model.User;
+
 public class ClientMenu {
 
 	/**

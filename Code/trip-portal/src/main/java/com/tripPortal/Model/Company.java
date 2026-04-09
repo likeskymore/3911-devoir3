@@ -1,4 +1,4 @@
-
+package com.tripPortal.Mediateur;
 public class Company {
 
 	private String id;

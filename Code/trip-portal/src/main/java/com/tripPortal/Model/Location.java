@@ -1,5 +1,5 @@
 public class Location {
 
-	private string city;
+	private String city;
 
 }
