@@ -703,25 +703,19 @@
             margin: 0;
             margin-bottom: 6px;
         }
-
         .activity-diagram {
             display: block;
 
-            /* Minimum usable size */
             min-width: 300px;
             min-height: 300px;
 
-            /* Maximum size: never exceed viewport */
-            max-width: 100vw;
+            max-width: 100%;
             max-height: 100vh;
-
-            /* Scale nicely */
 
             height: auto;
 
             background-color: #d5d5d5;
 
-            /* Prevent overflow */
             overflow: auto;
         }
 
@@ -988,6 +982,16 @@
             <h1>Patron Commande</h1>
             <br>
             <div>
+                <p>
+                    Pour la l’utilisation de la patron de Commande, on améliore l’encapsulation ainsi qu’améliorer l’aspect OCP pour notre design. 
+                    L’invocateur n’a pas besoin de connaître le receveur pour pouvoir exécuter une commande. Cela nous permet d'épandre notre projet
+                    sans modifier les codes existantes. 
+
+                    Pour le Mémento, cela nous aide à garder une historique, donc retourner en arrière si on a fait une modification qu’on n’a pas voulu faire.
+
+                </p>
+            </div>
+            <div>
                 <a href="../Rapport/Assets/CommandeClass.svg"><img src="/Rapport/Assets/CommandeClass.svg" alt="Patron Commande" id="CommandeClass"/></a>
                 <br>
                 <h3 class="text-red-500">Nous avons conçu plusieurs diagrammes de séquence pour illustrer l'utilisation du patron Commande, mais aussi du patron Memento, car dans l'énoncé on parle de la fonctionnalité undo.</h3>
@@ -1006,7 +1010,7 @@
             <div>
                 <a href="../Rapport/Assets/VisiteurClass.svg"><img src="/Rapport/Assets/VisiteurClass.svg" alt="Patron Visiteur" id="VisiteurClass"/></a>
                 <br>
-                <a href="../Rapport/Assets/VisiteurSequence.svg"><img src="/Rapport/Assets/VisiteurSequence.svg" alt="Patron Visiteur" id="VisiteurSequence"/></a>
+                <a href="../Rapport/Assets/VisiteurSequence.svg"><img class="activity-diagram" src="/Rapport/Assets/VisiteurSequence.svg" alt="Patron Visiteur" id="VisiteurSequence"/></a>
             </div>
             <br>
             <br>
