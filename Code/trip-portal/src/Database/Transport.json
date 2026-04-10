@@ -1,0 +1,49 @@
+[
+  {
+    "id": "TR1",
+    "name": "Air Canada Express",
+    "type": "Plane"
+  },
+  {
+    "id": "TR2",
+    "name": "Delta Airlines",
+    "type": "Plane"
+  },
+  {
+    "id": "TR3",
+    "name": "Air France",
+    "type": "Plane"
+  },
+
+  {
+    "id": "BT1",
+    "name": "MSC Cruises",
+    "type": "Boat"
+  },
+  {
+    "id": "BT2",
+    "name": "Royal Caribbean",
+    "type": "Boat"
+  },
+  {
+    "id": "BT3",
+    "name": "Norwegian Cruise Line",
+    "type": "Boat"
+  },
+
+  {
+    "id": "TN1",
+    "name": "Via Rail Canada",
+    "type": "Train"
+  },
+  {
+    "id": "TN2",
+    "name": "Amtrak",
+    "type": "Train"
+  },
+  {
+    "id": "TN3",
+    "name": "Eurostar",
+    "type": "Train"
+  }
+]

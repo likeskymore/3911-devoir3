@@ -3,6 +3,8 @@ package com.tripPortal.Model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public abstract class Company {
 
 	private String id;
@@ -11,6 +13,9 @@ public abstract class Company {
 	private ArrayList<Transport> transports;
 	private ArrayList<Trip> trips;
 
+	public Company(){
+
+	}
 	public Company(String name) {
 		this.id = randomGenerateID(5);
 		this.tripID = randomGenerateID(2);
@@ -69,4 +74,19 @@ public abstract class Company {
 	public void setTrips(ArrayList<Trip> trips) {
 		this.trips = trips;
 	}
+
+	public static Company fromJson(String name, JsonNode root) {
+    for (JsonNode node : root.get("companies")) {
+        if (node.get("name").asText().equals(name)) {
+            String type = node.get("type").asText();
+            return switch (type) {
+                case "FlightCompany" -> new FlightCompany(node);
+                case "BoatCompany"   -> new BoatCompany(node);
+                case "TrainCompany"  -> new TrainCompany(node);
+                default -> throw new IllegalArgumentException("Unknown company type: " + type);
+            };
+        }
+    }
+    throw new IllegalArgumentException("Company not found: " + name);
+}
 }
