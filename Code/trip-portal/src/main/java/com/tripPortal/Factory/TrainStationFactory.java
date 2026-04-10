@@ -1,6 +1,7 @@
 package com.tripPortal.Factory;
 
 import com.tripPortal.Model.Location;
+import com.tripPortal.Model.TrainStation;
 
 public class TrainStationFactory extends TrainTripFactory {
 
@@ -10,7 +11,8 @@ public class TrainStationFactory extends TrainTripFactory {
 	 */
 	public Location createLocation(String city) {
 		// TODO - implement TrainStationFactory.createLocation
-		throw new UnsupportedOperationException();
+		Location t = new TrainStation(city);
+		return t;
 	}
 
 }

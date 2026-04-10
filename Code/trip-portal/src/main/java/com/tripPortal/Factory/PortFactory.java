@@ -1,6 +1,7 @@
 package com.tripPortal.Factory;
 
 import com.tripPortal.Model.Location;
+import com.tripPortal.Model.Port;
 
 public class PortFactory extends BoatTripFactory {
 
@@ -10,7 +11,8 @@ public class PortFactory extends BoatTripFactory {
 	 */
 	public Location createLocation(String city) {
 		// TODO - implement PortFactory.createLocation
-		throw new UnsupportedOperationException();
+		Location p = new Port(city);
+		return p;
 	}
 
 }

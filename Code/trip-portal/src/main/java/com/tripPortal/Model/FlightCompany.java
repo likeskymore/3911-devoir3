@@ -2,10 +2,10 @@ package com.tripPortal.Model;
 
 import java.util.ArrayList;
 
-public class FlightCompany {
+public class FlightCompany extends Company {
 
-	private String name;
-	private ArrayList<Plane> vehicules;
-	private ArrayList<Flight> trips;
+	public FlightCompany(String name) {
+		super(name);
+	}
 
 }

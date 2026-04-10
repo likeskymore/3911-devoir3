@@ -1,5 +1,6 @@
 package com.tripPortal;
 
+import com.tripPortal.Model.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -19,6 +20,9 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+
+        Company company = new BoatCompany("Company");
+        System.out.println(company.getId());
         launch(args);
     }
 }

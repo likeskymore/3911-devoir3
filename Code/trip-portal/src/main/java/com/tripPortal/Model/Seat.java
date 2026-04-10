@@ -5,6 +5,7 @@ public abstract class Seat {
 
 	private String id;
 	private SeatState currentState;
+	private boolean occupied;
 
 	/**
 	 * 
