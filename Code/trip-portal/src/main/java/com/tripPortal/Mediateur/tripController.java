@@ -1,6 +1,8 @@
 package com.tripPortal.Mediateur;
 
-import com.sun.jdi.connect.Transport;
+import com.tripPortal.Factory.CruiseLineFactory;
+import com.tripPortal.Factory.FlightFactory;
+import com.tripPortal.Factory.RouteFactory;
 import com.tripPortal.Model.*;
 
 import java.time.LocalDate;
@@ -9,6 +11,35 @@ import java.util.ArrayList;
 
 
 public class tripController {
+
+	public Trip goCallCreateTrip(
+            Company company,
+            LocalDate startDate,
+            LocalDate endDate,
+            float price,
+            int duration,
+            ArrayList<Location> locations,
+            Transport transport,
+            String type) {
+
+        if (company == null || locations == null || locations.isEmpty() || transport == null) {
+            System.err.println("Invalid trip parameters.");
+            return null;
+        }
+
+        return switch (type) {
+            case "Flight"     -> FlightFactory.getInstance().createTrajectory(
+                                    company, startDate, endDate, price, duration, locations, transport);
+            case "CruiseLine" -> CruiseLineFactory.getInstance().createTrajectory(
+                                    company, startDate, endDate, price, duration, locations, transport);
+            case "Route"      -> RouteFactory.getInstance().createTrajectory(
+                                    company, startDate, endDate, price, duration, locations, transport);
+            default -> {
+                System.err.println("Unknown trip type: " + type);
+                yield null;
+            }
+        };
+    }
 
 	/**
 	 * 

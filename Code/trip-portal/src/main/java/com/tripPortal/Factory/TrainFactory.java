@@ -67,7 +67,15 @@ public class TrainFactory extends PlaneTripFactory {
             File file = new File("src/Database/Transport.json");
 
             JsonNode root = mapper.readTree(file);
-            ArrayNode array = (ArrayNode) root;
+            ArrayNode array;
+
+            if (root == null || root.isMissingNode() || root.isNull()) {
+                array = mapper.createArrayNode(); // fichier vide ou null
+            } else if (root.isArray()) {
+                array = (ArrayNode) root;
+            } else {
+                throw new IOException("Transport.json doit contenir un tableau JSON []");
+            }
 
             ObjectNode node = mapper.createObjectNode();
             node.put("transportID", train.getTransportID());

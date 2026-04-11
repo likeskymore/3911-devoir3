@@ -30,6 +30,10 @@ public abstract class Transport {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getTransportID() {
         return TransportID;
     }

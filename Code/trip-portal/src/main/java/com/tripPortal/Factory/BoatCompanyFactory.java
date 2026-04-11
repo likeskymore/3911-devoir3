@@ -44,12 +44,21 @@ public class BoatCompanyFactory extends BoatTripFactory {
 
 			// Read existing array
 			JsonNode root = mapper.readTree(file);
-			ArrayNode array = (ArrayNode) root;
+			ArrayNode array;
 
+			if (root == null || root.isMissingNode() || root.isNull()) {
+				array = mapper.createArrayNode();
+			} else if (root.isArray()) {
+				array = (ArrayNode) root;
+			} else {
+				throw new IOException("Company.json doit contenir un tableau JSON []");
+			}
 			// Build new entry
 			ObjectNode newCompany = mapper.createObjectNode();
 			newCompany.put("type", "BoatCompany");
+			newCompany.put("id", company.getId());
 			newCompany.put("name", name);
+			newCompany.put("tripId", company.getTripID());
 
 			// Append and write back
 			array.add(newCompany);

@@ -39,4 +39,8 @@ public abstract class Trip {
 		return id;
 
 	}
+
+	public String getId() {
+		return id;
+	}
 }

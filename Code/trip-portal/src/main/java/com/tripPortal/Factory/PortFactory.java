@@ -40,7 +40,15 @@ public class PortFactory extends BoatTripFactory {
 
 			// Read existing array
 			JsonNode root = mapper.readTree(file);
-			ArrayNode array = (ArrayNode) root;
+			ArrayNode array;
+
+			if (root == null || root.isMissingNode() || root.isNull()) {
+				array = mapper.createArrayNode(); // fichier vide ou null
+			} else if (root.isArray()) {
+				array = (ArrayNode) root;
+			} else {
+				throw new IOException("Location.json doit contenir un tableau JSON []");
+			}
 
 			// Build new entry
 			ObjectNode newPort = mapper.createObjectNode();
