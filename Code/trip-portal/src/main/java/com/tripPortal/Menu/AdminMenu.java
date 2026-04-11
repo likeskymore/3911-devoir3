@@ -28,8 +28,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -395,6 +397,7 @@ public class AdminMenu {
 
 		VBox back = new VBox(backButton);
 		VBox pageContent = new VBox();
+
 		Button CreateCompanyButton = new Button("Create Company");
 		CreateCompanyButton.setMinWidth(50);
 		CreateCompanyButton.setPrefHeight(50);
@@ -403,12 +406,20 @@ public class AdminMenu {
 		});
 		ArrayList<Company> companies = new ArrayList<>();
 
+		Button displayCompanies = new Button();
+		displayCompanies.setMinWidth(50);
+		displayCompanies.setPrefHeight(50);
+		displayCompanies.setOnAction(e ->{
+			
+		});
+
 		// Button EditCompanyButton = new Button("Edit Company");
 		// EditCompanyButton.setMinWidth(200);
 		// EditCompanyButton.setPrefHeight(50);
 		// Button DeleteCompanyButton = new Button("Delete Company");
 		// DeleteCompanyButton.setMinWidth(100);
 		// DeleteCompanyButton.setPrefHeight(50);
+
 		pageContent.getChildren().addAll(CreateCompanyButton);
 		pageContent.setAlignment(Pos.CENTER);
 		back.setPrefWidth(200);
@@ -427,7 +438,7 @@ public class AdminMenu {
 		Button backButton = new Button("Back");
 		backButton.setMinWidth(100);
 		backButton.setPrefHeight(50);
-		backButton.setOnAction(e -> displayTripsMenu(scene));
+		backButton.setOnAction(e -> displayCompaniesMenu(scene));
 
 		VBox back = new VBox(backButton);
 
@@ -458,6 +469,11 @@ public class AdminMenu {
 				boatCheckBox.setSelected(false);
 			}
 		});
+		// RadioButton flightCheckBox = new RadioButton("Flight Company");
+		// RadioButton boatCheckBox = new RadioButton("Cruise Company");
+		// RadioButton trainCheckBox = new RadioButton("Train Company");
+		// HBox checkboxes = new HBox(5, flightCheckBox, boatCheckBox, trainCheckBox);
+
 		HBox checkboxes = new HBox(5, flightCheckBox, boatCheckBox, trainCheckBox);
 
 		TextField nameField = new TextField();
