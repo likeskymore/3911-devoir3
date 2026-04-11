@@ -1,8 +1,9 @@
 package com.tripPortal.Mediateur;
 
-import com.sun.jdi.connect.Transport;
+//import com.sun.jdi.connect.Transport;
 import com.tripPortal.Model.Company;
 import com.tripPortal.Model.Trip;
+import com.tripPortal.Model.Transport;
 
 import java.util.ArrayList;
 
