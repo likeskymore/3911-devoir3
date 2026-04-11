@@ -1,14 +1,42 @@
 package com.tripPortal.Model;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Random;
+
+import com.tripPortal.Factory.TripFactory;
 
 public abstract class Trip {
 
 	private String id;
 	private Company servicedBy;
-	private LocalTime departureTime;
-	private LocalTime arrivalTime;
+	private LocalDate departureTime;
+	private LocalDate arrivalTime;
 	private float price;
-	private LocalTime tripDuration;
+	private int tripDuration;
+	private TripFactory tripFactory;
 
+	public Trip(Company servicedBy, LocalDate departureTime, LocalDate arrivalTime, float price, int tripDuration) {
+		this.id = randomGenerateID(servicedBy);
+		this.servicedBy = servicedBy;
+		this.departureTime = departureTime;
+		this.arrivalTime = arrivalTime;
+		this.price = price;
+		this.tripDuration = tripDuration;
+	}
+
+	private String randomGenerateID(Company servicedBy) {
+		String id = servicedBy.getTripID();
+		Random rand = new Random();
+
+		for (int i = 0; i < 4; i++) {
+			char letter = (char) (rand.nextInt(26) + 'A');
+			id += letter;
+		}
+
+		// complete verification ...
+
+		return id;
+
+	}
 }

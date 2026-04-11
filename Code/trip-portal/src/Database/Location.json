@@ -1,0 +1,58 @@
+[
+  {
+    "id": "L01",
+    "city": "Montreal",
+    "type": "Airport",
+    "name": "Montréal–Trudeau International Airport"
+  },
+  {
+    "id": "L02",
+    "city": "Toronto",
+    "type": "Airport",
+    "name": "Toronto Pearson International Airport"
+  },
+  {
+    "id": "L03",
+    "city": "Paris",
+    "type": "Airport",
+    "name": "Charles de Gaulle Airport"
+  },
+
+  {
+    "id": "L04",
+    "city": "Miami",
+    "type": "Port",
+    "name": "Port of Miami"
+  },
+  {
+    "id": "L05",
+    "city": "Barcelona",
+    "type": "Port",
+    "name": "Port of Barcelona"
+  },
+  {
+    "id": "L06",
+    "city": "Venice",
+    "type": "Port",
+    "name": "Port of Venice"
+  },
+
+  {
+    "id": "L07",
+    "city": "Montreal",
+    "type": "TrainStation",
+    "name": "Gare Centrale"
+  },
+  {
+    "id": "L08",
+    "city": "London",
+    "type": "TrainStation",
+    "name": "London St Pancras International"
+  },
+  {
+    "id": "L09",
+    "city": "Tokyo",
+    "type": "TrainStation",
+    "name": "Tokyo Station"
+  }
+]

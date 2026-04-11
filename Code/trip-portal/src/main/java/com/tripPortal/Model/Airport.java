@@ -1,7 +1,14 @@
 package com.tripPortal.Model;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class Airport extends Location {
 
-	private String city;
-
+	public Airport( String city) {
+		super(city);
+	}
+	public Airport(JsonNode node) {
+        super(node.get("city").asText());
+		setId(node.get("id").asText());
+    }
 }

@@ -2,10 +2,17 @@ package com.tripPortal.Model;
 
 import java.util.ArrayList;
 
-public class FlightCompany {
+import com.fasterxml.jackson.databind.JsonNode;
 
-	private String name;
-	private ArrayList<Plane> vehicules;
-	private ArrayList<Flight> trips;
+public class FlightCompany extends Company {
 
+	public FlightCompany(String name) {
+		super(name);
+	}
+
+	public FlightCompany(JsonNode node) {
+        super(node.get("name").asText());
+        setId(node.get("id").asText());
+        setTripID(node.get("tripID").asText());
+    }
 }

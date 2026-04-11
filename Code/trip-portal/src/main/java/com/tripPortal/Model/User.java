@@ -9,4 +9,13 @@ public abstract class User {
 	private String password;
 	private String email;
 
+	User(int id, String firstName, String lastName, String username, String password, String email) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+	}
+
 }
