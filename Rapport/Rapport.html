@@ -1052,18 +1052,13 @@
 
                     <li><strong>État: </strong></li>
                     <li><strong>Observateur: </strong></li>
-                    <li><strong>Commande:
-                        <div>
-                            <p>
-                                Pour la l’utilisation de la patron de Commande, on améliore l’encapsulation ainsi qu’améliorer l’aspect OCP pour notre design. 
-                                L’invocateur n’a pas besoin de connaître le receveur pour pouvoir exécuter une commande. Cela nous permet d'épandre notre projet
-                                sans modifier les codes existantes. 
+                    <li><strong>Commande:</strong> En utilisant le patron de conception Commande, nous améliorons l’encapsulation en séparant clairement les responsabilités entre les objets qui invoquent les actions et ceux qui les exécutent. Cela permet également de 
+                        mieux respecter le principe OCP, puisque nous pouvons ajouter de nouvelles commandes sans modifier le code existant. L’invocateur n’a donc pas besoin de connaître les détails du receveur pour exécuter une action, ce qui 
+                        rend le système plus flexible, modulaire et facile à maintenir. Cette approche facilite aussi l’extension du projet à long terme en réduisant les dépendances entre les différentes composantes.
 
-                                Pour le Mémento, cela nous aide à garder une historique, donc retourner en arrière si on a fait une modification qu’on n’a pas voulu faire.
-
-                            </p>
-                        </div>
-                    </strong></li>
+                        Puisque l’énoncé demandait d’implémenter une fonctionnalité « undo », le patron Mémento a été ajouté en complément du patron Commande (les deux étant étroitement liés). Le Mémento permet de sauvegarder l’état d’un objet à un moment donné, ce qui facilite la gestion d’un historique des actions. Ainsi, on peut facilement revenir en arrière lorsqu’une modification non désirée est effectuée.
+                        Ce patron présente quelques avantages : Il permet de restaurer un objet à un état précédent sans avoir à rejouer toutes les opérations une par une.
+                        Il évite d'exposer ou de rendre publiques les données internes de l’objet pour permettre le retour en arrière (bonne pratique objet orienté).</li>
                     <li><strong>Visiteur: </strong> Le patron Visiteur permet de séparer les algorithmes de parcours (traversal) des objets sur lesquels ils opèrent. Il contribue ainsi au respect du principe ouvert/fermé (OCP), 
                         puisqu’il devient possible d’ajouter de nouvelles fonctionnalités sans modifier les classes existantes. En dissociant davantage les données des traitements, ce patron améliore la cohésion en clarifiant 
                         les responsabilités de chaque composant. De plus, les classes du projet n’ont plus besoin de connaître les détails d’implémentation des algorithmes qui s’appliquent à elles. Un niveau d’abstraction supplémentaire 

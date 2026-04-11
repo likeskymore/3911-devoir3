@@ -47,7 +47,9 @@ public class FlightCompanyFactory extends PlaneTripFactory {
 			// Build new entry
 			ObjectNode newCompany = mapper.createObjectNode();
 			newCompany.put("type", "FlightCompany");
+			newCompany.put("id", company.getId());
 			newCompany.put("name", name);
+			newCompany.put("tripId", company.getTripID());
 
 			// Append and write back
 			array.add(newCompany);

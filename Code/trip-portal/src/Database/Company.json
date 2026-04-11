@@ -7,5 +7,12 @@
 }, {
   "type" : "CruiseCompany",
   "name" : "MSC Cruises"
-}
-]
+}, {
+  "type" : "BoatCompany",
+  "name" : "amo"
+}, {
+  "type" : "FlightCompany",
+  "id" : "EXABA",
+  "name" : "blabla",
+  "tripId" : "EO"
+} ]
