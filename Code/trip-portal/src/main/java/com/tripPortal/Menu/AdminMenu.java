@@ -466,7 +466,6 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 		Button backButton = new Button("Back");
 		backButton.setMinWidth(100);
 		backButton.setPrefHeight(50);
-		backButton.setOnAction(e -> displayCompaniesMenu(scene));
 		backButton.setOnAction(e -> displayCompaniesMenu(scene, ""));
 
 		VBox back = new VBox(backButton);
