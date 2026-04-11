@@ -89,7 +89,7 @@ public class CruiseLineFactory extends BoatTripFactory {
         node.put("transport", boat.getTransportID());
 
         ArrayNode pathArray = mapper.createArrayNode();
-        for (Port port : ports) pathArray.add(port.getCity());
+        for (Port port : ports) pathArray.add(port.getId());
         node.set("path", pathArray);
 
         array.add(node);

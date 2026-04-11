@@ -88,7 +88,7 @@ public class RouteFactory extends TrainTripFactory {
         node.put("transport", train.getTransportID());
 
         ArrayNode stationsArray = mapper.createArrayNode();
-        for (TrainStation st : stations) stationsArray.add(st.getCity());
+        for (TrainStation st : stations) stationsArray.add(st.getId());
         node.set("path", stationsArray);
 
         array.add(node);

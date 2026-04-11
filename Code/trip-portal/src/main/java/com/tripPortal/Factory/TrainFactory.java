@@ -87,7 +87,6 @@ public class TrainFactory extends PlaneTripFactory {
             ArrayNode sectionsArray = mapper.createArrayNode();
             for (SectionTrain st : sections) {
                 ObjectNode secNode = mapper.createObjectNode();
-                secNode.put("sectionName", st.getSectionName());
                 secNode.put("sectionType", st.getSectionType().name());
                 secNode.put("layout", "S");       // toujours Étroit
                 secNode.put("numberOfRows", st.getNumberOfRows());

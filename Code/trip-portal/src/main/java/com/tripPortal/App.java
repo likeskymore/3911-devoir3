@@ -47,6 +47,8 @@ public class App extends Application {
 
         button1.setOnAction(e -> {
             ClientMenu clientMenu = new ClientMenu();
+            tripController TripControllerForClientMenu = new tripController();
+            clientMenu.setTripControllerForClientMenu(TripControllerForClientMenu);
             clientMenu.start(new Stage());
         });
 

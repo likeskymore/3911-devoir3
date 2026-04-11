@@ -86,8 +86,8 @@ public class FlightFactory extends PlaneTripFactory {
         node.put("endDate",     endDate.toString());
         node.put("price",       price);
         node.put("duration",    duration);
-        node.put("origin",      origin.getCity());
-        node.put("destination", destination.getCity());
+        node.put("origin",      origin.getId());
+        node.put("destination", destination.getId());
         node.put("transport",   plane.getTransportID());
 
         array.add(node);

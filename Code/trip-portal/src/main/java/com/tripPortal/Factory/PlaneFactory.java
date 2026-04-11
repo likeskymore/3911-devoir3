@@ -84,7 +84,7 @@ public class PlaneFactory extends PlaneTripFactory {
         ArrayNode sectionsArray = mapper.createArrayNode();
         for (SectionPlane sp : sections) {
             ObjectNode secNode = mapper.createObjectNode();
-            secNode.put("sectionName", sp.getSectionName());
+            secNode.put("sectionType", sp.getSectionType().name());
             secNode.put("layout", sp.getLayout().name());
             secNode.put("numberOfRows", sp.getNumberOfRows());
             secNode.put("numberOfColumns", sp.getNumberOfColumns());
