@@ -7,8 +7,6 @@ import com.tripPortal.Factory.FlightCompanyFactory;
 import com.tripPortal.Factory.TrainCompanyFactory;
 import com.tripPortal.Model.Company;
 import com.tripPortal.Model.Trip;
-import com.tripPortal.Model.Transport;
-
 import java.util.ArrayList;
 
 public class companyController {
