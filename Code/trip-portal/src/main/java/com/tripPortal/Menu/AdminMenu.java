@@ -38,9 +38,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -423,11 +426,20 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 
 		VBox back = new VBox(backButton);
 		VBox pageContent = new VBox();
+
 		Button CreateCompanyButton = new Button("Create Company");
 		CreateCompanyButton.setMinWidth(100);
 		CreateCompanyButton.setPrefHeight(50);
 		CreateCompanyButton.setOnAction(e -> {
 			displayCompanyCreationForm(scene);
+		});
+		ArrayList<Company> companies = new ArrayList<>();
+
+		Button displayCompanies = new Button();
+		displayCompanies.setMinWidth(50);
+		displayCompanies.setPrefHeight(50);
+		displayCompanies.setOnAction(e ->{
+			
 		});
 
 		// Button EditCompanyButton = new Button("Edit Company");
@@ -436,6 +448,7 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 		// Button DeleteCompanyButton = new Button("Delete Company");
 		// DeleteCompanyButton.setMinWidth(100);
 		// DeleteCompanyButton.setPrefHeight(50);
+
 		pageContent.getChildren().addAll(CreateCompanyButton);
 		pageContent.setAlignment(Pos.CENTER);
 		back.setMinWidth(150);
@@ -453,6 +466,7 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 		Button backButton = new Button("Back");
 		backButton.setMinWidth(100);
 		backButton.setPrefHeight(50);
+		backButton.setOnAction(e -> displayCompaniesMenu(scene));
 		backButton.setOnAction(e -> displayCompaniesMenu(scene, ""));
 
 		VBox back = new VBox(backButton);
@@ -484,6 +498,11 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 				boatCheckBox.setSelected(false);
 			}
 		});
+		// RadioButton flightCheckBox = new RadioButton("Flight Company");
+		// RadioButton boatCheckBox = new RadioButton("Cruise Company");
+		// RadioButton trainCheckBox = new RadioButton("Train Company");
+		// HBox checkboxes = new HBox(5, flightCheckBox, boatCheckBox, trainCheckBox);
+
 		HBox checkboxes = new HBox(5, flightCheckBox, boatCheckBox, trainCheckBox);
 		checkboxes.setAlignment(Pos.CENTER);
 
