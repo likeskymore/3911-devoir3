@@ -18,6 +18,7 @@ import com.tripPortal.Model.Transport;
 import com.tripPortal.Model.Trip;
 import com.tripPortal.Model.User;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -29,6 +30,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -58,12 +60,14 @@ public class AdminMenu {
 		Button	editProfileButton = new Button("Profile");
 		editProfileButton.setMinWidth(200);
 		editProfileButton.setPrefHeight(50);
+
 		Button	tripsButton = new Button("Trips");
 		tripsButton.setMinWidth(200);
 		tripsButton.setPrefHeight(50);
 		tripsButton.setOnAction(e -> {
 			displayTripsMenu(scene);
 		});
+
 		Button	companiesButton = new Button("Companies");
 		companiesButton.setMinWidth(200);
 		companiesButton.setPrefHeight(50);
@@ -73,13 +77,16 @@ public class AdminMenu {
 		Button	locationsButton = new Button("Locations");
 		locationsButton.setMinWidth(200);
 		locationsButton.setPrefHeight(50);
+
 		Button	transportsButton = new Button("Transports");
 		transportsButton.setMinWidth(200);
 		transportsButton.setPrefHeight(50);
+
 		Button  logoutButton = new Button("Logout");
 		logoutButton.setMinWidth(200);
 		logoutButton.setPrefHeight(50);
 		root.getChildren().addAll(editProfileButton, tripsButton, companiesButton, locationsButton, transportsButton, logoutButton);
+
 		BorderPane borderPane = new BorderPane();
 		borderPane.setLeft(root);
 		scene.setRoot(borderPane);

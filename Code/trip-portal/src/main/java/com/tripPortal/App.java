@@ -6,6 +6,7 @@ import com.tripPortal.Model.Company;
 import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Menu.AdminMenu;
 import com.tripPortal.Menu.ClientMenu;
+import com.tripPortal.Menu.CompanyMenu;
 import com.tripPortal.Model.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -37,7 +38,7 @@ public class App extends Application {
 
         button1.setMaxWidth(400);
         button2.setMaxWidth(400);
-
+        
         button1.setPrefHeight(100);
         button2.setPrefHeight(100);
 
@@ -53,6 +54,7 @@ public class App extends Application {
             adminMenu.setCompanyControllerForAdminMenu(CompanyController);
             adminMenu.start(new Stage());
         });
+
 
         VBox centerBox = new VBox(20, button1, button2);
         centerBox.setAlignment(Pos.CENTER);
@@ -71,7 +73,6 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-
         launch(args);
     }
 

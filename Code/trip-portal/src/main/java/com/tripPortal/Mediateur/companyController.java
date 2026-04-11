@@ -1,12 +1,12 @@
 package com.tripPortal.Mediateur;
 
+//import com.sun.jdi.connect.Transport;
 import com.sun.jdi.connect.Transport;
 import com.tripPortal.Factory.BoatCompanyFactory;
 import com.tripPortal.Factory.FlightCompanyFactory;
 import com.tripPortal.Factory.TrainCompanyFactory;
 import com.tripPortal.Model.Company;
 import com.tripPortal.Model.Trip;
-
 import java.util.ArrayList;
 
 public class companyController {
