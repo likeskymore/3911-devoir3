@@ -1,5 +1,8 @@
 package com.tripPortal;
 
+import com.tripPortal.Commande.editCompanyCommand;
+import com.tripPortal.Model.Company;
+
 import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Menu.AdminMenu;
 import com.tripPortal.Menu.ClientMenu;
@@ -68,6 +71,11 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        Company company = new Company("test");
+        editCompanyCommand test = new editCompanyCommand(company);
+        test.execute();
+        //launch(args);
     }
+
+    
 }

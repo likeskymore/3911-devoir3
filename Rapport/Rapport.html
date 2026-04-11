@@ -991,16 +991,6 @@
             <h1>Patron Commande</h1>
             <br>
             <div>
-                <p>
-                    Pour la l’utilisation de la patron de Commande, on améliore l’encapsulation ainsi qu’améliorer l’aspect OCP pour notre design. 
-                    L’invocateur n’a pas besoin de connaître le receveur pour pouvoir exécuter une commande. Cela nous permet d'épandre notre projet
-                    sans modifier les codes existantes. 
-
-                    Pour le Mémento, cela nous aide à garder une historique, donc retourner en arrière si on a fait une modification qu’on n’a pas voulu faire.
-
-                </p>
-            </div>
-            <div>
                 <a href="../Rapport/Assets/CommandeClass.svg"><img class="activity-diagram" src="/Rapport/Assets/CommandeClass.svg" alt="Patron Commande" id="CommandeClass"/></a>
                 <br>
                 <p class="text-red-500">Nous avons conçu plusieurs diagrammes de séquence pour illustrer l'utilisation du patron Commande, mais aussi du patron Memento, car dans l'énoncé on parle de la fonctionnalité undo.</p>
@@ -1062,7 +1052,18 @@
 
                     <li><strong>État: </strong></li>
                     <li><strong>Observateur: </strong></li>
-                    <li><strong>Commande: </strong></li>
+                    <li><strong>Commande:
+                        <div>
+                            <p>
+                                Pour la l’utilisation de la patron de Commande, on améliore l’encapsulation ainsi qu’améliorer l’aspect OCP pour notre design. 
+                                L’invocateur n’a pas besoin de connaître le receveur pour pouvoir exécuter une commande. Cela nous permet d'épandre notre projet
+                                sans modifier les codes existantes. 
+
+                                Pour le Mémento, cela nous aide à garder une historique, donc retourner en arrière si on a fait une modification qu’on n’a pas voulu faire.
+
+                            </p>
+                        </div>
+                    </strong></li>
                     <li><strong>Visiteur: </strong> Le patron Visiteur permet de séparer les algorithmes de parcours (traversal) des objets sur lesquels ils opèrent. Il contribue ainsi au respect du principe ouvert/fermé (OCP), 
                         puisqu’il devient possible d’ajouter de nouvelles fonctionnalités sans modifier les classes existantes. En dissociant davantage les données des traitements, ce patron améliore la cohésion en clarifiant 
                         les responsabilités de chaque composant. De plus, les classes du projet n’ont plus besoin de connaître les détails d’implémentation des algorithmes qui s’appliquent à elles. Un niveau d’abstraction supplémentaire 
