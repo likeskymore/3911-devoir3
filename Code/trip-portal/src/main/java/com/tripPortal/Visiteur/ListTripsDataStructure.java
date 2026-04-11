@@ -2,16 +2,21 @@ package com.tripPortal.Visiteur;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class ListTripsDataStructure {
 
     private ArrayList<VisitableTrips> trips = new ArrayList<>();
 
     public void add(VisitableTrips trip) { trips.add(trip); }
 
-    public ArrayList<String> accept(Visitor visitor) {
-        ArrayList<String> results = new ArrayList<>();
+    public ArrayList<javafx.util.Pair<String, JsonNode>> acceptWithNodes(Visitor visitor) {
+        ArrayList<javafx.util.Pair<String, JsonNode>> results = new ArrayList<>();
         for (VisitableTrips trip : trips) {
-            results.add(trip.accept(visitor));
+            String display = trip.accept(visitor);
+            if (display != null && !display.isBlank()) {
+                results.add(new javafx.util.Pair<>(display, trip.getNode()));
+            }
         }
         return results;
     }

@@ -16,7 +16,7 @@
       "occupied" : false
     }, {
       "seatID" : "F1C",
-      "occupied" : false
+      "occupied" : true
     }, {
       "seatID" : "F2A",
       "occupied" : false
@@ -31,7 +31,7 @@
       "occupied" : false
     }, {
       "seatID" : "F3B",
-      "occupied" : false
+      "occupied" : true
     }, {
       "seatID" : "F3C",
       "occupied" : false
@@ -212,7 +212,7 @@
       "occupied" : false
     }, {
       "seatID" : "D-C9",
-      "occupied" : false
+      "occupied" : true
     }, {
       "seatID" : "D-C10",
       "occupied" : false

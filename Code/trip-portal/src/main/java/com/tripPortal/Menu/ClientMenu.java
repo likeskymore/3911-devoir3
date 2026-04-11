@@ -1,10 +1,12 @@
 package com.tripPortal.Menu;
 
+import java.io.File;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tripPortal.Mediateur.reservationController;
 import com.tripPortal.Mediateur.tripController;
-import com.tripPortal.Model.Trip;
-import com.tripPortal.Model.User;
 import com.tripPortal.Visiteur.ConcreteCruiseLineVisitor;
 import com.tripPortal.Visiteur.ConcreteFlightVisitor;
 import com.tripPortal.Visiteur.ConcreteRouteVisitor;
@@ -16,16 +18,19 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ClientMenu {
 
 	private tripController tripControllerForClientMenu;
+	private reservationController reservationControllerForClientMenu;
 
 	public void start(Stage stage) {
 		// TODO - implement com.tripPortal.Menu.ClientMenu.start
@@ -79,27 +84,29 @@ public class ClientMenu {
 	public void displayReserveMenu(Scene scene, String message) {
 		ListTripsDataStructure structure = tripControllerForClientMenu.fetchAllTripsAsStructure();
 
-		ArrayList<String> lines = new ArrayList<>();
-		lines.addAll(structure.accept(new ConcreteFlightVisitor()));
-		lines.addAll(structure.accept(new ConcreteRouteVisitor()));
-		lines.addAll(structure.accept(new ConcreteCruiseLineVisitor()));
-
-		// Filtre les lignes vides
-		lines.removeIf(String::isBlank);
+		// ── Collecter paires (affichage, node) ────────────────────────
+		ArrayList<javafx.util.Pair<String, JsonNode>> pairs = new ArrayList<>();
+		pairs.addAll(structure.acceptWithNodes(new ConcreteFlightVisitor()));
+		pairs.addAll(structure.acceptWithNodes(new ConcreteRouteVisitor()));
+		pairs.addAll(structure.acceptWithNodes(new ConcreteCruiseLineVisitor()));
 
 		// ── Liste des trips ───────────────────────────────────────────
 		VBox tripList = new VBox(8);
 		tripList.setPadding(new Insets(10));
-		for (String line : lines) {
+		for (javafx.util.Pair<String, JsonNode> pair : pairs) {
+			String line   = pair.getKey();
+			JsonNode node = pair.getValue();
+
 			Label label = new Label(line);
 			label.setWrapText(true);
 			label.setStyle("-fx-border-color: #ccc; -fx-border-radius: 5; -fx-padding: 8;");
 			label.setPrefWidth(300);
+
 			Button reserveButton = new Button("Reserve");
 			reserveButton.setOnAction(e -> {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION, "Reservation successful for:\n" + line, ButtonType.OK);
-				alert.showAndWait();
+				displayAvailableSeats(scene, node);
 			});
+
 			tripList.getChildren().add(new HBox(10, label, reserveButton));
 		}
 
@@ -109,6 +116,8 @@ public class ClientMenu {
 
 		// ── Message si applicable ─────────────────────────────────────
 		VBox content = new VBox(10);
+		Label header = new Label("Available Trips:");
+		content.getChildren().add(header);
 		content.setPadding(new Insets(20));
 		if (message != null && !message.isBlank()) {
 			Label msgLabel = new Label(message);
@@ -133,8 +142,79 @@ public class ClientMenu {
 		scene.setRoot(layout);
 	}
 
+	public void displayAvailableSeats(Scene scene, JsonNode tripNode) {
+		JsonNode transport = tripNode.get("transport");
+		String type = tripNode.get("type").asText();
+		ObjectMapper mapper = new ObjectMapper();
+		File file = new File("src/Database/Transport.json");
+		
+		try {
+			JsonNode root = mapper.readTree(file);
+			if (root == null || !root.isArray()) return;
+
+			ListView<String> listView = new ListView<>();
+			if(type.equals("CruiseLine")) {
+				for (JsonNode node : root) {
+					if (node.has("transportID") && node.get("transportID").asText().equals(transport.asText())) {
+						for (JsonNode section : node.get("sections")) {
+							for (JsonNode cabin : section.get("cabins")) {
+								if (cabin.get("occupied").asBoolean() == false) {
+									listView.getItems().add("Cabin ID: " + cabin.get("seatID").asText());
+								}
+							}
+						}
+					}
+				}
+			} else {
+				for (JsonNode node : root) {
+					if (node.has("transportID") && node.get("transportID").asText().equals(transport.asText())) {
+						for (JsonNode Section : node.get("sections")) {
+							for (JsonNode seat : Section.get("seats")) {
+								if (seat.get("occupied").asBoolean() == false) {
+									listView.getItems().add("Seat ID: " + seat.get("seatID").asText());
+								}
+							}
+						}
+					}
+				}
+			}
+			VBox layout = new VBox(10);
+			layout.setPadding(new Insets(20));	
+			layout.getChildren().add(new Label("Available Seats:"));
+			layout.getChildren().add(listView); // Placeholder for seat list
+			Button backButton = new Button("Back");
+			backButton.setOnAction(e -> displayReserveMenu(scene, ""));
+			Button reserveButton = new Button("Reserve now");
+			reserveButton.setOnAction(e -> {
+				String selected = listView.getSelectionModel().getSelectedItem();
+				if (selected == null) {
+					new Alert(Alert.AlertType.WARNING, "Please select a seat.").showAndWait();
+					return;
+				}
+				String seatID = selected.split(": ")[1];
+				reservationControllerForClientMenu.reserveTrip(tripNode, seatID);
+				displayReserveMenu(scene, "Reservation successful for seat: " + seatID);
+			});
+			Region spacer = new Region();
+			HBox.setHgrow(spacer, Priority.ALWAYS);
+			HBox buttons = new HBox(10, backButton, spacer, reserveButton);
+			layout.getChildren().add(buttons);
+			scene.setRoot(layout);
+
+		} catch (Exception e) {
+			Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load transport data");
+			alert.showAndWait();
+		}
+
+		
+	}
+
 	public void setTripControllerForClientMenu(tripController tripControllerForClientMenu) {
 		this.tripControllerForClientMenu = tripControllerForClientMenu;
+	}
+
+	public void setReservationControllerForClientMenu(reservationController reservationControllerForClientMenu) {
+		this.reservationControllerForClientMenu = reservationControllerForClientMenu;
 	}
 
 
