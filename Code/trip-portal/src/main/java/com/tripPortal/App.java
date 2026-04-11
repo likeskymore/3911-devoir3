@@ -1,5 +1,8 @@
 package com.tripPortal;
 
+import com.tripPortal.Commande.editCompanyCommand;
+import com.tripPortal.Model.Company;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -19,6 +22,11 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        Company company = new Company("test");
+        editCompanyCommand test = new editCompanyCommand(company);
+        test.execute();
+        //launch(args);
     }
+
+    
 }
