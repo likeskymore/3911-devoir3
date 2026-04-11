@@ -9,7 +9,19 @@ import com.tripPortal.Model.Trip;
 import com.tripPortal.Model.Location;
 
 public class TrainCompanyFactory extends TrainTripFactory {
+	// Singleton
+	private static TrainCompanyFactory instance;
 
+	private TrainCompanyFactory() {}
+
+	public static TrainCompanyFactory getInstance() {
+		if (instance == null) {
+			instance = new TrainCompanyFactory();
+		}
+		return instance;
+	}
+
+	// Patron de fabrique
 	public Location createLocation(String city) {
 		// TODO - implement TrainCompanyFactory.createLocation
 		return null;

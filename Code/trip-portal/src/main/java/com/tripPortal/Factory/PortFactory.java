@@ -11,10 +11,19 @@ import com.tripPortal.Model.Trip;
 
 public class PortFactory extends BoatTripFactory {
 
-	/**
-	 * 
-	 * @param city
-	 */
+	// Singleton
+    private static PortFactory instance;
+
+    private PortFactory() {}
+
+    public static PortFactory getInstance() {
+        if (instance == null) {
+            instance = new PortFactory();
+        }
+        return instance;
+    }
+
+	// Patron de fabrique
 	public Location createLocation(String city) {
 		// TODO - implement PortFactory.createLocation
 		Location p = new Port(city);

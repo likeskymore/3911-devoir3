@@ -9,22 +9,32 @@ import com.tripPortal.Model.Flight;
 import com.tripPortal.Model.Trip;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class FlightFactory extends PlaneTripFactory {
-	public Location createLocation(String city) {
-		return null;
-	}
-    public Company createCompany(String name){
-		return null;
-	}
 
-	/**
-	 * 
-	 * @param locations
-	 */
-	public Trip createTrajectory(
+    // Singleton
+    private static FlightFactory instance;
+
+    private FlightFactory() {}
+
+    public static FlightFactory getInstance() {
+        if (instance == null) {
+            instance = new FlightFactory();
+        }
+        return instance;
+    }
+
+    // Patron de fabrique
+    public Location createLocation(String city) {
+        return null;
+    }
+
+    public Company createCompany(String name) {
+        return null;
+    }
+
+    public Trip createTrajectory(
             Company company,
             LocalDate startDate,
             LocalDate endDate,
@@ -51,5 +61,4 @@ public class FlightFactory extends PlaneTripFactory {
             (Plane) transport
         );
     }
-
 }

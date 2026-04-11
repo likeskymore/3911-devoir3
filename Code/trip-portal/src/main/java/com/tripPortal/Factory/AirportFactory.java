@@ -11,7 +11,19 @@ import com.tripPortal.Model.Trip;
 
 public class AirportFactory extends PlaneTripFactory {
 
+	// Singleton
+    private static AirportFactory instance;
 
+    private AirportFactory() {}
+
+    public static AirportFactory getInstance() {
+        if (instance == null) {
+            instance = new AirportFactory();
+        }
+        return instance;
+    }
+
+	// Patron de fabrique
 	public Location createLocation(String city) {
 		// TODO - implement AirportFactory.createLocation
 		Location l = new Airport( city );

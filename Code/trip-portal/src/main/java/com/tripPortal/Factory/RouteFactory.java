@@ -10,7 +10,19 @@ import java.util.ArrayList;
 
 public class RouteFactory extends TrainTripFactory {
 
+    // Singleton
+    private static RouteFactory instance;
 
+    private RouteFactory() {}
+
+    public static RouteFactory getInstance() {
+        if (instance == null) {
+            instance = new RouteFactory();
+        }
+        return instance;
+    }
+
+    // Patron de fabrique
 	public Location createLocation(String city){
 		return null;
 	}

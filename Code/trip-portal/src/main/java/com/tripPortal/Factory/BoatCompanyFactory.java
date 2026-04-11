@@ -10,6 +10,19 @@ import com.tripPortal.Model.Location;
 
 public class BoatCompanyFactory extends BoatTripFactory {
 
+    // Singleton
+    private static BoatCompanyFactory instance;
+
+    private BoatCompanyFactory() {}
+
+    public static BoatCompanyFactory getInstance() {
+        if (instance == null) {
+            instance = new BoatCompanyFactory();
+        }
+        return instance;
+    }
+
+    // Patron de fabrique
 	public Location createLocation(String city){
 		return null;
 	}

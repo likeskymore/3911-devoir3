@@ -1,14 +1,13 @@
-[
-  {
-    "type": "FlightCompany",
-    "name": "Air Canada"
-  },
-  {
-    "type": "TrainCompany",
-    "name": "VIA Rail"
-  },
-  {
-    "type": "CruiseCompany",
-    "name": "MSC Cruises"
-  }
-]
+[ {
+  "type" : "FlightCompany",
+  "name" : "Air Canada"
+}, {
+  "type" : "TrainCompany",
+  "name" : "VIA Rail"
+}, {
+  "type" : "CruiseCompany",
+  "name" : "MSC Cruises"
+}, {
+  "type" : "FlightCompany",
+  "name" : "helo"
+} ]

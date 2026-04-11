@@ -1,6 +1,8 @@
 package com.tripPortal.Model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -50,17 +52,17 @@ public abstract class Transport {
     }
 
     public static Transport fromJson(String transportID, JsonNode root) {
-    for (JsonNode node : root.get("transports")) {
-        if (node.get("transportID").asText().equals(transportID)) {
-            String type = node.get("type").asText();
-            return switch (type) {
-                case "Plane" -> new Plane(node);
-                case "Boat"  -> new Boat(node);
-                case "Train" -> new Train(node);
-                default -> throw new IllegalArgumentException("Unknown transport type: " + type);
-            };
+        for (JsonNode node : root) {
+            if (node.get("transportID").asText().equals(transportID)) {
+                String type = node.get("type").asText();
+                return switch (type) {
+                    case "Plane" -> new Plane(node);
+                    case "Boat"  -> new Boat(node);
+                    case "Train" -> new Train(node);
+                    default -> throw new IllegalArgumentException("Unknown transport type: " + type);
+                };
+            }
         }
+        throw new IllegalArgumentException("Transport not found: " + transportID);
     }
-    throw new IllegalArgumentException("Transport not found: " + transportID);
-}
 }
