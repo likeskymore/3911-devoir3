@@ -1,4 +1,6 @@
 package com.tripPortal.Model;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -42,7 +44,7 @@ public abstract class Location {
 	}
 
 	public static Location fromJson(String city, JsonNode root) {
-		for (JsonNode node : root.get("locations")) {
+		for (JsonNode node : root) {
 			if (node.get("city").asText().equals(city)) {
 				String type = node.get("type").asText();
 				return switch (type) {
@@ -53,6 +55,6 @@ public abstract class Location {
 				};
 			}
 		}
-    	throw new IllegalArgumentException("Location not found: " + city);
+		throw new IllegalArgumentException("Location not found: " + city);
 	}
 }

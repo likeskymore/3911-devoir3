@@ -1,25 +1,20 @@
 package com.tripPortal.Menu;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.File;
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.temporal.ChronoUnit;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tripPortal.Factory.CruiseLineFactory;
+import com.tripPortal.Factory.FlightFactory;
 import com.tripPortal.Factory.RouteFactory;
-import com.tripPortal.Factory.TripFactory;
-import com.tripPortal.Model.Boat;
-import com.tripPortal.Model.BoatCompany;
+import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Model.Company;
-import com.tripPortal.Model.CruiseLine;
-import com.tripPortal.Model.FlightCompany;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Transport;
-import com.tripPortal.Model.TrainCompany;
 import com.tripPortal.Model.Trip;
 import com.tripPortal.Model.User;
 
@@ -30,17 +25,18 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.control.TextField;
 
 public class AdminMenu {
-	private TripFactory tripFactory;
-	private RouteFactory routeFactory;
-	private CruiseLine cruiseLine;
+	private companyController CompanyControllerForAdminMenu;
 
 
 	public void start(Stage stage) {
@@ -71,6 +67,9 @@ public class AdminMenu {
 		Button	companiesButton = new Button("Companies");
 		companiesButton.setMinWidth(200);
 		companiesButton.setPrefHeight(50);
+		companiesButton.setOnAction(e -> {
+			displayCompaniesMenu(scene);
+		});
 		Button	locationsButton = new Button("Locations");
 		locationsButton.setMinWidth(200);
 		locationsButton.setPrefHeight(50);
@@ -147,9 +146,39 @@ public class AdminMenu {
 		ComboBox<String> CompanyComboBox = new ComboBox<>();
 		VBox companyBox = new VBox(5, companyLabel, CompanyComboBox);
 
-		Label locationLabel = new Label("Select Location:");
-		ComboBox<String> LocationComboBox = new ComboBox<>();
-		VBox locationBox = new VBox(5, locationLabel, LocationComboBox);
+		Label locationLabel = new Label("Select Path (hold Ctrl to multi-select):");
+		ListView<String> LocationListView = new ListView<>();
+		LocationListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		LocationListView.setPrefHeight(120);
+		LocationListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+			if (flightCheckBox.isSelected()) {
+				List<String> selected = LocationListView.getSelectionModel().getSelectedItems();
+				if (selected.size() >= 2) {
+					LocationListView.setCellFactory(lv -> new ListCell<String>() {
+						@Override
+						protected void updateItem(String item, boolean empty) {
+							super.updateItem(item, empty);
+							setText(empty ? null : item);
+							// Disable unselected cells once limit is reached
+							setDisable(!empty && !selected.contains(item));
+							setOpacity(!empty && !selected.contains(item) ? 0.4 : 1.0);
+						}
+					});
+				} else {
+					// Re-enable all cells when under the limit
+					LocationListView.setCellFactory(lv -> new ListCell<String>() {
+						@Override
+						protected void updateItem(String item, boolean empty) {
+							super.updateItem(item, empty);
+							setText(empty ? null : item);
+							setDisable(false);
+							setOpacity(1.0);
+						}
+					});
+        		}
+    		}
+		});
+		VBox locationBox = new VBox(5, locationLabel, LocationListView);
 
 		
 		Label transportLabel = new Label("Select Transport:");
@@ -172,26 +201,50 @@ public class AdminMenu {
 				JsonNode root2 = mapper.readTree(new File("src/Database/Location.json"));
 				JsonNode root3 = mapper.readTree(new File("src/Database/Transport.json"));
 
-				Company company      = Company.fromJson(CompanyComboBox.getValue(), root1);
-				Location origin      = Location.fromJson(LocationComboBox.getValue(), root2);
-				Location destination = Location.fromJson(LocationComboBox.getValue(), root2);
-				Transport transport  = Transport.fromJson(TransportComboBox.getValue(), root3);
+				Company company = Company.fromJson(CompanyComboBox.getValue(), root1);
 
-				TripFactory factory = TripFactory.getFactory(
-					flightCheckBox.isSelected() ? "Flight" :
-					boatCheckBox.isSelected()   ? "Cruise" :
-					trainCheckBox.isSelected()  ? "Train"  : ""
-				);
+				ArrayList<Location> locations = new ArrayList<>();
+				for (String selectedName : LocationListView.getSelectionModel().getSelectedItems()) {
+					Location loc = Location.fromJson(selectedName, root2);
+					locations.add(loc);
+				}
 
-				factory.createTrajectory(
-					company,
-					startDate.getValue(),
-					endDate.getValue(),
-					Float.parseFloat(priceField.getText()),
-					(int) ChronoUnit.DAYS.between(startDate.getValue(), endDate.getValue()),
-					new ArrayList<>(),
-					transport
-				);
+				Transport transport = Transport.fromJson(TransportComboBox.getValue(), root3);
+
+				Trip trip;
+				if (flightCheckBox.isSelected()) {
+					trip = FlightFactory.getInstance().createTrajectory(
+						company,
+						startDate.getValue(),
+						endDate.getValue(),
+						Float.parseFloat(priceField.getText()),
+						(int) ChronoUnit.DAYS.between(startDate.getValue(), endDate.getValue()),
+						locations,
+						transport
+					);
+				} else if (boatCheckBox.isSelected()) {
+					trip = CruiseLineFactory.getInstance().createTrajectory(
+						company,
+						startDate.getValue(),
+						endDate.getValue(),
+						Float.parseFloat(priceField.getText()),
+						(int) ChronoUnit.DAYS.between(startDate.getValue(), endDate.getValue()),
+						locations,
+						transport
+					);
+				} else if (trainCheckBox.isSelected()) {
+					trip = RouteFactory.getInstance().createTrajectory(
+						company,
+						startDate.getValue(),
+						endDate.getValue(),
+						Float.parseFloat(priceField.getText()),
+						(int) ChronoUnit.DAYS.between(startDate.getValue(), endDate.getValue()),
+						locations,
+						transport
+					);
+				} else {
+					throw new IllegalArgumentException("No trip type selected.");
+				}
 
 			} catch (IOException ex) {
 				System.err.println("Failed to read JSON files: " + ex.getMessage());
@@ -202,7 +255,6 @@ public class AdminMenu {
 			}
 		});
 
-		// ---------------- LOAD JSON ONCE ----------------
 		ObjectMapper mapper = new ObjectMapper();
 		File companyFile = new File("src/Database/Company.json");
 		File locationFile = new File("src/Database/Location.json");
@@ -236,7 +288,7 @@ public class AdminMenu {
 				trainCheckBox.setSelected(false);
 				updating[0] = false;
 				updateCompanies(root1, CompanyComboBox, "FlightCompany");
-				updateLocations(root2, LocationComboBox, "Airport");
+				updateLocations(root2, LocationListView, "Airport");
 				updateTransports(root3, TransportComboBox, "Plane");
 			}
 		});
@@ -248,8 +300,10 @@ public class AdminMenu {
 				flightCheckBox.setSelected(false);
 				trainCheckBox.setSelected(false);
 				updating[0] = false;
+				LocationListView.getSelectionModel().clearSelection();
+        		LocationListView.setCellFactory(null);
 				updateCompanies(root1, CompanyComboBox, "CruiseCompany");
-				updateLocations(root2, LocationComboBox, "Port");
+				updateLocations(root2, LocationListView, "Port");
 				updateTransports(root3, TransportComboBox, "Boat");
 			}
 		});
@@ -261,8 +315,10 @@ public class AdminMenu {
 				flightCheckBox.setSelected(false);
 				boatCheckBox.setSelected(false);
 				updating[0] = false;
+				LocationListView.getSelectionModel().clearSelection();
+        		LocationListView.setCellFactory(null);
 				updateCompanies(root1, CompanyComboBox, "TrainCompany");
-				updateLocations(root2, LocationComboBox, "TrainStation");
+				updateLocations(root2, LocationListView, "TrainStation");
 				updateTransports(root3, TransportComboBox, "Train");
 			}
 		});
@@ -299,12 +355,12 @@ public class AdminMenu {
 		}
 	}
 
-	private void updateLocations(JsonNode root, ComboBox<String> comboBox, String type) {
-		comboBox.getItems().clear();
+	private void updateLocations(JsonNode root, ListView<String> listView, String type) {
+		listView.getItems().clear();
 
 		for (JsonNode node : root) {
 			if (node.has("type") && node.get("type").asText().equals(type)) {
-				comboBox.getItems().add(node.get("name").asText());
+				listView.getItems().add(node.get("name").asText());
 			}
 		}
 	}
@@ -319,40 +375,102 @@ public class AdminMenu {
 		}
 	}
 
-	/**
-	 * 
-	 * @param user
-	 */
-	public void displayEditProfile(User user) {
-		// TODO - implement com.tripPortal.Menu.AdminMenu.displayEditProfile
-		throw new UnsupportedOperationException();
+
+
+	private void displayCompaniesMenu(Scene scene) {
+		// TODO - implement com.tripPortal.Menu.AdminMenu.displayCompaniesMenu
+		Button backButton = new Button("Back");
+		backButton.setMinWidth(100);
+		backButton.setPrefHeight(50);
+		backButton.setOnAction(e -> {
+			displayMenuAdmin(scene);
+		});
+
+		VBox back = new VBox(backButton);
+		VBox pageContent = new VBox();
+		Button CreateCompanyButton = new Button("Create Company");
+		CreateCompanyButton.setMinWidth(50);
+		CreateCompanyButton.setPrefHeight(50);
+		CreateCompanyButton.setOnAction(e -> {
+			displayCompanyCreationForm(scene);
+		});
+		ArrayList<Company> companies = new ArrayList<>();
+
+		// Button EditCompanyButton = new Button("Edit Company");
+		// EditCompanyButton.setMinWidth(200);
+		// EditCompanyButton.setPrefHeight(50);
+		// Button DeleteCompanyButton = new Button("Delete Company");
+		// DeleteCompanyButton.setMinWidth(100);
+		// DeleteCompanyButton.setPrefHeight(50);
+		pageContent.getChildren().addAll(CreateCompanyButton);
+		pageContent.setAlignment(Pos.CENTER);
+		back.setPrefWidth(200);
+		back.setMinWidth(200);
+		back.setMaxWidth(200);
+		HBox.setHgrow(pageContent, Priority.ALWAYS);
+		HBox layout = new HBox(back, pageContent);
+
+		scene.setRoot(layout);
 	}
 
-	/**
-	 * 
-	 * @param companies
-	 */
-	public void displayCompanies(ArrayList<Company> companies) {
-		// TODO - implement com.tripPortal.Menu.AdminMenu.displayCompanies
-		throw new UnsupportedOperationException();
+	private void displayCompanyCreationForm(Scene scene) {
+		HBox layout = new HBox();
+
+		// ---------------- BACK BUTTON ----------------
+		Button backButton = new Button("Back");
+		backButton.setMinWidth(100);
+		backButton.setPrefHeight(50);
+		backButton.setOnAction(e -> displayTripsMenu(scene));
+
+		VBox back = new VBox(backButton);
+
+		// ---------------- FORM ----------------
+		VBox form = new VBox(10);
+		form.setAlignment(Pos.CENTER);
+
+		CheckBox flightCheckBox = new CheckBox("Flight Company");
+		CheckBox boatCheckBox = new CheckBox("Cruise Company");
+		CheckBox trainCheckBox = new CheckBox("Train Company");
+		HBox checkboxes = new HBox(5, flightCheckBox, boatCheckBox, trainCheckBox);
+
+		TextField nameField = new TextField();
+		nameField.setPromptText("Company Name");
+
+	
+
+		Button submitButton = new Button("Submit");
+		submitButton.setMinWidth(100);
+		submitButton.setPrefHeight(20);
+		submitButton.setOnAction(e -> {
+			String type = flightCheckBox.isSelected() ? "FlightCompany" :
+				boatCheckBox.isSelected()   ? "CruiseCompany" :
+				trainCheckBox.isSelected()  ? "TrainCompany"  : null;
+			if (type == null) {
+				System.err.println("No company type selected.");
+				return;
+			}
+
+			CompanyControllerForAdminMenu.goCallCreateCompany(nameField.getText(), type);
+		});
+
+		form.getChildren().addAll(
+				checkboxes,
+				nameField,
+				submitButton
+		);
+
+		back.setPrefWidth(200);
+		back.setMinWidth(200);
+		back.setMaxWidth(200);
+
+		HBox.setHgrow(form, Priority.ALWAYS);
+		layout.getChildren().addAll(back, form);
+		scene.setRoot(layout);
+
 	}
 
-	/**
-	 * 
-	 * @param trips
-	 */
-	public void displayTrips(ArrayList<Trip> trips) {
-		// TODO - implement com.tripPortal.Menu.AdminMenu.displayTrips
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param location
-	 */
-	public void displayLocations(ArrayList<Location> location) {
-		// TODO - implement com.tripPortal.Menu.AdminMenu.displayLocations
-		throw new UnsupportedOperationException();
+	public void setCompanyControllerForAdminMenu(companyController companyControllerForAdminMenu) {
+		this.CompanyControllerForAdminMenu = companyControllerForAdminMenu;
 	}
 
 }

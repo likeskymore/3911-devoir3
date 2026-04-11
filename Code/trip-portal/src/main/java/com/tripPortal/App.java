@@ -1,5 +1,6 @@
 package com.tripPortal;
 
+import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Menu.AdminMenu;
 import com.tripPortal.Menu.ClientMenu;
 import com.tripPortal.Model.*;
@@ -45,6 +46,8 @@ public class App extends Application {
         // Admin click
         button2.setOnAction(e -> {
             AdminMenu adminMenu = new AdminMenu();
+            companyController CompanyController = new companyController();
+            adminMenu.setCompanyControllerForAdminMenu(CompanyController);
             adminMenu.start(new Stage());
         });
 

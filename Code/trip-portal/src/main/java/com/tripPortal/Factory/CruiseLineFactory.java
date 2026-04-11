@@ -18,13 +18,26 @@ import java.util.ArrayList;
 
 public class CruiseLineFactory extends BoatTripFactory {
 
+	// Singleton
+    private static CruiseLineFactory instance;
+
+    private CruiseLineFactory() {}
+
+    public static CruiseLineFactory getInstance() {
+        if (instance == null) {
+            instance = new CruiseLineFactory();
+        }
+        return instance;
+    }
+
+	// Patron de fabrique
 	public Location createLocation(String city) {
 		return null;
 	}
     public Company createCompany(String name){
 		return null;
 	}
-	@Override
+
 	public Trip createTrajectory(
             Company company,
             LocalDate startDate,

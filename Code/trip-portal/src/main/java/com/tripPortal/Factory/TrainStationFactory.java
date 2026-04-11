@@ -11,10 +11,19 @@ import com.tripPortal.Model.Trip;
 
 public class TrainStationFactory extends TrainTripFactory {
 
-	/**
-	 * 
-	 * @param city
-	 */
+	// Singleton
+    private static TrainStationFactory instance;
+
+    private TrainStationFactory() {}
+
+    public static TrainStationFactory getInstance() {
+        if (instance == null) {
+            instance = new TrainStationFactory();
+        }
+        return instance;
+    }
+
+    // Patron de fabrique
 	public Location createLocation(String city) {
 		// TODO - implement TrainStationFactory.createLocation
 		Location t = new TrainStation(city);

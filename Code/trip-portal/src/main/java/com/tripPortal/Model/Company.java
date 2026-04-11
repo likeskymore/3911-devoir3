@@ -1,6 +1,8 @@
 package com.tripPortal.Model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -76,17 +78,17 @@ public abstract class Company {
 	}
 
 	public static Company fromJson(String name, JsonNode root) {
-    for (JsonNode node : root.get("companies")) {
-        if (node.get("name").asText().equals(name)) {
-            String type = node.get("type").asText();
-            return switch (type) {
-                case "FlightCompany" -> new FlightCompany(node);
-                case "BoatCompany"   -> new BoatCompany(node);
-                case "TrainCompany"  -> new TrainCompany(node);
-                default -> throw new IllegalArgumentException("Unknown company type: " + type);
-            };
-        }
-    }
-    throw new IllegalArgumentException("Company not found: " + name);
-}
+		for (JsonNode node : root) { // root is a flat array, just iterate directly
+			if (node.get("name").asText().equals(name)) {
+				String type = node.get("type").asText();
+				return switch (type) {
+					case "FlightCompany" -> new FlightCompany(node);
+					case "BoatCompany"   -> new BoatCompany(node);
+					case "TrainCompany"  -> new TrainCompany(node);
+					default -> throw new IllegalArgumentException("Unknown company type: " + type);
+				};
+			}
+		}
+		throw new IllegalArgumentException("Company not found: " + name);
+	}
 }
