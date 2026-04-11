@@ -8,13 +8,16 @@ import java.util.Random;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public abstract class Transport {
+    String name;
     String TransportID;
     ArrayList<Section> sections;
     boolean available;
 
-    public Transport(boolean available) {
+    public Transport(String name) {
+        this.name = name;
         this.TransportID = randomGenerateID();
-        this.available = available;
+        this.available = true;
+        this.sections = new ArrayList<>();
     }
 
     private String randomGenerateID() {
@@ -25,6 +28,10 @@ public abstract class Transport {
             id += number;
         }
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getTransportID() {

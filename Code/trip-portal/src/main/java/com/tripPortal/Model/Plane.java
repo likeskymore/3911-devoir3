@@ -4,11 +4,22 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class Plane extends Transport {
 
-    public Plane(boolean available) {
-        super(available);
+    public Plane(String name) {
+        super(name);
     }
     public Plane(JsonNode node) {
-        super(node.get("available").asBoolean());
+        super(node.get("name").asText());
         this.TransportID = node.get("transportID").asText();
     }
+
+    public boolean addSection(Section section) {
+    boolean alreadyExists = sections.stream()
+            .anyMatch(s -> s.getSectionName().equals(section.getSectionName()));
+    if (alreadyExists) {
+        System.err.println("La section " + section.getSectionName() + " existe déjà.");
+        return false;
+    }
+    sections.add(section);
+    return true;
+}
 }

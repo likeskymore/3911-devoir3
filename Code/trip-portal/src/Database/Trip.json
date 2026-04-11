@@ -1,0 +1,32 @@
+[ {
+  "type" : "Flight",
+  "id" : "JEALRI",
+  "company" : "dasdsq",
+  "startDate" : "2026-04-01",
+  "endDate" : "2026-04-10",
+  "price" : 23.0,
+  "duration" : 9,
+  "origin" : "Montreal",
+  "destination" : "montreal",
+  "transport" : "457057"
+}, {
+  "type" : "Route",
+  "id" : "CPWWMC",
+  "company" : "qsadq",
+  "startDate" : "2026-04-01",
+  "endDate" : "2026-04-16",
+  "price" : 15.0,
+  "duration" : 15,
+  "transport" : "755623",
+  "path" : [ "Montreal", "London", "Tokyo" ]
+}, {
+  "type" : "CruiseLine",
+  "id" : "XIPOUD",
+  "company" : "dwqdsadq",
+  "startDate" : "2026-04-01",
+  "endDate" : "2026-04-16",
+  "price" : 17.0,
+  "duration" : 15,
+  "transport" : "463247",
+  "path" : [ "Miami", "Barcelona", "Venice" ]
+} ]

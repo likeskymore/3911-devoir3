@@ -4,6 +4,9 @@ import com.tripPortal.Commande.editCompanyCommand;
 import com.tripPortal.Model.Company;
 
 import com.tripPortal.Mediateur.companyController;
+import com.tripPortal.Mediateur.locationController;
+import com.tripPortal.Mediateur.transportController;
+import com.tripPortal.Mediateur.tripController;
 import com.tripPortal.Menu.AdminMenu;
 import com.tripPortal.Menu.ClientMenu;
 import com.tripPortal.Menu.CompanyMenu;
@@ -50,8 +53,14 @@ public class App extends Application {
         // Admin click
         button2.setOnAction(e -> {
             AdminMenu adminMenu = new AdminMenu();
+            tripController TripControllerForAdminMenu = new tripController();
             companyController CompanyController = new companyController();
+            locationController LocationController = new locationController();
+            transportController TransportController = new transportController();
+            adminMenu.setTripControllerForAdminMenu(TripControllerForAdminMenu);
             adminMenu.setCompanyControllerForAdminMenu(CompanyController);
+            adminMenu.setLocationControllerForAdminMenu(LocationController);
+            adminMenu.setTransportControllerForAdminMenu(TransportController);
             adminMenu.start(new Stage());
         });
 

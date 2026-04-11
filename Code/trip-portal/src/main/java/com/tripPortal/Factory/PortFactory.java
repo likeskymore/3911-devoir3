@@ -1,8 +1,15 @@
 package com.tripPortal.Factory;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tripPortal.Model.Airport;
 import com.tripPortal.Model.Company;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Port;
@@ -25,9 +32,40 @@ public class PortFactory extends BoatTripFactory {
 
 	// Patron de fabrique
 	public Location createLocation(String city) {
-		// TODO - implement PortFactory.createLocation
-		Location p = new Port(city);
-		return p;
+		Port port = new Port(city);
+
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			File file = new File("src/Database/Location.json");
+
+			// Read existing array
+			JsonNode root = mapper.readTree(file);
+			ArrayNode array;
+
+			if (root == null || root.isMissingNode() || root.isNull()) {
+				array = mapper.createArrayNode(); // fichier vide ou null
+			} else if (root.isArray()) {
+				array = (ArrayNode) root;
+			} else {
+				throw new IOException("Location.json doit contenir un tableau JSON []");
+			}
+
+			// Build new entry
+			ObjectNode newPort = mapper.createObjectNode();
+			newPort.put("type", "Port");
+			newPort.put("id", port.getId());
+			newPort.put("city", city);
+			
+			// Append and write back
+			array.add(newPort);
+			mapper.writerWithDefaultPrettyPrinter().writeValue(file, array);
+
+		} catch (IOException e) {
+			System.err.println("Failed to write port to JSON: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return port;
 	}
     public Company createCompany(String name){
 		return null;

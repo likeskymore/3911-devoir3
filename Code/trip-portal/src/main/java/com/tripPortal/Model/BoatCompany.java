@@ -11,6 +11,6 @@ public class BoatCompany extends Company {
     public BoatCompany(JsonNode node) {
         super(node.get("name").asText());
         setId(node.get("id").asText());
-        setTripID(node.get("tripID").asText());
+        setTripID(node.get("tripId").asText());
     }
 }

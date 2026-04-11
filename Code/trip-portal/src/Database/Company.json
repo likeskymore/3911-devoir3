@@ -1,11 +1,31 @@
 [ {
   "type" : "FlightCompany",
-  "name" : "Air Canada"
+  "id" : "YBOBR",
+  "name" : "dasdsq",
+  "tripId" : "JE"
 }, {
   "type" : "TrainCompany",
-  "name" : "VIA Rail"
+  "id" : "NFKOA",
+  "name" : "qsadq",
+  "tripId" : "CP"
 }, {
-  "type" : "CruiseCompany",
-  "name" : "MSC Cruises"
-}
-]
+  "type" : "BoatCompany",
+  "id" : "GOYIA",
+  "name" : "dqaw",
+  "tripId" : "GT"
+}, {
+  "type" : "FlightCompany",
+  "id" : "EVXBJ",
+  "name" : "12345",
+  "tripId" : "DQ"
+}, {
+  "type" : "TrainCompany",
+  "id" : "BSEMB",
+  "name" : "321wqe1",
+  "tripId" : "JM"
+}, {
+  "type" : "BoatCompany",
+  "id" : "UMQUO",
+  "name" : "dwqdsadq",
+  "tripId" : "XI"
+} ]

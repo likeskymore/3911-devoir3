@@ -13,6 +13,6 @@ public class FlightCompany extends Company {
 	public FlightCompany(JsonNode node) {
         super(node.get("name").asText());
         setId(node.get("id").asText());
-        setTripID(node.get("tripID").asText());
+        setTripID(node.get("tripId").asText());
     }
 }

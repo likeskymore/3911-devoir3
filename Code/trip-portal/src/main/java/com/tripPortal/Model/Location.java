@@ -45,6 +45,7 @@ public abstract class Location {
 
 	public static Location fromJson(String city, JsonNode root) {
 		for (JsonNode node : root) {
+			if (!node.has("city") || !node.has("type")) continue;
 			if (node.get("city").asText().equals(city)) {
 				String type = node.get("type").asText();
 				return switch (type) {

@@ -1,15 +1,21 @@
 package com.tripPortal.Factory;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tripPortal.Model.Airport;
 import com.tripPortal.Model.Company;
+import com.tripPortal.Model.Flight;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Plane;
 import com.tripPortal.Model.Transport;
-import com.tripPortal.Model.Flight;
 import com.tripPortal.Model.Trip;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class FlightFactory extends PlaneTripFactory {
 
@@ -35,30 +41,63 @@ public class FlightFactory extends PlaneTripFactory {
     }
 
     public Trip createTrajectory(
-            Company company,
-            LocalDate startDate,
-            LocalDate endDate,
-            float price,
-            int duration,
-            ArrayList<Location> locations,
-            Transport transport) {
+        Company company,
+        LocalDate startDate,
+        LocalDate endDate,
+        float price,
+        int duration,
+        ArrayList<Location> locations,
+        Transport transport) {
 
-        if (!(locations.get(0) instanceof Airport) || !(locations.get(locations.size() - 1) instanceof Airport)) {
-            throw new IllegalArgumentException("FlightFactory requires Airport locations");
-        }
-        if (!(transport instanceof Plane)) {
-            throw new IllegalArgumentException("FlightFactory requires a Plane transport");
-        }
-
-        return new Flight(
-            company,
-            startDate,
-            endDate,
-            price,
-            duration,
-            (Airport) locations.get(0),
-            (Airport) locations.get(locations.size() - 1),
-            (Plane) transport
-        );
+    if (!(locations.get(0) instanceof Airport) || !(locations.get(locations.size() - 1) instanceof Airport)) {
+        throw new IllegalArgumentException("FlightFactory requires Airport locations");
     }
+    if (!(transport instanceof Plane)) {
+        throw new IllegalArgumentException("FlightFactory requires a Plane transport");
+    }
+
+    Airport origin      = (Airport) locations.get(0);
+    Airport destination = (Airport) locations.get(locations.size() - 1);
+    Plane plane         = (Plane) transport;
+
+    Flight flight = new Flight(company, startDate, endDate, price, duration, origin, destination, plane);
+
+    // ── Sauvegarder en JSON ────────────────────────────────────────
+    try {
+        ObjectMapper mapper = new ObjectMapper();
+        File file = new File("src/Database/Trip.json");
+
+        JsonNode root = mapper.readTree(file);
+        ArrayNode array;
+
+        if (root == null || root.isMissingNode() || root.isNull()) {
+            array = mapper.createArrayNode(); // fichier vide ou null
+        } else if (root.isArray()) {
+            array = (ArrayNode) root;
+        } else {
+            throw new IOException("Trip.json doit contenir un tableau JSON []");
+        }
+
+        ObjectNode node = mapper.createObjectNode();
+        node.put("type",        "Flight");
+        node.put("id",          flight.getId());
+        node.put("company",     company.getName());
+        node.put("startDate",   startDate.toString());
+        node.put("endDate",     endDate.toString());
+        node.put("price",       price);
+        node.put("duration",    duration);
+        node.put("origin",      origin.getCity());
+        node.put("destination", destination.getCity());
+        node.put("transport",   plane.getTransportID());
+
+        array.add(node);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(file, array);
+
+    } catch (IOException e) {
+        System.err.println("Failed to write Flight to JSON: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    return flight;
+}
 }
