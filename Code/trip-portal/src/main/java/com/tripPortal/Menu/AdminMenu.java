@@ -431,6 +431,26 @@ public class AdminMenu {
 		CheckBox flightCheckBox = new CheckBox("Flight Company");
 		CheckBox boatCheckBox = new CheckBox("Cruise Company");
 		CheckBox trainCheckBox = new CheckBox("Train Company");
+		flightCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+			if (newVal) {
+				boatCheckBox.setSelected(false);
+				trainCheckBox.setSelected(false);
+			}
+		});
+
+		boatCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+			if (newVal) {
+				flightCheckBox.setSelected(false);
+				trainCheckBox.setSelected(false);
+			}
+		});
+
+		trainCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+			if (newVal) {
+				flightCheckBox.setSelected(false);
+				boatCheckBox.setSelected(false);
+			}
+		});
 		HBox checkboxes = new HBox(5, flightCheckBox, boatCheckBox, trainCheckBox);
 
 		TextField nameField = new TextField();

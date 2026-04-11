@@ -71,10 +71,8 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        Company company = new Company("test");
-        editCompanyCommand test = new editCompanyCommand(company);
-        test.execute();
-        //launch(args);
+
+        launch(args);
     }
 
     

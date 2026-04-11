@@ -7,7 +7,5 @@
 }, {
   "type" : "CruiseCompany",
   "name" : "MSC Cruises"
-}, {
-  "type" : "FlightCompany",
-  "name" : "helo"
-} ]
+}
+]
