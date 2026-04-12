@@ -12,8 +12,12 @@ public class Reservation {
 	private String tripId;
 	private boolean isPaid;
 
-	public Reservation(String transportID, String reservedSeat, String tripId, boolean isPaid) {
-		this.reservationNumber = generateReservationNumber();
+	public Reservation(String reservationNumber, String transportID, String reservedSeat, String tripId, boolean isPaid) {
+		if (reservationNumber == null || reservationNumber.isEmpty()) {
+			this.reservationNumber = generateReservationNumber();
+		} else {
+			this.reservationNumber = reservationNumber;
+		}
 		this.startTimeReservation = LocalTime.now();
 		this.transportID = transportID;
 		this.reservedSeat = reservedSeat;

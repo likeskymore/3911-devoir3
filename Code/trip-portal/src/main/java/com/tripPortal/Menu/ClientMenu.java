@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tripPortal.Mediateur.reservationController;
 import com.tripPortal.Mediateur.tripController;
+import com.tripPortal.Model.Reservation;
 import com.tripPortal.Visiteur.ConcreteCruiseLineVisitor;
 import com.tripPortal.Visiteur.ConcreteFlightVisitor;
 import com.tripPortal.Visiteur.ConcreteRouteVisitor;
@@ -53,6 +54,9 @@ public class ClientMenu {
 		Button editProfileButton = new Button("Profile");
 		editProfileButton.setMinWidth(200);
 		editProfileButton.setPrefHeight(50);
+		editProfileButton.setOnAction(e -> {
+			displayProfileMenu(scene);
+		});
 
 		Button tripsButton = new Button("Reserve a trip");
 		tripsButton.setMinWidth(200);
@@ -81,6 +85,73 @@ public class ClientMenu {
 		scene.setRoot(borderPane);
 	}
 
+	public void displayProfileMenu(Scene scene) {
+		HBox layout = new HBox(10);
+
+		Button backButton = new Button("Back");
+		backButton.setMinWidth(100);
+		backButton.setPrefHeight(50);
+		backButton.setOnAction(e -> {
+			displayMenuClient(scene);
+		});
+
+		VBox back = new VBox(backButton);
+		back.setPrefWidth(150);
+		back.setMinWidth(150);
+		back.setMaxWidth(150);
+
+		VBox content = new VBox(10);
+		content.setPadding(new Insets(20));
+		content.getChildren().add(new Label("Your Reservations:"));
+
+		ArrayList<Reservation> reservations = reservationControllerForClientMenu.fetchUserReservations();
+
+		VBox reservationList = new VBox(8);
+		reservationList.setPadding(new Insets(10));
+
+		for (Reservation res : reservations) {
+			String line = "Reservation #" + res.getReservationNumber()
+					+ " - Trip ID: " + res.getTripId()
+					+ " - Seat: " + res.getReservedSeat()
+					+ " - Paid: " + (res.isPaid() ? "Yes" : "No");
+
+			Label resLabel = new Label(line);
+			resLabel.setWrapText(true);
+			resLabel.setStyle("-fx-border-color: #ccc; -fx-border-radius: 5; -fx-padding: 8;");
+			resLabel.setPrefWidth(300);
+
+			VBox buttons = new VBox(5);
+			Button payButton = new Button("Pay");
+			payButton.setDisable(res.isPaid()); // Disable if already paid
+			payButton.setOnAction(e -> {
+				reservationControllerForClientMenu.payReservation(res);
+				displayProfileMenu(scene);
+			});
+			payButton.setMinWidth(80);
+
+			Button cancelButton = new Button("Cancel");
+			cancelButton.setOnAction(e -> {
+				reservationControllerForClientMenu.cancelReservation(res);
+				displayProfileMenu(scene); // Refresh after deletion
+			});
+			cancelButton.setMinWidth(80);
+
+			buttons.getChildren().addAll(payButton, cancelButton);
+
+			reservationList.getChildren().add(new HBox(10, resLabel, buttons));
+		}
+
+		ScrollPane scroll = new ScrollPane(reservationList);
+		scroll.setFitToWidth(true);
+		scroll.setPrefHeight(350);
+
+		content.getChildren().add(scroll);
+
+		HBox.setHgrow(content, Priority.ALWAYS);
+		layout.getChildren().addAll(back, content);
+		scene.setRoot(layout);
+	}
+
 	public void displayReserveMenu(Scene scene, String message) {
 		ListTripsDataStructure structure = tripControllerForClientMenu.fetchAllTripsAsStructure();
 
@@ -106,6 +177,7 @@ public class ClientMenu {
 			reserveButton.setOnAction(e -> {
 				displayAvailableSeats(scene, node);
 			});
+			reserveButton.setMinWidth(80);
 
 			tripList.getChildren().add(new HBox(10, label, reserveButton));
 		}
