@@ -1,82 +1,14 @@
 [ {
-  "transportID" : "656752",
+  "transportID" : "252415",
   "type" : "Plane",
-  "name" : "Air Canada",
+  "name" : "Boing 747",
+  "company" : "Air Canada",
   "available" : true,
   "sections" : [ {
-    "sectionType" : "F",
-    "layout" : "S",
-    "numberOfRows" : 7,
-    "numberOfColumns" : 3,
-    "seats" : [ {
-      "seatID" : "F1A",
-      "occupied" : true
-    }, {
-      "seatID" : "F1B",
-      "occupied" : false
-    }, {
-      "seatID" : "F1C",
-      "occupied" : false
-    }, {
-      "seatID" : "F2A",
-      "occupied" : false
-    }, {
-      "seatID" : "F2B",
-      "occupied" : false
-    }, {
-      "seatID" : "F2C",
-      "occupied" : false
-    }, {
-      "seatID" : "F3A",
-      "occupied" : false
-    }, {
-      "seatID" : "F3B",
-      "occupied" : false
-    }, {
-      "seatID" : "F3C",
-      "occupied" : false
-    }, {
-      "seatID" : "F4A",
-      "occupied" : false
-    }, {
-      "seatID" : "F4B",
-      "occupied" : false
-    }, {
-      "seatID" : "F4C",
-      "occupied" : false
-    }, {
-      "seatID" : "F5A",
-      "occupied" : false
-    }, {
-      "seatID" : "F5B",
-      "occupied" : false
-    }, {
-      "seatID" : "F5C",
-      "occupied" : false
-    }, {
-      "seatID" : "F6A",
-      "occupied" : false
-    }, {
-      "seatID" : "F6B",
-      "occupied" : false
-    }, {
-      "seatID" : "F6C",
-      "occupied" : false
-    }, {
-      "seatID" : "F7A",
-      "occupied" : false
-    }, {
-      "seatID" : "F7B",
-      "occupied" : false
-    }, {
-      "seatID" : "F7C",
-      "occupied" : false
-    } ]
-  }, {
     "sectionType" : "A",
-    "layout" : "S",
+    "layout" : "C",
     "numberOfRows" : 10,
-    "numberOfColumns" : 3,
+    "numberOfColumns" : 4,
     "seats" : [ {
       "seatID" : "A1A",
       "occupied" : false
@@ -85,6 +17,9 @@
       "occupied" : false
     }, {
       "seatID" : "A1C",
+      "occupied" : false
+    }, {
+      "seatID" : "A1D",
       "occupied" : false
     }, {
       "seatID" : "A2A",
@@ -96,13 +31,19 @@
       "seatID" : "A2C",
       "occupied" : false
     }, {
-      "seatID" : "A3A",
+      "seatID" : "A2D",
       "occupied" : false
+    }, {
+      "seatID" : "A3A",
+      "occupied" : true
     }, {
       "seatID" : "A3B",
       "occupied" : false
     }, {
       "seatID" : "A3C",
+      "occupied" : false
+    }, {
+      "seatID" : "A3D",
       "occupied" : false
     }, {
       "seatID" : "A4A",
@@ -114,6 +55,9 @@
       "seatID" : "A4C",
       "occupied" : false
     }, {
+      "seatID" : "A4D",
+      "occupied" : false
+    }, {
       "seatID" : "A5A",
       "occupied" : false
     }, {
@@ -121,6 +65,9 @@
       "occupied" : false
     }, {
       "seatID" : "A5C",
+      "occupied" : false
+    }, {
+      "seatID" : "A5D",
       "occupied" : false
     }, {
       "seatID" : "A6A",
@@ -132,6 +79,9 @@
       "seatID" : "A6C",
       "occupied" : false
     }, {
+      "seatID" : "A6D",
+      "occupied" : false
+    }, {
       "seatID" : "A7A",
       "occupied" : false
     }, {
@@ -139,6 +89,9 @@
       "occupied" : false
     }, {
       "seatID" : "A7C",
+      "occupied" : false
+    }, {
+      "seatID" : "A7D",
       "occupied" : false
     }, {
       "seatID" : "A8A",
@@ -150,6 +103,9 @@
       "seatID" : "A8C",
       "occupied" : false
     }, {
+      "seatID" : "A8D",
+      "occupied" : false
+    }, {
       "seatID" : "A9A",
       "occupied" : false
     }, {
@@ -157,6 +113,9 @@
       "occupied" : false
     }, {
       "seatID" : "A9C",
+      "occupied" : false
+    }, {
+      "seatID" : "A9D",
       "occupied" : false
     }, {
       "seatID" : "A10A",
@@ -167,376 +126,135 @@
     }, {
       "seatID" : "A10C",
       "occupied" : false
-    } ]
-  } ]
-}, {
-  "transportID" : "810328",
-  "type" : "Boat",
-  "name" : "Avion de Chasse",
-  "available" : true,
-  "sections" : [ {
-    "sectionType" : "O",
-    "maxCapacity" : 2,
-    "numberOfCabins" : 1,
-    "cabins" : [ {
-      "seatID" : "O-C1",
-      "occupied" : false
-    } ]
-  }, {
-    "sectionType" : "D",
-    "maxCapacity" : 6,
-    "numberOfCabins" : 10,
-    "cabins" : [ {
-      "seatID" : "D-C1",
-      "occupied" : false
     }, {
-      "seatID" : "D-C2",
-      "occupied" : false
-    }, {
-      "seatID" : "D-C3",
-      "occupied" : false
-    }, {
-      "seatID" : "D-C4",
-      "occupied" : true
-    }, {
-      "seatID" : "D-C5",
-      "occupied" : true
-    }, {
-      "seatID" : "D-C6",
-      "occupied" : false
-    }, {
-      "seatID" : "D-C7",
-      "occupied" : false
-    }, {
-      "seatID" : "D-C8",
-      "occupied" : false
-    }, {
-      "seatID" : "D-C9",
-      "occupied" : true
-    }, {
-      "seatID" : "D-C10",
-      "occupied" : false
-    } ]
-  } ]
-}, {
-  "transportID" : "713312",
-  "type" : "Train",
-  "name" : "Norwegian Cruise",
-  "available" : true,
-  "sections" : [ {
-    "sectionType" : "P",
-    "layout" : "S",
-    "numberOfRows" : 6,
-    "numberOfColumns" : 3,
-    "seats" : [ {
-      "seatID" : "T1A",
-      "occupied" : false
-    }, {
-      "seatID" : "T1B",
-      "occupied" : false
-    }, {
-      "seatID" : "T1C",
-      "occupied" : false
-    }, {
-      "seatID" : "T2A",
-      "occupied" : false
-    }, {
-      "seatID" : "T2B",
-      "occupied" : false
-    }, {
-      "seatID" : "T2C",
-      "occupied" : false
-    }, {
-      "seatID" : "T3A",
-      "occupied" : false
-    }, {
-      "seatID" : "T3B",
-      "occupied" : false
-    }, {
-      "seatID" : "T3C",
-      "occupied" : false
-    }, {
-      "seatID" : "T4A",
-      "occupied" : false
-    }, {
-      "seatID" : "T4B",
-      "occupied" : false
-    }, {
-      "seatID" : "T4C",
-      "occupied" : false
-    }, {
-      "seatID" : "T5A",
-      "occupied" : false
-    }, {
-      "seatID" : "T5B",
-      "occupied" : false
-    }, {
-      "seatID" : "T5C",
-      "occupied" : false
-    }, {
-      "seatID" : "T6A",
-      "occupied" : false
-    }, {
-      "seatID" : "T6B",
-      "occupied" : false
-    }, {
-      "seatID" : "T6C",
+      "seatID" : "A10D",
       "occupied" : false
     } ]
   }, {
     "sectionType" : "E",
-    "layout" : "S",
-    "numberOfRows" : 27,
-    "numberOfColumns" : 3,
+    "layout" : "C",
+    "numberOfRows" : 10,
+    "numberOfColumns" : 4,
     "seats" : [ {
-      "seatID" : "T1A",
+      "seatID" : "E1A",
       "occupied" : false
     }, {
-      "seatID" : "T1B",
+      "seatID" : "E1B",
       "occupied" : false
     }, {
-      "seatID" : "T1C",
+      "seatID" : "E1C",
       "occupied" : false
     }, {
-      "seatID" : "T2A",
+      "seatID" : "E1D",
       "occupied" : false
     }, {
-      "seatID" : "T2B",
+      "seatID" : "E2A",
       "occupied" : false
     }, {
-      "seatID" : "T2C",
+      "seatID" : "E2B",
       "occupied" : false
     }, {
-      "seatID" : "T3A",
+      "seatID" : "E2C",
       "occupied" : false
     }, {
-      "seatID" : "T3B",
+      "seatID" : "E2D",
       "occupied" : false
     }, {
-      "seatID" : "T3C",
+      "seatID" : "E3A",
       "occupied" : false
     }, {
-      "seatID" : "T4A",
+      "seatID" : "E3B",
       "occupied" : false
     }, {
-      "seatID" : "T4B",
+      "seatID" : "E3C",
       "occupied" : false
     }, {
-      "seatID" : "T4C",
+      "seatID" : "E3D",
       "occupied" : false
     }, {
-      "seatID" : "T5A",
+      "seatID" : "E4A",
       "occupied" : false
     }, {
-      "seatID" : "T5B",
+      "seatID" : "E4B",
       "occupied" : false
     }, {
-      "seatID" : "T5C",
+      "seatID" : "E4C",
       "occupied" : false
     }, {
-      "seatID" : "T6A",
+      "seatID" : "E4D",
       "occupied" : false
     }, {
-      "seatID" : "T6B",
+      "seatID" : "E5A",
       "occupied" : false
     }, {
-      "seatID" : "T6C",
+      "seatID" : "E5B",
       "occupied" : false
     }, {
-      "seatID" : "T7A",
+      "seatID" : "E5C",
       "occupied" : false
     }, {
-      "seatID" : "T7B",
+      "seatID" : "E5D",
       "occupied" : false
     }, {
-      "seatID" : "T7C",
+      "seatID" : "E6A",
       "occupied" : false
     }, {
-      "seatID" : "T8A",
+      "seatID" : "E6B",
       "occupied" : false
     }, {
-      "seatID" : "T8B",
+      "seatID" : "E6C",
       "occupied" : false
     }, {
-      "seatID" : "T8C",
+      "seatID" : "E6D",
       "occupied" : false
     }, {
-      "seatID" : "T9A",
+      "seatID" : "E7A",
       "occupied" : false
     }, {
-      "seatID" : "T9B",
+      "seatID" : "E7B",
       "occupied" : false
     }, {
-      "seatID" : "T9C",
+      "seatID" : "E7C",
       "occupied" : false
     }, {
-      "seatID" : "T10A",
+      "seatID" : "E7D",
       "occupied" : false
     }, {
-      "seatID" : "T10B",
+      "seatID" : "E8A",
       "occupied" : false
     }, {
-      "seatID" : "T10C",
+      "seatID" : "E8B",
       "occupied" : false
     }, {
-      "seatID" : "T11A",
+      "seatID" : "E8C",
       "occupied" : false
     }, {
-      "seatID" : "T11B",
+      "seatID" : "E8D",
       "occupied" : false
     }, {
-      "seatID" : "T11C",
+      "seatID" : "E9A",
       "occupied" : false
     }, {
-      "seatID" : "T12A",
+      "seatID" : "E9B",
       "occupied" : false
     }, {
-      "seatID" : "T12B",
+      "seatID" : "E9C",
       "occupied" : false
     }, {
-      "seatID" : "T12C",
+      "seatID" : "E9D",
       "occupied" : false
     }, {
-      "seatID" : "T13A",
+      "seatID" : "E10A",
       "occupied" : false
     }, {
-      "seatID" : "T13B",
+      "seatID" : "E10B",
       "occupied" : false
     }, {
-      "seatID" : "T13C",
+      "seatID" : "E10C",
       "occupied" : false
     }, {
-      "seatID" : "T14A",
-      "occupied" : false
-    }, {
-      "seatID" : "T14B",
-      "occupied" : false
-    }, {
-      "seatID" : "T14C",
-      "occupied" : false
-    }, {
-      "seatID" : "T15A",
-      "occupied" : false
-    }, {
-      "seatID" : "T15B",
-      "occupied" : false
-    }, {
-      "seatID" : "T15C",
-      "occupied" : false
-    }, {
-      "seatID" : "T16A",
-      "occupied" : false
-    }, {
-      "seatID" : "T16B",
-      "occupied" : false
-    }, {
-      "seatID" : "T16C",
-      "occupied" : false
-    }, {
-      "seatID" : "T17A",
-      "occupied" : false
-    }, {
-      "seatID" : "T17B",
-      "occupied" : false
-    }, {
-      "seatID" : "T17C",
-      "occupied" : false
-    }, {
-      "seatID" : "T18A",
-      "occupied" : false
-    }, {
-      "seatID" : "T18B",
-      "occupied" : false
-    }, {
-      "seatID" : "T18C",
-      "occupied" : false
-    }, {
-      "seatID" : "T19A",
-      "occupied" : false
-    }, {
-      "seatID" : "T19B",
-      "occupied" : false
-    }, {
-      "seatID" : "T19C",
-      "occupied" : false
-    }, {
-      "seatID" : "T20A",
-      "occupied" : false
-    }, {
-      "seatID" : "T20B",
-      "occupied" : false
-    }, {
-      "seatID" : "T20C",
-      "occupied" : false
-    }, {
-      "seatID" : "T21A",
-      "occupied" : false
-    }, {
-      "seatID" : "T21B",
-      "occupied" : false
-    }, {
-      "seatID" : "T21C",
-      "occupied" : false
-    }, {
-      "seatID" : "T22A",
-      "occupied" : false
-    }, {
-      "seatID" : "T22B",
-      "occupied" : false
-    }, {
-      "seatID" : "T22C",
-      "occupied" : false
-    }, {
-      "seatID" : "T23A",
-      "occupied" : false
-    }, {
-      "seatID" : "T23B",
-      "occupied" : false
-    }, {
-      "seatID" : "T23C",
-      "occupied" : false
-    }, {
-      "seatID" : "T24A",
-      "occupied" : false
-    }, {
-      "seatID" : "T24B",
-      "occupied" : false
-    }, {
-      "seatID" : "T24C",
-      "occupied" : false
-    }, {
-      "seatID" : "T25A",
-      "occupied" : false
-    }, {
-      "seatID" : "T25B",
-      "occupied" : false
-    }, {
-      "seatID" : "T25C",
-      "occupied" : false
-    }, {
-      "seatID" : "T26A",
-      "occupied" : false
-    }, {
-      "seatID" : "T26B",
-      "occupied" : false
-    }, {
-      "seatID" : "T26C",
-      "occupied" : false
-    }, {
-      "seatID" : "T27A",
-      "occupied" : false
-    }, {
-      "seatID" : "T27B",
-      "occupied" : false
-    }, {
-      "seatID" : "T27C",
+      "seatID" : "E10D",
       "occupied" : false
     } ]
   } ]
-}, {
-  "transportID" : "441340",
-  "type" : "Plane",
-  "name" : "plane",
-  "available" : true,
-  "sections" : [ ]
 } ]

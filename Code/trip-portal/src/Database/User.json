@@ -1,25 +1,7 @@
 [ {
-  "reservationNumber" : "004864",
-  "tripId" : "GTZQFD",
-  "transportID" : "810328",
-  "seatID" : "D-C9",
-  "confirmed" : true
-}, {
-  "reservationNumber" : "377754",
-  "tripId" : "GTZQFD",
-  "transportID" : "810328",
-  "seatID" : "D-C5",
-  "confirmed" : false
-}, {
-  "reservationNumber" : "841030",
-  "tripId" : "GTZQFD",
-  "transportID" : "810328",
-  "seatID" : "D-C4",
-  "confirmed" : false
-}, {
-  "reservationNumber" : "855648",
-  "tripId" : "JEQHVK",
-  "transportID" : "656752",
-  "seatID" : "F1A",
+  "reservationNumber" : "082006",
+  "tripId" : "LGKDAG",
+  "transportID" : "252415",
+  "seatID" : "A3A",
   "confirmed" : false
 } ]

@@ -1,31 +1,7 @@
 [ {
-  "type" : "BoatCompany",
-  "id" : "BZKYX",
-  "name" : "BoatTest",
-  "tripId" : "CD",
-  "Trips" : [ "CDBOIP", "CDMHZN" ]
-}, {
-  "type" : "BoatCompany",
-  "id" : "AUDCJ",
-  "name" : "Air China",
-  "tripId" : "UG",
-  "Trips" : [ "UGGIOS" ]
-}, {
-  "type" : "BoatCompany",
-  "id" : "NRSFN",
-  "name" : "Tien",
-  "tripId" : "VF",
-  "Trips" : [ "VFQFVN" ]
-}, {
   "type" : "FlightCompany",
-  "id" : "LLYRS",
-  "name" : "air france",
-  "tripId" : "FV",
-  "Trips" : [ "FVRNAF", "FVIYAT", "FVXPWG", "FVSUKE" ]
-}, {
-  "type" : "TrainCompany",
-  "id" : "BXUEU",
-  "name" : "help",
-  "tripId" : "LE",
-  "Trips" : [ "LEQPUQ" ]
+  "id" : "JHLZM",
+  "name" : "Air Canada",
+  "tripId" : "LG",
+  "Trips" : [ "LGKDAG" ]
 } ]

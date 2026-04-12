@@ -254,42 +254,33 @@ public class AdminMenu {
                     + "-fx-prompt-text-fill: " + C_MUTED + ";");
     }
 
-    private void styleStringComboBox(ComboBox<String> comboBox) {
+    private <T> void styleComboBox(ComboBox<T> comboBox, java.util.function.Function<T, String> textExtractor) {
         comboBox.setButtonCell(new ListCell<>() {
             @Override
-            protected void updateItem(String item, boolean empty) {
+            protected void updateItem(T item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty || item == null ? "" : item);
+                setText(empty || item == null ? "" : textExtractor.apply(item));
+                // Selected value shown inside the field (dark background): white text.
                 setStyle("-fx-text-fill: " + C_TEXT + "; -fx-background-color: transparent;");
             }
         });
         comboBox.setCellFactory(listView -> new ListCell<>() {
             @Override
-            protected void updateItem(String item, boolean empty) {
+            protected void updateItem(T item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty || item == null ? "" : item);
-                setStyle("-fx-text-fill: " + C_BG_DARK + "; -fx-background-color: transparent;");
+                setText(empty || item == null ? "" : textExtractor.apply(item));
+                // Open dropdown list: black text for readability on the light/default popup.
+                setStyle("-fx-text-fill: #111111; -fx-background-color: transparent;");
             }
         });
     }
 
+    private void styleStringComboBox(ComboBox<String> comboBox) {
+        styleComboBox(comboBox, s -> s);
+    }
+
     private void styleTransportComboBox(ComboBox<Transport> comboBox) {
-        comboBox.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(Transport item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? "" : item.getName());
-                setStyle("-fx-text-fill: " + C_TEXT + "; -fx-background-color: transparent;");
-            }
-        });
-        comboBox.setCellFactory(listView -> new ListCell<>() {
-            @Override
-            protected void updateItem(Transport item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? "" : item.getName());
-                setStyle("-fx-text-fill: " + C_BG_DARK + "; -fx-background-color: transparent;");
-            }
-        });
+        styleComboBox(comboBox, t -> t.getName());
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -550,21 +541,37 @@ public class AdminMenu {
             if (nv) { updating[0] = true; boatCB.setSelected(false); trainCB.setSelected(false); updating[0] = false;
                 updateCompanies(fr1, companyCombo, "FlightCompany");
                 updateLocations(fr2, locationList, "Airport");
-                updateTransports(fr3, transportCombo, "Plane"); }
+                companyCombo.setValue(null);
+                transportCombo.getItems().clear();
+                transportCombo.setValue(null); }
         });
         boatCB.selectedProperty().addListener((o, ov, nv) -> {
             if (updating[0]) return;
             if (nv) { updating[0] = true; flightCB.setSelected(false); trainCB.setSelected(false); updating[0] = false;
                 updateCompanies(fr1, companyCombo, "BoatCompany");
                 updateLocations(fr2, locationList, "Port");
-                updateTransports(fr3, transportCombo, "Boat"); }
+                companyCombo.setValue(null);
+                transportCombo.getItems().clear();
+                transportCombo.setValue(null); }
         });
         trainCB.selectedProperty().addListener((o, ov, nv) -> {
             if (updating[0]) return;
             if (nv) { updating[0] = true; flightCB.setSelected(false); boatCB.setSelected(false); updating[0] = false;
                 updateCompanies(fr1, companyCombo, "TrainCompany");
                 updateLocations(fr2, locationList, "TrainStation");
-                updateTransports(fr3, transportCombo, "Train"); }
+                companyCombo.setValue(null);
+                transportCombo.getItems().clear();
+                transportCombo.setValue(null); }
+        });
+
+        companyCombo.valueProperty().addListener((o, ov, nv) -> {
+            String transportType = getTransportTypeFromTripSelection(flightCB, boatCB, trainCB);
+            if (transportType == null || nv == null || nv.isBlank()) {
+                transportCombo.getItems().clear();
+                transportCombo.setValue(null);
+                return;
+            }
+            updateTransports(fr3, transportCombo, transportType, nv);
         });
 
         locationList.getSelectionModel().getSelectedItems().addListener((javafx.collections.ListChangeListener<Location>) change -> {
@@ -1348,10 +1355,159 @@ public class AdminMenu {
         Label title = pageTitle("Manage Transports");
 
         Button createBtn = actionBtn("＋  Create Transport");
+        Button listBtn   = ghostBtn("☰  View All Transports");
         createBtn.setOnAction(e -> displayTransportCreationForm(scene));
+        listBtn.setOnAction(e -> displayTransports(scene));
 
-        main.getChildren().addAll(title, createBtn);
+        HBox btnRow = new HBox(10, createBtn, listBtn);
+
+        main.getChildren().addAll(title, btnRow);
         scene.setRoot(buildShell(nav, main));
+    }
+
+    private void displayTransports(Scene scene) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack       = navBtn("←  Back");
+		Button btnTransports = navBtn("🚌  Transports");
+		btnTransports.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayTransportsMenu(scene));
+		nav.getChildren().addAll(btnBack, new Separator(), btnTransports);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("All Transports");
+
+        FlowPane grid = new FlowPane(14, 14);
+        grid.setPadding(new Insets(4));
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            File transportFile = new File("src/Database/Transport.json");
+            File tripFile = new File("src/Database/Trip.json");
+
+            ArrayNode transports = (ArrayNode) mapper.readTree(transportFile);
+            ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
+
+            for (JsonNode transport : transports) {
+                String transportId = transport.path("transportID").asText();
+                String transportName = transport.path("name").asText("Unnamed");
+                String transportType = transport.path("type").asText("Unknown");
+                String transportCompany = transport.path("company").asText("");
+
+                int linkedTripsCount = 0;
+                for (JsonNode trip : trips) {
+                    if (!transportId.equals(trip.path("transport").asText())) {
+                        continue;
+                    }
+                    linkedTripsCount++;
+                    if (transportCompany.isBlank()) {
+                        transportCompany = trip.path("company").asText("");
+                    }
+                }
+
+                String companyText = transportCompany.isBlank() ? "Unlinked" : transportCompany;
+
+                VBox tc = card(8);
+                tc.setPrefWidth(260);
+
+                Label typeLbl = new Label(transportType.toUpperCase());
+                typeLbl.setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-size: 10px; -fx-font-weight: bold;");
+
+                Label nameLbl = new Label(transportName);
+                nameLbl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 14px; -fx-font-weight: bold;");
+                nameLbl.setWrapText(true);
+
+                Label companyLbl = new Label("Company: " + companyText);
+                companyLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+                companyLbl.setWrapText(true);
+
+                Label tripsLbl = new Label("Trips linked: " + linkedTripsCount);
+                tripsLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+
+                Separator sep = new Separator();
+                sep.setStyle("-fx-background-color: " + C_BORDER + ";");
+
+                Button deleteBtn = dangerBtn("🗑  Delete");
+                deleteBtn.setOnAction(e -> deleteTransport(scene, transportId));
+
+                tc.getChildren().addAll(typeLbl, nameLbl, companyLbl, tripsLbl, sep, deleteBtn);
+                grid.getChildren().add(tc);
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        ScrollPane scroll = new ScrollPane(grid);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+        VBox.setVgrow(scroll, Priority.ALWAYS);
+
+        main.getChildren().addAll(title, scroll);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    private void deleteTransport(Scene scene, String transportId) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Delete this transport and all trips linked to it?",
+                ButtonType.YES, ButtonType.NO);
+        alert.showAndWait().ifPresent(result -> {
+            if (result != ButtonType.YES) {
+                return;
+            }
+
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+
+                File transportFile = new File("src/Database/Transport.json");
+                ArrayNode transports = (ArrayNode) mapper.readTree(transportFile);
+                for (int i = 0; i < transports.size(); i++) {
+                    if (transportId.equals(transports.get(i).path("transportID").asText())) {
+                        transports.remove(i);
+                        break;
+                    }
+                }
+                mapper.writerWithDefaultPrettyPrinter().writeValue(transportFile, transports);
+
+                File tripFile = new File("src/Database/Trip.json");
+                ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
+                ArrayNode removedTripIds = mapper.createArrayNode();
+                for (int i = trips.size() - 1; i >= 0; i--) {
+                    if (transportId.equals(trips.get(i).path("transport").asText())) {
+                        removedTripIds.add(trips.get(i).path("id").asText());
+                        trips.remove(i);
+                    }
+                }
+                mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
+
+                if (removedTripIds.size() > 0) {
+                    File companyFile = new File("src/Database/Company.json");
+                    ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
+                    for (JsonNode company : companies) {
+                        if (!company.has("Trips")) {
+                            continue;
+                        }
+                        ArrayNode companyTrips = (ArrayNode) company.get("Trips");
+                        for (int i = companyTrips.size() - 1; i >= 0; i--) {
+                            String tripId = companyTrips.get(i).asText();
+                            for (JsonNode removedId : removedTripIds) {
+                                if (removedId.asText().equals(tripId)) {
+                                    companyTrips.remove(i);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                showError("Unable to delete transport.");
+                return;
+            }
+
+            displayTransports(scene);
+        });
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -1375,6 +1531,12 @@ public class AdminMenu {
         styleInput(nameField);
         nameField.setMaxWidth(300);
 
+        ComboBox<String> companyCombo = new ComboBox<>();
+        companyCombo.setPromptText("Select linked company");
+        styleInput(companyCombo);
+        styleStringComboBox(companyCombo);
+        companyCombo.setMaxWidth(300);
+
         CheckBox planeCB = styledCheckBox("✈  Plane");
         CheckBox boatCB  = styledCheckBox("🚢  Boat");
         CheckBox trainCB = styledCheckBox("🚂  Train");
@@ -1390,22 +1552,26 @@ public class AdminMenu {
         planeCB.selectedProperty().addListener((o,ov,nv) -> { boatCB.setSelected(false); trainCB.setSelected(false);
             planeArea.setVisible(nv); planeArea.setManaged(nv);
             boatArea.setVisible(false); boatArea.setManaged(false);
-            trainArea.setVisible(false); trainArea.setManaged(false); });
+            trainArea.setVisible(false); trainArea.setManaged(false);
+            updateCompaniesForTransportType(companyCombo, "Plane"); });
         boatCB.selectedProperty().addListener((o,ov,nv) -> { planeCB.setSelected(false); trainCB.setSelected(false);
             boatArea.setVisible(nv); boatArea.setManaged(nv);
             planeArea.setVisible(false); planeArea.setManaged(false);
-            trainArea.setVisible(false); trainArea.setManaged(false); });
+            trainArea.setVisible(false); trainArea.setManaged(false);
+            updateCompaniesForTransportType(companyCombo, "Boat"); });
         trainCB.selectedProperty().addListener((o,ov,nv) -> { planeCB.setSelected(false); boatCB.setSelected(false);
             trainArea.setVisible(nv); trainArea.setManaged(nv);
             planeArea.setVisible(false); planeArea.setManaged(false);
-            boatArea.setVisible(false); boatArea.setManaged(false); });
+            boatArea.setVisible(false); boatArea.setManaged(false);
+            updateCompaniesForTransportType(companyCombo, "Train"); });
 
         Button submitBtn = actionBtn("  Create Transport  ");
-        submitBtn.setOnAction(e -> handleSubmit(scene, nameField, planeCB, boatCB, trainCB, planeArea, boatArea, trainArea));
+        submitBtn.setOnAction(e -> handleSubmit(scene, nameField, companyCombo, planeCB, boatCB, trainCB, planeArea, boatArea, trainArea));
 
         VBox formCard = card(16);
         formCard.getChildren().addAll(
 			formField("Type", typeRow),
+            formField("Company", companyCombo),
             formField("Transport Name", nameField),
             planeArea, boatArea, trainArea,
             submitBtn
@@ -1429,11 +1595,13 @@ public class AdminMenu {
         secTypeCombo.getItems().addAll(SectionPlane.SectionPlaneType.values());
         secTypeCombo.setPromptText("Section type");
         styleInput(secTypeCombo);
+        styleComboBox(secTypeCombo, t -> t.name());
 
         ComboBox<SectionPlane.Layout> layoutCombo = new ComboBox<>();
         layoutCombo.getItems().addAll(SectionPlane.Layout.values());
         layoutCombo.setPromptText("Layout");
         styleInput(layoutCombo);
+        styleComboBox(layoutCombo, l -> l.name());
 
         Spinner<Integer> rowsSpinner = new Spinner<>(1, 100, 10);
         rowsSpinner.setEditable(true);
@@ -1474,6 +1642,7 @@ public class AdminMenu {
         secTypeCombo.getItems().addAll(SectionBoat.SectionBoatType.values());
         secTypeCombo.setPromptText("Section type");
         styleInput(secTypeCombo);
+        styleComboBox(secTypeCombo, t -> t.name());
 
         Label capLabel = new Label("Max capacity: —");
         capLabel.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
@@ -1528,18 +1697,22 @@ public class AdminMenu {
     // SUBMIT TRANSPORT
     // ═══════════════════════════════════════════════════════════════
     @SuppressWarnings("unchecked")
-    private void handleSubmit(Scene scene, TextField nameField,
+    private void handleSubmit(Scene scene, TextField nameField, ComboBox<String> companyCombo,
             CheckBox flightCB, CheckBox boatCB, CheckBox trainCB,
             VBox planeArea, VBox boatArea, VBox trainArea) {
         if (nameField.getText().isBlank()) { showError("Please enter a transport name."); return; }
+        if (companyCombo.getValue() == null || companyCombo.getValue().isBlank()) {
+            showError("Please select the linked company.");
+            return;
+        }
         String type = flightCB.isSelected() ? "Plane" : boatCB.isSelected() ? "Boat" : trainCB.isSelected() ? "Train" : null;
         if (type == null) { showError("Please select a transport type."); return; }
         switch (type) {
-            case "Plane" -> TransportControllerForAdminMenu.goCallCreateTransport(nameField.getText(), type, pendingPlaneSections);
-            case "Boat"  -> TransportControllerForAdminMenu.goCallCreateTransport(nameField.getText(), type, pendingBoatSections);
+            case "Plane" -> TransportControllerForAdminMenu.goCallCreateTransport(nameField.getText(), type, companyCombo.getValue(), pendingPlaneSections);
+            case "Boat"  -> TransportControllerForAdminMenu.goCallCreateTransport(nameField.getText(), type, companyCombo.getValue(), pendingBoatSections);
             case "Train" -> {
                 Spinner<Integer>[] spinners = (Spinner<Integer>[]) trainArea.getUserData();
-                TransportControllerForAdminMenu.goCallCreateTransport(nameField.getText(), type,
+                TransportControllerForAdminMenu.goCallCreateTransport(nameField.getText(), type, companyCombo.getValue(),
                     List.of(new SectionTrain(SectionTrain.SectionTrainType.P, spinners[0].getValue()),
                             new SectionTrain(SectionTrain.SectionTrainType.E, spinners[1].getValue())));
             }
@@ -1612,10 +1785,12 @@ public class AdminMenu {
         });
     }
 
-    private void updateTransports(JsonNode root, ComboBox<Transport> combo, String type) {
+    private void updateTransports(JsonNode root, ComboBox<Transport> combo, String type, String companyName) {
         combo.getItems().clear();
+        combo.setValue(null);
         for (JsonNode n : root) {
             if (!n.has("type") || !n.get("type").asText().equals(type)) continue;
+            if (!n.has("company") || !n.get("company").asText().equals(companyName)) continue;
             Transport t = switch (n.get("type").asText()) {
                 case "Plane" -> new Plane(n);
                 case "Boat"  -> new Boat(n);
@@ -1624,6 +1799,38 @@ public class AdminMenu {
             };
             if (t != null) combo.getItems().add(t);
         }
+    }
+
+    private void updateCompaniesForTransportType(ComboBox<String> companyCombo, String transportType) {
+        String companyType = getCompanyTypeForTransportType(transportType);
+        companyCombo.getItems().clear();
+        companyCombo.setValue(null);
+        if (companyType == null) {
+            return;
+        }
+
+        try {
+            JsonNode companyRoot = new ObjectMapper().readTree(new File("src/Database/Company.json"));
+            updateCompanies(companyRoot, companyCombo, companyType);
+        } catch (IOException e) {
+            showError("Unable to load companies.");
+        }
+    }
+
+    private String getTransportTypeFromTripSelection(CheckBox flightCB, CheckBox boatCB, CheckBox trainCB) {
+        if (flightCB.isSelected()) return "Plane";
+        if (boatCB.isSelected()) return "Boat";
+        if (trainCB.isSelected()) return "Train";
+        return null;
+    }
+
+    private String getCompanyTypeForTransportType(String transportType) {
+        return switch (transportType) {
+            case "Plane" -> "FlightCompany";
+            case "Boat" -> "BoatCompany";
+            case "Train" -> "TrainCompany";
+            default -> null;
+        };
     }
 
     // ═══════════════════════════════════════════════════════════════

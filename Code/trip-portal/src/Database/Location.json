@@ -1,59 +1,36 @@
 [ {
-  "id" : "L01",
+  "type" : "Port",
+  "id" : "EOJ",
   "city" : "Montreal",
-  "type" : "Airport",
-  "name" : "Montréal–Trudeau International Airport"
+  "name" : "Vieux Port"
 }, {
-  "id" : "L02",
-  "city" : "Toronto",
-  "type" : "Airport",
-  "name" : "Toronto Pearson International Airport"
+  "type" : "Port",
+  "id" : "EXN",
+  "city" : "Shanghai",
+  "name" : "Port"
 }, {
-  "id" : "L03",
+  "type" : "Airport",
+  "id" : "BTA",
+  "city" : "Pekin",
+  "name" : "Airport Pekin"
+}, {
+  "type" : "TrainStation",
+  "id" : "WMU",
+  "city" : "Vancouver",
+  "name" : "Pipeline Station"
+}, {
+  "type" : "TrainStation",
+  "id" : "QOT",
+  "city" : "Calgary",
+  "name" : "Calgary Station"
+}, {
+  "type" : "Airport",
+  "id" : "AJT",
   "city" : "Paris",
-  "type" : "Airport",
-  "name" : "Charles de Gaulle Airport"
-}, {
-  "id" : "L04",
-  "city" : "Miami",
-  "type" : "Port",
-  "name" : "Port of Miami"
-}, {
-  "id" : "L05",
-  "city" : "Barcelona",
-  "type" : "Port",
-  "name" : "Port of Barcelona"
-}, {
-  "id" : "L06",
-  "city" : "Venice",
-  "type" : "Port",
-  "name" : "Port of Venice"
-}, {
-  "id" : "L07",
-  "city" : "Montreal",
-  "type" : "TrainStation",
-  "name" : "Gare Centrale"
-}, {
-  "id" : "L08",
-  "city" : "London",
-  "type" : "TrainStation",
-  "name" : "London St Pancras International"
-}, {
-  "id" : "L09",
-  "city" : "Tokyo",
-  "type" : "TrainStation",
-  "name" : "Tokyo Station"
+  "name" : "Airport"
 }, {
   "type" : "Airport",
-  "id" : "WVP",
-  "city" : "montreal"
-}, {
-  "type" : "Airport",
-  "id" : "HTM",
-  "city" : "montreal"
-}, {
-  "type" : "Port",
-  "id" : "BOV",
-  "city" : "barrage",
-  "name" : "Laval"
+  "id" : "ZBY",
+  "city" : "Los Angeles",
+  "name" : "Airport LA"
 } ]

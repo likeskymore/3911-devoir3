@@ -50,7 +50,7 @@ public class TrainFactory extends PlaneTripFactory {
     ){
 		return null;
 	}
-    public Transport createTransport(String name, List<SectionTrain> sections) {
+    public Transport createTransport(String name, String companyName, List<SectionTrain> sections) {
 
         // ── 1. Créer l'objet Java ──────────────────────────────────────
         Train train = new Train(name);
@@ -81,6 +81,7 @@ public class TrainFactory extends PlaneTripFactory {
             node.put("transportID", train.getTransportID());
             node.put("type", "Train");
             node.put("name", name);
+            node.put("company", companyName);
             node.put("available", train.isAvailable());
 
             // ── Sections ───────────────────────────────────────────────

@@ -13,18 +13,22 @@ import com.tripPortal.Model.Transport;
 
 public class transportController {
 
-    public Transport goCallCreateTransport(String name, String type, List<? extends Section> sections) {
+    public Transport goCallCreateTransport(String name, String type, String companyName, List<? extends Section> sections) {
         if (name == null || name.isEmpty()) {
             System.err.println("Transport name cannot be empty.");
             return null;
         }
+        if (companyName == null || companyName.isBlank()) {
+            System.err.println("Company name cannot be empty.");
+            return null;
+        }
 
         if (type.equals("Plane")) {
-            return PlaneFactory.getInstance().createTransport(name, (List<SectionPlane>) sections);
+            return PlaneFactory.getInstance().createTransport(name, companyName, (List<SectionPlane>) sections);
         } else if (type.equals("Boat")) {
-            return BoatFactory.getInstance().createTransport(name, (List<SectionBoat>) sections);
+            return BoatFactory.getInstance().createTransport(name, companyName, (List<SectionBoat>) sections);
         } else if (type.equals("Train")) {
-            return TrainFactory.getInstance().createTransport(name, (List<SectionTrain>) sections);
+            return TrainFactory.getInstance().createTransport(name, companyName, (List<SectionTrain>) sections);
         } else {
             System.err.println("Unknown transport type: " + type);
         }
