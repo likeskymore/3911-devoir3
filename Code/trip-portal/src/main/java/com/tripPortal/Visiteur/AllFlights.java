@@ -1,14 +1,15 @@
 package com.tripPortal.Visiteur;
 
-public class AllFlights {
+import com.fasterxml.jackson.databind.JsonNode;
 
-	/**
-	 * 
-	 * @param v
-	 */
-	public void accept(Visitor v) {
-		// TODO - implement AllFlights.accept
-		throw new UnsupportedOperationException();
-	}
+public class AllFlights implements VisitableTrips {
+    private JsonNode node;
 
+    public AllFlights(JsonNode node) { this.node = node; }
+
+    @Override
+    public String accept(Visitor visitor) { return visitor.visit(node); }
+
+    @Override
+    public JsonNode getNode() { return node; }
 }

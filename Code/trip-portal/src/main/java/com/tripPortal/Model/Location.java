@@ -43,10 +43,10 @@ public abstract class Location {
 
 	}
 
-	public static Location fromJson(String city, JsonNode root) {
+	public static Location fromJson(String id, JsonNode root) {
 		for (JsonNode node : root) {
-			if (!node.has("city") || !node.has("type")) continue;
-			if (node.get("city").asText().equals(city)) {
+			if (!node.has("id") || !node.has("type")) continue;
+			if (node.get("id").asText().equals(id)) {
 				String type = node.get("type").asText();
 				return switch (type) {
 					case "Airport"      -> new Airport(node);
@@ -56,6 +56,6 @@ public abstract class Location {
 				};
 			}
 		}
-		throw new IllegalArgumentException("Location not found: " + city);
+		throw new IllegalArgumentException("Location not found: " + id);
 	}
 }

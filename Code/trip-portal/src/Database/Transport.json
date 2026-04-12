@@ -1,13 +1,13 @@
 [ {
-  "transportID" : "457057",
+  "transportID" : "656752",
   "type" : "Plane",
-  "name" : "Air France",
+  "name" : "Air Canada",
   "available" : true,
   "sections" : [ {
-    "sectionName" : "F",
-    "layout" : "C",
-    "numberOfRows" : 6,
-    "numberOfColumns" : 4,
+    "sectionType" : "F",
+    "layout" : "S",
+    "numberOfRows" : 7,
+    "numberOfColumns" : 3,
     "seats" : [ {
       "seatID" : "F1A",
       "occupied" : false
@@ -16,9 +16,6 @@
       "occupied" : false
     }, {
       "seatID" : "F1C",
-      "occupied" : false
-    }, {
-      "seatID" : "F1D",
       "occupied" : false
     }, {
       "seatID" : "F2A",
@@ -30,19 +27,13 @@
       "seatID" : "F2C",
       "occupied" : false
     }, {
-      "seatID" : "F2D",
-      "occupied" : false
-    }, {
       "seatID" : "F3A",
       "occupied" : false
     }, {
       "seatID" : "F3B",
-      "occupied" : false
+      "occupied" : true
     }, {
       "seatID" : "F3C",
-      "occupied" : false
-    }, {
-      "seatID" : "F3D",
       "occupied" : false
     }, {
       "seatID" : "F4A",
@@ -54,9 +45,6 @@
       "seatID" : "F4C",
       "occupied" : false
     }, {
-      "seatID" : "F4D",
-      "occupied" : false
-    }, {
       "seatID" : "F5A",
       "occupied" : false
     }, {
@@ -64,9 +52,6 @@
       "occupied" : false
     }, {
       "seatID" : "F5C",
-      "occupied" : false
-    }, {
-      "seatID" : "F5D",
       "occupied" : false
     }, {
       "seatID" : "F6A",
@@ -78,146 +63,170 @@
       "seatID" : "F6C",
       "occupied" : false
     }, {
-      "seatID" : "F6D",
+      "seatID" : "F7A",
+      "occupied" : false
+    }, {
+      "seatID" : "F7B",
+      "occupied" : false
+    }, {
+      "seatID" : "F7C",
       "occupied" : false
     } ]
   }, {
-    "sectionName" : "P",
+    "sectionType" : "A",
     "layout" : "S",
     "numberOfRows" : 10,
     "numberOfColumns" : 3,
     "seats" : [ {
-      "seatID" : "P1A",
+      "seatID" : "A1A",
       "occupied" : false
     }, {
-      "seatID" : "P1B",
+      "seatID" : "A1B",
       "occupied" : false
     }, {
-      "seatID" : "P1C",
+      "seatID" : "A1C",
       "occupied" : false
     }, {
-      "seatID" : "P2A",
+      "seatID" : "A2A",
       "occupied" : false
     }, {
-      "seatID" : "P2B",
+      "seatID" : "A2B",
       "occupied" : false
     }, {
-      "seatID" : "P2C",
+      "seatID" : "A2C",
       "occupied" : false
     }, {
-      "seatID" : "P3A",
+      "seatID" : "A3A",
       "occupied" : false
     }, {
-      "seatID" : "P3B",
+      "seatID" : "A3B",
       "occupied" : false
     }, {
-      "seatID" : "P3C",
+      "seatID" : "A3C",
       "occupied" : false
     }, {
-      "seatID" : "P4A",
+      "seatID" : "A4A",
       "occupied" : false
     }, {
-      "seatID" : "P4B",
+      "seatID" : "A4B",
       "occupied" : false
     }, {
-      "seatID" : "P4C",
+      "seatID" : "A4C",
       "occupied" : false
     }, {
-      "seatID" : "P5A",
+      "seatID" : "A5A",
       "occupied" : false
     }, {
-      "seatID" : "P5B",
+      "seatID" : "A5B",
       "occupied" : false
     }, {
-      "seatID" : "P5C",
+      "seatID" : "A5C",
       "occupied" : false
     }, {
-      "seatID" : "P6A",
+      "seatID" : "A6A",
       "occupied" : false
     }, {
-      "seatID" : "P6B",
+      "seatID" : "A6B",
       "occupied" : false
     }, {
-      "seatID" : "P6C",
+      "seatID" : "A6C",
       "occupied" : false
     }, {
-      "seatID" : "P7A",
+      "seatID" : "A7A",
       "occupied" : false
     }, {
-      "seatID" : "P7B",
+      "seatID" : "A7B",
       "occupied" : false
     }, {
-      "seatID" : "P7C",
+      "seatID" : "A7C",
       "occupied" : false
     }, {
-      "seatID" : "P8A",
+      "seatID" : "A8A",
       "occupied" : false
     }, {
-      "seatID" : "P8B",
+      "seatID" : "A8B",
       "occupied" : false
     }, {
-      "seatID" : "P8C",
+      "seatID" : "A8C",
       "occupied" : false
     }, {
-      "seatID" : "P9A",
+      "seatID" : "A9A",
       "occupied" : false
     }, {
-      "seatID" : "P9B",
+      "seatID" : "A9B",
       "occupied" : false
     }, {
-      "seatID" : "P9C",
+      "seatID" : "A9C",
       "occupied" : false
     }, {
-      "seatID" : "P10A",
+      "seatID" : "A10A",
       "occupied" : false
     }, {
-      "seatID" : "P10B",
+      "seatID" : "A10B",
       "occupied" : false
     }, {
-      "seatID" : "P10C",
+      "seatID" : "A10C",
       "occupied" : false
     } ]
   } ]
 }, {
-  "transportID" : "463247",
+  "transportID" : "810328",
   "type" : "Boat",
-  "name" : "Norwegian Cruise Line",
+  "name" : "Avion de Chasse",
   "available" : true,
   "sections" : [ {
-    "sectionName" : "O",
     "sectionType" : "O",
     "maxCapacity" : 2,
-    "numberOfCabins" : 6,
+    "numberOfCabins" : 1,
     "cabins" : [ {
       "seatID" : "O-C1",
       "occupied" : false
-    }, {
-      "seatID" : "O-C2",
+    } ]
+  }, {
+    "sectionType" : "D",
+    "maxCapacity" : 6,
+    "numberOfCabins" : 10,
+    "cabins" : [ {
+      "seatID" : "D-C1",
       "occupied" : false
     }, {
-      "seatID" : "O-C3",
+      "seatID" : "D-C2",
       "occupied" : false
     }, {
-      "seatID" : "O-C4",
+      "seatID" : "D-C3",
       "occupied" : false
     }, {
-      "seatID" : "O-C5",
+      "seatID" : "D-C4",
       "occupied" : false
     }, {
-      "seatID" : "O-C6",
+      "seatID" : "D-C5",
+      "occupied" : true
+    }, {
+      "seatID" : "D-C6",
+      "occupied" : false
+    }, {
+      "seatID" : "D-C7",
+      "occupied" : false
+    }, {
+      "seatID" : "D-C8",
+      "occupied" : false
+    }, {
+      "seatID" : "D-C9",
+      "occupied" : true
+    }, {
+      "seatID" : "D-C10",
       "occupied" : false
     } ]
   } ]
 }, {
-  "transportID" : "755623",
+  "transportID" : "713312",
   "type" : "Train",
-  "name" : "Amtrack",
+  "name" : "Norwegian Cruise",
   "available" : true,
   "sections" : [ {
-    "sectionName" : "P",
     "sectionType" : "P",
     "layout" : "S",
-    "numberOfRows" : 8,
+    "numberOfRows" : 6,
     "numberOfColumns" : 3,
     "seats" : [ {
       "seatID" : "T1A",
@@ -273,30 +282,11 @@
     }, {
       "seatID" : "T6C",
       "occupied" : false
-    }, {
-      "seatID" : "T7A",
-      "occupied" : false
-    }, {
-      "seatID" : "T7B",
-      "occupied" : false
-    }, {
-      "seatID" : "T7C",
-      "occupied" : false
-    }, {
-      "seatID" : "T8A",
-      "occupied" : false
-    }, {
-      "seatID" : "T8B",
-      "occupied" : false
-    }, {
-      "seatID" : "T8C",
-      "occupied" : false
     } ]
   }, {
-    "sectionName" : "E",
     "sectionType" : "E",
     "layout" : "S",
-    "numberOfRows" : 28,
+    "numberOfRows" : 27,
     "numberOfColumns" : 3,
     "seats" : [ {
       "seatID" : "T1A",
@@ -540,15 +530,6 @@
       "occupied" : false
     }, {
       "seatID" : "T27C",
-      "occupied" : false
-    }, {
-      "seatID" : "T28A",
-      "occupied" : false
-    }, {
-      "seatID" : "T28B",
-      "occupied" : false
-    }, {
-      "seatID" : "T28C",
       "occupied" : false
     } ]
   } ]

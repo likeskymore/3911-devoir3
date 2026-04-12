@@ -84,7 +84,6 @@ public class BoatFactory extends PlaneTripFactory {
             ArrayNode sectionsArray = mapper.createArrayNode();
             for (SectionBoat sb : sections) {
                 ObjectNode secNode = mapper.createObjectNode();
-                secNode.put("sectionName", sb.getSectionName());
                 secNode.put("sectionType", sb.getSectionType().name());
                 secNode.put("maxCapacity", sb.getSectionType().getMaxCapacity());
                 secNode.put("numberOfCabins", sb.getNumberOfCabins());

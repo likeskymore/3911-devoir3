@@ -1,13 +1,34 @@
 package com.tripPortal.Mediateur;
 
-import com.tripPortal.Factory.CruiseLineFactory;
-import com.tripPortal.Factory.FlightFactory;
-import com.tripPortal.Factory.RouteFactory;
-import com.tripPortal.Model.*;
-
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tripPortal.Factory.CruiseLineFactory;
+import com.tripPortal.Factory.FlightFactory;
+import com.tripPortal.Factory.RouteFactory;
+import com.tripPortal.Model.Airport;
+import com.tripPortal.Model.Boat;
+import com.tripPortal.Model.Company;
+import com.tripPortal.Model.CruiseLine;
+import com.tripPortal.Model.Flight;
+import com.tripPortal.Model.Location;
+import com.tripPortal.Model.Plane;
+import com.tripPortal.Model.Port;
+import com.tripPortal.Model.Route;
+import com.tripPortal.Model.SectionPlane;
+import com.tripPortal.Model.Train;
+import com.tripPortal.Model.TrainStation;
+import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.Trip;
+import com.tripPortal.Visiteur.AllCruiseLines;
+import com.tripPortal.Visiteur.AllFlights;
+import com.tripPortal.Visiteur.AllRoutes;
+import com.tripPortal.Visiteur.ListTripsDataStructure;
 
 
 public class tripController {
@@ -40,6 +61,27 @@ public class tripController {
             }
         };
     }
+
+	public ListTripsDataStructure fetchAllTripsAsStructure() {
+		ListTripsDataStructure structure = new ListTripsDataStructure();
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode root = mapper.readTree(new File("src/Database/Trip.json"));
+			if (root == null || !root.isArray()) return structure;
+
+			for (JsonNode node : root) {
+				if (!node.has("type")) continue;
+				switch (node.get("type").asText()) {
+					case "Flight"     -> structure.add(new AllFlights(node));
+					case "Route"      -> structure.add(new AllRoutes(node));
+					case "CruiseLine" -> structure.add(new AllCruiseLines(node));
+				}
+			}
+		} catch (IOException e) {
+			System.err.println("Failed to read trips: " + e.getMessage());
+		}
+		return structure;
+	}
 
 	/**
 	 * 

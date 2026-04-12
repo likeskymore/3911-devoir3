@@ -1,11 +1,8 @@
 package com.tripPortal.Visiteur;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public interface VisitableTrips {
-
-	/**
-	 * 
-	 * @param v
-	 */
-	void accept(Visitor v);
-
+    String accept(Visitor visitor);
+    JsonNode getNode();
 }

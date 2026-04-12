@@ -210,7 +210,7 @@ public class AdminMenu {
 					@Override
 					protected void updateItem(Location loc, boolean empty) {
 						super.updateItem(loc, empty);
-						setText(empty || loc == null ? "" : loc.getCity() + " (" + loc.getCity() + ")");
+						setText(empty || loc == null ? "" : loc.getCity());
 						setDisable(!empty && !selected.contains(loc));
 						setOpacity(!empty && !selected.contains(loc) ? 0.4 : 1.0);
 					}
@@ -220,7 +220,7 @@ public class AdminMenu {
 					@Override
 					protected void updateItem(Location loc, boolean empty) {
 						super.updateItem(loc, empty);
-						setText(empty || loc == null ? "" : loc.getCity() + " (" + loc.getCity() + ")");
+						setText(empty || loc == null ? "" : loc.getCity());
 						setDisable(false);
 						setOpacity(1.0);
 					}
@@ -371,9 +371,8 @@ public class AdminMenu {
     );
 
     // ---------------- LAYOUT ----------------
-    back.setPrefWidth(200);
-    back.setMinWidth(200);
-    back.setMaxWidth(200);
+    back.setMinWidth(150);
+    back.setMaxWidth(150);
 
     HBox.setHgrow(form, Priority.ALWAYS);
     layout.getChildren().addAll(back, form);
@@ -611,9 +610,8 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 
 		pageContent.getChildren().addAll(CreateCompanyButton);
 		pageContent.setAlignment(Pos.CENTER);
-		back.setPrefWidth(200);
-		back.setMinWidth(200);
-		back.setMaxWidth(200);
+		back.setMinWidth(150);
+		back.setMaxWidth(150);
 		HBox.setHgrow(pageContent, Priority.ALWAYS);
 		HBox layout = new HBox(back, pageContent, displayBox);
 
@@ -900,9 +898,8 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 				nameField,
 				submitButton);
 
-		back.setPrefWidth(200);
-		back.setMinWidth(200);
-		back.setMaxWidth(200);
+		back.setMinWidth(150);
+		back.setMaxWidth(150);
 
 		HBox.setHgrow(form, Priority.ALWAYS);
 		layout.getChildren().addAll(back, form);
@@ -939,9 +936,8 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 		// DeleteLocationButton.setPrefHeight(50);
 		pageContent.getChildren().addAll(messageLabel, CreateLocationButton);
 		pageContent.setAlignment(Pos.CENTER);
-		back.setPrefWidth(200);
-		back.setMinWidth(200);
-		back.setMaxWidth(200);
+		back.setMinWidth(150);
+		back.setMaxWidth(150);
 		HBox.setHgrow(pageContent, Priority.ALWAYS);
 		HBox layout = new HBox(back, pageContent);
 
@@ -1020,9 +1016,8 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 				nameField,
 				submitButton);
 
-		back.setPrefWidth(200);
-		back.setMinWidth(200);
-		back.setMaxWidth(200);
+		back.setMinWidth(150);
+		back.setMaxWidth(150);
 
 		HBox.setHgrow(form, Priority.ALWAYS);
 		layout.getChildren().addAll(back, form);
@@ -1050,9 +1045,8 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 
 		pageContent.getChildren().addAll(CreateTransportButton);
 		pageContent.setAlignment(Pos.CENTER);
-		back.setPrefWidth(200);
-		back.setMinWidth(200);
-		back.setMaxWidth(200);
+		back.setMinWidth(150);
+		back.setMaxWidth(150);
 		HBox.setHgrow(pageContent, Priority.ALWAYS);
 		HBox layout = new HBox(back, pageContent);
 
@@ -1067,9 +1061,8 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 		backButton.setPrefHeight(50);
 		backButton.setOnAction(e -> displayTransportsMenu(scene));
 		VBox back = new VBox(backButton);
-		back.setPrefWidth(200);
-		back.setMinWidth(200);
-		back.setMaxWidth(200);
+		back.setMinWidth(150);
+		back.setMaxWidth(150);
 
 		// ── Nom du transport ───────────────────────────────────────────
 		TextField nameField = new TextField();

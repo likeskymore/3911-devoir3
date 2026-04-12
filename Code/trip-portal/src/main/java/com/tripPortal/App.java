@@ -5,6 +5,7 @@ import com.tripPortal.Model.Company;
 
 import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Mediateur.locationController;
+import com.tripPortal.Mediateur.reservationController;
 import com.tripPortal.Mediateur.transportController;
 import com.tripPortal.Mediateur.tripController;
 import com.tripPortal.Menu.AdminMenu;
@@ -47,6 +48,10 @@ public class App extends Application {
 
         button1.setOnAction(e -> {
             ClientMenu clientMenu = new ClientMenu();
+            tripController TripControllerForClientMenu = new tripController();
+            reservationController ReservationControllerForClientMenu = new reservationController();
+            clientMenu.setReservationControllerForClientMenu(ReservationControllerForClientMenu);
+            clientMenu.setTripControllerForClientMenu(TripControllerForClientMenu);
             clientMenu.start(new Stage());
         });
 

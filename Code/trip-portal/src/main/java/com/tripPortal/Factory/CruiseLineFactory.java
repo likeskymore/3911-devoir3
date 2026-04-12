@@ -92,7 +92,7 @@ public class CruiseLineFactory extends BoatTripFactory {
         node.put("active", 1);
 
         ArrayNode pathArray = mapper.createArrayNode();
-        for (Port port : ports) pathArray.add(port.getCity());
+        for (Port port : ports) pathArray.add(port.getId());
         node.set("path", pathArray);
 
         JsonNode CompanyRoot = mapper.readTree(companyFile);

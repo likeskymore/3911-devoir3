@@ -91,7 +91,7 @@ public class RouteFactory extends TrainTripFactory {
         node.put("active", 1);
 
         ArrayNode stationsArray = mapper.createArrayNode();
-        for (TrainStation st : stations) stationsArray.add(st.getCity());
+        for (TrainStation st : stations) stationsArray.add(st.getId());
         node.set("path", stationsArray);
 
         JsonNode CompanyRoot = mapper.readTree(companyFile);

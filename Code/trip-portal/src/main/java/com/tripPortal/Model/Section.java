@@ -28,6 +28,7 @@ public abstract class Section {
 
     /** Cherche un siège par son ID (ex: "F12A") */
     public Seat findSeatById(String seatId) {
+        System.out.println("Searching for seat ID: " + seatId + " in section: " + sectionName);
         return seats.stream()
                 .filter(s -> s.getSeatID().equals(seatId))
                 .findFirst()

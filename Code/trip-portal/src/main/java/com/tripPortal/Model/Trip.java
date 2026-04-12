@@ -41,8 +41,29 @@ public abstract class Trip {
 		return id;
 
 	}
-
 	public String getId() {
 		return id;
 	}
+
+	public Company getServicedBy() {
+		return servicedBy;
+	}
+
+	public LocalDate getDepartureTime() {
+		return departureTime;
+	}
+
+	public LocalDate getArrivalTime() {
+		return arrivalTime;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public int getTripDuration() {
+		return tripDuration;
+	}
+
+
 }
