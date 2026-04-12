@@ -44,10 +44,13 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -356,16 +359,45 @@ public class AdminMenu {
         Label subtitle = new Label("Welcome back, Administrator");
         subtitle.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 14px;");
 
-        // Quick-action cards row
-        HBox cards = new HBox(16);
-        cards.getChildren().addAll(
-            quickCard("🗺", "Trips",      "Create & manage trips",      () -> displayTripsMenu(scene, "")),
-            quickCard("🏢", "Companies",  "Manage travel companies",    () -> displayCompaniesMenu(scene, "")),
-            quickCard("📍", "Locations",  "Airports, ports, stations",  () -> displayLocationsMenu(scene, "")),
-            quickCard("🚌", "Transports", "Planes, boats, trains",      () -> displayTransportsMenu(scene))
-        );
+        // Quick-action cards as a strict 2x2 equal grid
+        GridPane cardsGrid = new GridPane();
+        cardsGrid.setHgap(16);
+        cardsGrid.setVgap(16);
+        VBox.setVgrow(cardsGrid, Priority.ALWAYS);
 
-        main.getChildren().addAll(title, subtitle, cards);
+        ColumnConstraints col = new ColumnConstraints();
+        col.setPercentWidth(50);
+        col.setHgrow(Priority.ALWAYS);
+        cardsGrid.getColumnConstraints().addAll(col, col);
+
+        RowConstraints row = new RowConstraints();
+        row.setVgrow(Priority.ALWAYS);
+        cardsGrid.getRowConstraints().addAll(row, row);
+
+        VBox tripsCard = quickCard("🗺", "Trips", "Create & manage trips", () -> displayTripsMenu(scene, ""));
+        VBox companiesCard = quickCard("🏢", "Companies", "Manage travel companies", () -> displayCompaniesMenu(scene, ""));
+        VBox locationsCard = quickCard("📍", "Locations", "Airports, ports, stations", () -> displayLocationsMenu(scene, ""));
+        VBox transportsCard = quickCard("🚌", "Transports", "Planes, boats, trains", () -> displayTransportsMenu(scene));
+
+        cardsGrid.add(tripsCard, 0, 0);
+        cardsGrid.add(companiesCard, 1, 0);
+        cardsGrid.add(locationsCard, 0, 1);
+        cardsGrid.add(transportsCard, 1, 1);
+
+        GridPane.setHgrow(tripsCard, Priority.ALWAYS);
+        GridPane.setHgrow(companiesCard, Priority.ALWAYS);
+        GridPane.setHgrow(locationsCard, Priority.ALWAYS);
+        GridPane.setHgrow(transportsCard, Priority.ALWAYS);
+        GridPane.setVgrow(tripsCard, Priority.ALWAYS);
+        GridPane.setVgrow(companiesCard, Priority.ALWAYS);
+        GridPane.setVgrow(locationsCard, Priority.ALWAYS);
+        GridPane.setVgrow(transportsCard, Priority.ALWAYS);
+        GridPane.setFillWidth(tripsCard, true);
+        GridPane.setFillWidth(companiesCard, true);
+        GridPane.setFillWidth(locationsCard, true);
+        GridPane.setFillWidth(transportsCard, true);
+
+        main.getChildren().addAll(title, subtitle, cardsGrid);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -379,7 +411,10 @@ public class AdminMenu {
 
         VBox card = new VBox(6, ico, ttl, sub);
         card.setPadding(new Insets(20));
-        card.setPrefWidth(160);
+        card.setMinSize(0, 0);
+        card.setMaxWidth(Double.MAX_VALUE);
+        card.setMaxHeight(Double.MAX_VALUE);
+        card.prefHeightProperty().bind(card.widthProperty());
         card.setStyle(quickCardStyle(false));
         card.setOnMouseEntered(e -> card.setStyle(quickCardStyle(true)));
         card.setOnMouseExited(e  -> card.setStyle(quickCardStyle(false)));
@@ -418,7 +453,9 @@ public class AdminMenu {
         titleRow.setAlignment(Pos.CENTER_LEFT);
 
         Button createBtn = actionBtn("＋  Create Trip");
+		createBtn.setPrefSize(200, 50);
         Button listBtn   = ghostBtn("☰  View All Trips");
+		listBtn.setPrefSize(200, 50);
         createBtn.setOnAction(e -> displayTripCreationForm(scene));
         listBtn.setOnAction(e   -> displayTrips(scene));
 
@@ -827,7 +864,9 @@ public class AdminMenu {
         Label title = pageTitle("Manage Companies");
 
         Button createBtn = actionBtn("＋  Create Company");
+		createBtn.setPrefSize(200, 50);
 		Button listBtn   = ghostBtn("☰  View All Companies");
+		listBtn.setPrefSize(200, 50);
         createBtn.setOnAction(e -> displayCompanyCreationForm(scene));
 		listBtn.setOnAction(e -> displayCompanies(scene));
 
@@ -1120,7 +1159,9 @@ public class AdminMenu {
         Label title = pageTitle("Manage Locations");
 
         Button createBtn = actionBtn("＋  Create Location");
+		createBtn.setPrefSize(200, 50);
         Button listBtn   = ghostBtn("☰  View All Locations");
+		listBtn.setPrefSize(200, 50);
         createBtn.setOnAction(e -> displayLocationCreationForm(scene));
         listBtn.setOnAction(e -> displayLocations(scene));
 
@@ -1355,7 +1396,9 @@ public class AdminMenu {
         Label title = pageTitle("Manage Transports");
 
         Button createBtn = actionBtn("＋  Create Transport");
+		createBtn.setPrefSize(200, 50);
         Button listBtn   = ghostBtn("☰  View All Transports");
+		listBtn.setPrefSize(200, 50);
         createBtn.setOnAction(e -> displayTransportCreationForm(scene));
         listBtn.setOnAction(e -> displayTransports(scene));
 
