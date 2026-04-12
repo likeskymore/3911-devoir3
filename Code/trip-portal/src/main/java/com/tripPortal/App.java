@@ -1,8 +1,5 @@
 package com.tripPortal;
 
-import com.tripPortal.Commande.editCompanyCommand;
-import com.tripPortal.Model.Company;
-
 import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Mediateur.locationController;
 import com.tripPortal.Mediateur.reservationController;
@@ -10,85 +7,150 @@ import com.tripPortal.Mediateur.transportController;
 import com.tripPortal.Mediateur.tripController;
 import com.tripPortal.Menu.AdminMenu;
 import com.tripPortal.Menu.ClientMenu;
-import com.tripPortal.Menu.CompanyMenu;
-import com.tripPortal.Model.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 public class App extends Application {
 
+    // ═══════════════════════════════════════════════════════════════
+    // DESIGN TOKENS  (same palette as Admin/Client menus)
+    // ═══════════════════════════════════════════════════════════════
+    private static final String C_BG_DARK  = "#0f1117";
+    private static final String C_CARD     = "#1e2535";
+    private static final String C_BORDER   = "#2a3450";
+    private static final String C_AMBER    = "#f0a500";
+    private static final String C_TEXT     = "#e8eaf0";
+    private static final String C_MUTED    = "#7a8499";
+
     @Override
     public void start(Stage stage) {
 
-        // Top label
-        Label welcomeLabel = new Label("Welcome to Trip Portal");
-        welcomeLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
-        VBox topBox = new VBox(welcomeLabel);
-        topBox.setAlignment(Pos.CENTER);
-        topBox.setPadding(new Insets(25, 0, 0, 0));
+        // ── Brand header ──────────────────────────────────────────
+        Label logo = new Label("✈");
+        logo.setStyle("-fx-font-size: 48px;");
 
-        // Buttons
-        Button button1 = new Button("Client");
-        Button button2 = new Button("Administrator");
+        Label title = new Label("TripPortal");
+        title.setStyle("-fx-text-fill: " + C_AMBER + "; "
+                     + "-fx-font-size: 36px; "
+                     + "-fx-font-weight: bold;");
 
-        button1.setMaxWidth(400);
-        button2.setMaxWidth(400);
-        
-        button1.setPrefHeight(100);
-        button2.setPrefHeight(100);
+        Label subtitle = new Label("Choose how you'd like to continue");
+        subtitle.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 14px;");
 
-        button1.setOnAction(e -> {
-            ClientMenu clientMenu = new ClientMenu();
-            tripController TripControllerForClientMenu = new tripController();
-            reservationController ReservationControllerForClientMenu = new reservationController();
-            clientMenu.setReservationControllerForClientMenu(ReservationControllerForClientMenu);
-            clientMenu.setTripControllerForClientMenu(TripControllerForClientMenu);
-            clientMenu.start(new Stage());
-        });
+        VBox header = new VBox(8, logo, title, subtitle);
+        header.setAlignment(Pos.CENTER);
 
-        // Admin click
-        button2.setOnAction(e -> {
-            AdminMenu adminMenu = new AdminMenu();
-            tripController TripControllerForAdminMenu = new tripController();
-            companyController CompanyController = new companyController();
-            locationController LocationController = new locationController();
-            transportController TransportController = new transportController();
-            adminMenu.setTripControllerForAdminMenu(TripControllerForAdminMenu);
-            adminMenu.setCompanyControllerForAdminMenu(CompanyController);
-            adminMenu.setLocationControllerForAdminMenu(LocationController);
-            adminMenu.setTransportControllerForAdminMenu(TransportController);
-            adminMenu.start(new Stage());
-        });
+        // ── Role cards ────────────────────────────────────────────
+        VBox clientCard  = roleCard("👤", "Client",
+                "Browse trips, make reservations\nand manage your bookings.",
+                () -> launchClient());
 
+        VBox adminCard   = roleCard("🛠", "Administrator",
+                "Manage trips, companies,\nlocations and transports.",
+                () -> launchAdmin());
 
-        VBox centerBox = new VBox(20, button1, button2);
-        centerBox.setAlignment(Pos.CENTER);
+        HBox cards = new HBox(24, clientCard, adminCard);
+        cards.setAlignment(Pos.CENTER);
 
-        // Layout
-        BorderPane root = new BorderPane();
+        // ── Root ──────────────────────────────────────────────────
+        VBox root = new VBox(48, header, cards);
+        root.setAlignment(Pos.CENTER);
+        root.setStyle("-fx-background-color: " + C_BG_DARK + ";");
+        root.setPadding(new Insets(60));
 
-        root.setTop(topBox);
-        root.setCenter(centerBox); 
-
-        Scene scene = new Scene(root, 800, 600);
-
-        stage.setTitle("Trip Portal");
+        Scene scene = new Scene(root, 860, 560);
+        stage.setTitle("TripPortal");
         stage.setScene(scene);
         stage.show();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // ROLE CARD
+    // ═══════════════════════════════════════════════════════════════
+    private VBox roleCard(String icon, String title, String description, Runnable onClick) {
+        Label ico = new Label(icon);
+        ico.setStyle("-fx-font-size: 36px;");
+
+        Label ttl = new Label(title);
+        ttl.setStyle("-fx-text-fill: " + C_TEXT + "; "
+                   + "-fx-font-size: 20px; "
+                   + "-fx-font-weight: bold;");
+
+        Label desc = new Label(description);
+        desc.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 12px;");
+        desc.setWrapText(true);
+        desc.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
+        Button enterBtn = new Button("Enter  →");
+        enterBtn.setPrefHeight(40);
+        enterBtn.setMaxWidth(Double.MAX_VALUE);
+        enterBtn.setStyle(btnStyle(false));
+        enterBtn.setOnMouseEntered(e -> enterBtn.setStyle(btnStyle(true)));
+        enterBtn.setOnMouseExited(e  -> enterBtn.setStyle(btnStyle(false)));
+        enterBtn.setOnAction(e -> onClick.run());
+
+        VBox card = new VBox(12, ico, ttl, desc, spacer, enterBtn);
+        card.setAlignment(Pos.TOP_CENTER);
+        card.setPadding(new Insets(32, 28, 28, 28));
+        card.setPrefWidth(260);
+        card.setPrefHeight(280);
+        card.setStyle(cardStyle(false));
+        card.setOnMouseEntered(e -> card.setStyle(cardStyle(true)));
+        card.setOnMouseExited(e  -> card.setStyle(cardStyle(false)));
+        card.setOnMouseClicked(e -> onClick.run());
+
+        return card;
+    }
+
+    private String cardStyle(boolean hover) {
+        return "-fx-background-color: " + (hover ? "#243040" : C_CARD) + "; "
+             + "-fx-background-radius: 12; "
+             + "-fx-border-color: " + (hover ? C_AMBER : C_BORDER) + "; "
+             + "-fx-border-radius: 12; "
+             + "-fx-cursor: hand;";
+    }
+
+    private String btnStyle(boolean hover) {
+        return "-fx-background-color: " + (hover ? "#d4920a" : C_AMBER) + "; "
+             + "-fx-text-fill: " + C_BG_DARK + "; "
+             + "-fx-font-size: 13px; -fx-font-weight: bold; "
+             + "-fx-background-radius: 7; -fx-cursor: hand;";
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // LAUNCHERS
+    // ═══════════════════════════════════════════════════════════════
+    private void launchClient() {
+        ClientMenu clientMenu = new ClientMenu();
+        tripController tc = new tripController();
+        reservationController rc = new reservationController();
+        clientMenu.setTripControllerForClientMenu(tc);
+        clientMenu.setReservationControllerForClientMenu(rc);
+        clientMenu.start(new Stage());
+    }
+
+    private void launchAdmin() {
+        AdminMenu adminMenu = new AdminMenu();
+        adminMenu.setTripControllerForAdminMenu(new tripController());
+        adminMenu.setCompanyControllerForAdminMenu(new companyController());
+        adminMenu.setLocationControllerForAdminMenu(new locationController());
+        adminMenu.setTransportControllerForAdminMenu(new transportController());
+        adminMenu.start(new Stage());
     }
 
     public static void main(String[] args) {
         launch(args);
     }
-
-    
 }

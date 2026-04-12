@@ -1,16 +1,20 @@
 package com.tripPortal.Model;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.JsonNode;
 public abstract class Location {
 	private String id;
 	private String city;
+	private String name;
 
 	public Location(String city) {
+		this(city, city);
+	}
+
+	public Location(String city, String name) {
 		this.id = randomGenerateID();
 		this.city = city;
+		this.name = name;
 	}
 
 	public String getCity() {
@@ -19,6 +23,14 @@ public abstract class Location {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getId() {
@@ -43,10 +55,10 @@ public abstract class Location {
 
 	}
 
-	public static Location fromJson(String id, JsonNode root) {
+	public static Location fromJson(String city, JsonNode root) {
 		for (JsonNode node : root) {
-			if (!node.has("id") || !node.has("type")) continue;
-			if (node.get("id").asText().equals(id)) {
+			if (!node.has("city") || !node.has("type")) continue;
+			if (node.get("city").asText().equals(city)) {
 				String type = node.get("type").asText();
 				return switch (type) {
 					case "Airport"      -> new Airport(node);
@@ -56,6 +68,6 @@ public abstract class Location {
 				};
 			}
 		}
-		throw new IllegalArgumentException("Location not found: " + id);
+		throw new IllegalArgumentException("Location not found: " + city);
 	}
 }

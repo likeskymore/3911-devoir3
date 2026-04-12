@@ -6,8 +6,11 @@ public class Port extends Location {
 	public Port(String city) {
         super(city);
     }
+    public Port(String city, String name) {
+        super(city, name);
+    }
     public Port(JsonNode node) {
-        super(node.get("city").asText());
+        super(node.path("city").asText(), node.path("name").asText(node.path("city").asText()));
         setId(node.get("id").asText());
     }
 }

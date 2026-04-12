@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.tripPortal.Model.Airport;
 import com.tripPortal.Model.Company;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.TrainStation;
@@ -18,7 +17,7 @@ import com.tripPortal.Model.Trip;
 
 public class TrainStationFactory extends TrainTripFactory {
 
-	// Singleton
+    // Singleton
     private static TrainStationFactory instance;
 
     private TrainStationFactory() {}
@@ -31,46 +30,53 @@ public class TrainStationFactory extends TrainTripFactory {
     }
 
     // Patron de fabrique
-	public Location createLocation(String city) {
-		TrainStation trainStation = new TrainStation(city);
+    public Location createLocation(String city) {
+        return createLocation(city, city);
+    }
 
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			File file = new File("src/Database/Location.json");
+    public Location createLocation(String city, String name) {
+        TrainStation trainStation = new TrainStation(city, name);
 
-			// Read existing array
-			JsonNode root = mapper.readTree(file);
-			ArrayNode array;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            File file = new File("src/Database/Location.json");
 
-			if (root == null || root.isMissingNode() || root.isNull()) {
-				array = mapper.createArrayNode(); // fichier vide ou null
-			} else if (root.isArray()) {
-				array = (ArrayNode) root;
-			} else {
-				throw new IOException("Location.json doit contenir un tableau JSON []");
-			}
+            // Read existing array
+            JsonNode root = mapper.readTree(file);
+            ArrayNode array;
 
-			// Build new entry
-			ObjectNode newTrainStation = mapper.createObjectNode();
-			newTrainStation.put("type", "TrainStation");
-			newTrainStation.put("id", trainStation.getId());
-			newTrainStation.put("city", city);
+            if (root == null || root.isMissingNode() || root.isNull()) {
+                array = mapper.createArrayNode(); // fichier vide ou null
+            } else if (root.isArray()) {
+                array = (ArrayNode) root;
+            } else {
+                throw new IOException("Location.json doit contenir un tableau JSON []");
+            }
 
-			// Append and write back
-			array.add(newTrainStation);
-			mapper.writerWithDefaultPrettyPrinter().writeValue(file, array);
+            // Build new entry
+            ObjectNode newTrainStation = mapper.createObjectNode();
+            newTrainStation.put("type", "TrainStation");
+            newTrainStation.put("id", trainStation.getId());
+            newTrainStation.put("city", city);
+            newTrainStation.put("name", name);
 
-		} catch (IOException e) {
-			System.err.println("Failed to write train station to JSON: " + e.getMessage());
-			e.printStackTrace();
-		}
+            // Append and write back
+            array.add(newTrainStation);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, array);
 
-		return trainStation;
-	}
+        } catch (IOException e) {
+            System.err.println("Failed to write train station to JSON: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return trainStation;
+    }
+
     public Company createCompany(String name) {
         // TODO - implement TrainStationFactory.createCompany
         return null;
     }
+
     public Trip createTrajectory(
         Company company,
         LocalDate startDate,
@@ -79,8 +85,7 @@ public class TrainStationFactory extends TrainTripFactory {
         int duration,
         ArrayList<Location> locations,
         Transport transport
-    ){
-		return null;
-	}
-
+    ) {
+        return null;
+    }
 }

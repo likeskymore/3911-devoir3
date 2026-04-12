@@ -47,4 +47,13 @@
   "type" : "Airport",
   "id" : "WVP",
   "city" : "montreal"
+}, {
+  "type" : "Airport",
+  "id" : "HTM",
+  "city" : "montreal"
+}, {
+  "type" : "Port",
+  "id" : "BOV",
+  "city" : "barrage",
+  "name" : "Laval"
 } ]

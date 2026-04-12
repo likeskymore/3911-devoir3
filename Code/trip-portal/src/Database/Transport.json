@@ -10,7 +10,7 @@
     "numberOfColumns" : 3,
     "seats" : [ {
       "seatID" : "F1A",
-      "occupied" : false
+      "occupied" : true
     }, {
       "seatID" : "F1B",
       "occupied" : false
@@ -31,7 +31,7 @@
       "occupied" : false
     }, {
       "seatID" : "F3B",
-      "occupied" : true
+      "occupied" : false
     }, {
       "seatID" : "F3C",
       "occupied" : false
@@ -197,7 +197,7 @@
       "occupied" : false
     }, {
       "seatID" : "D-C4",
-      "occupied" : false
+      "occupied" : true
     }, {
       "seatID" : "D-C5",
       "occupied" : true
@@ -533,4 +533,10 @@
       "occupied" : false
     } ]
   } ]
+}, {
+  "transportID" : "441340",
+  "type" : "Plane",
+  "name" : "plane",
+  "available" : true,
+  "sections" : [ ]
 } ]

@@ -98,7 +98,7 @@ public class FlightFactory extends PlaneTripFactory {
         for (JsonNode companyNode : companyArray){
             if (companyNode.get("id").asText().equals(company.getId())){
                 ArrayNode trips = (ArrayNode) companyNode.get("Trips");
-                trips.add(mapper.valueToTree(flight));
+                trips.add(flight.getId());
                 break;
             }
         }

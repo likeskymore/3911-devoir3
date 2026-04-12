@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tripPortal.Model.Boat;
@@ -101,7 +102,7 @@ public class CruiseLineFactory extends BoatTripFactory {
         for (JsonNode companyNode : companyArray){
             if (companyNode.get("id").asText().equals(company.getId())){
                 ArrayNode trips = (ArrayNode) companyNode.get("Trips");
-                trips.add(mapper.valueToTree(cruise));
+                trips.add(cruise.getId());
                 break;
             }
         }

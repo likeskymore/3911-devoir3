@@ -32,7 +32,11 @@ public class AirportFactory extends PlaneTripFactory {
 
 	// Patron de fabrique
 	public Location createLocation(String city) {
-		Airport airport = new Airport(city);
+		return createLocation(city, city);
+	}
+
+	public Location createLocation(String city, String name) {
+		Airport airport = new Airport(city, name);
 
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -55,6 +59,7 @@ public class AirportFactory extends PlaneTripFactory {
 			newAirport.put("type", "Airport");
 			newAirport.put("id", airport.getId());
 			newAirport.put("city", city);
+			newAirport.put("name", name);
 
 			// Append and write back
 			array.add(newAirport);

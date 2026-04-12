@@ -14,6 +14,7 @@ import com.tripPortal.Visiteur.ConcreteRouteVisitor;
 import com.tripPortal.Visiteur.ListTripsDataStructure;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -21,7 +22,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -30,264 +31,519 @@ import javafx.stage.Stage;
 
 public class ClientMenu {
 
-	private tripController tripControllerForClientMenu;
-	private reservationController reservationControllerForClientMenu;
+    // ═══════════════════════════════════════════════════════════════
+    // DESIGN TOKENS  (matches AdminMenu palette)
+    // ═══════════════════════════════════════════════════════════════
+    private static final String C_BG_DARK  = "#0f1117";
+    private static final String C_SIDEBAR  = "#161b27";
+    private static final String C_CARD     = "#1e2535";
+    private static final String C_BORDER   = "#2a3450";
+    private static final String C_AMBER    = "#f0a500";
+    private static final String C_TEXT     = "#e8eaf0";
+    private static final String C_MUTED    = "#7a8499";
+    private static final String C_SUCCESS  = "#2ecc71";
+    private static final String C_DANGER   = "#e74c3c";
+    private static final String C_MAIN_BG  = "#111520";
 
-	public void start(Stage stage) {
-		// TODO - implement com.tripPortal.Menu.ClientMenu.start
-		Stage newStage = new Stage();
+    private tripController        tripControllerForClientMenu;
+    private reservationController reservationControllerForClientMenu;
 
+    // ═══════════════════════════════════════════════════════════════
+    // ENTRY POINT
+    // ═══════════════════════════════════════════════════════════════
+    public void start(Stage stage) {
+        Stage newStage = new Stage();
+        Scene scene = new Scene(new VBox(), 900, 600);
+        displayMenuClient(scene);
+        newStage.setTitle("TripPortal — Client");
+        newStage.setScene(scene);
+        newStage.show();
+    }
 
-		Scene scene = new Scene(new VBox(), 600, 400);
-		displayMenuClient(scene);
+    // ═══════════════════════════════════════════════════════════════
+    // SHELL  — persistent sidebar + swappable content
+    // ═══════════════════════════════════════════════════════════════
+    private HBox buildShell(VBox sidebarContent, VBox mainContent) {
+        VBox sidebar = new VBox(0);
+        sidebar.setPrefWidth(230);
+        sidebar.setMinWidth(230);
+        sidebar.setMaxWidth(230);
+        sidebar.setStyle("-fx-background-color: " + C_SIDEBAR + ";");
 
+        Label brand = new Label("✈  TripPortal");
+        brand.setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-size: 17px; -fx-font-weight: bold; -fx-padding: 28 24 10 24;");
 
-		newStage.setTitle("Client");
-		newStage.setScene(scene);
+        Separator sep = new Separator();
+        sep.setStyle("-fx-background-color: " + C_BORDER + "; -fx-opacity: 1;");
+        sep.setPadding(new Insets(0, 0, 8, 0));
 
-		newStage.show();
-	}
-	
-	public void displayMenuClient(Scene scene) {
-		// TODO - implement com.tripPortal.Menu.AdminMenu.displayMenuAdmin
-		VBox root = new VBox();
-		Button editProfileButton = new Button("Profile");
-		editProfileButton.setMinWidth(200);
-		editProfileButton.setPrefHeight(50);
-		editProfileButton.setOnAction(e -> {
-			displayProfileMenu(scene);
+        sidebar.getChildren().addAll(brand, sep, sidebarContent);
+
+        mainContent.setStyle("-fx-background-color: " + C_MAIN_BG + ";");
+        HBox.setHgrow(mainContent, Priority.ALWAYS);
+
+        HBox shell = new HBox(sidebar, mainContent);
+        shell.setStyle("-fx-background-color: " + C_BG_DARK + ";");
+        return shell;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // NAV BUTTON
+    // ═══════════════════════════════════════════════════════════════
+    private Button navBtn(String text) {
+        Button btn = new Button(text);
+        btn.setMaxWidth(Double.MAX_VALUE);
+        btn.setPrefHeight(44);
+        btn.setStyle(navBtnStyle(false));
+        btn.setOnMouseEntered(e -> btn.setStyle(navBtnStyle(true)));
+        btn.setOnMouseExited(e  -> btn.setStyle(navBtnStyle(false)));
+        return btn;
+    }
+
+    private String navBtnStyle(boolean hover) {
+        String bg = hover ? C_AMBER   : "transparent";
+        String fg = hover ? C_BG_DARK : C_TEXT;
+        return "-fx-background-color: " + bg + "; "
+             + "-fx-text-fill: " + fg + "; "
+             + "-fx-font-size: 13px; "
+             + "-fx-background-radius: 0; "
+             + "-fx-cursor: hand; "
+             + "-fx-alignment: CENTER_LEFT; "
+             + "-fx-padding: 0 0 0 24;";
+    }
+
+    private String navBtnActiveStyle() {
+        return "-fx-background-color: #a06d00; "
+             + "-fx-text-fill: " + C_AMBER + "; "
+             + "-fx-font-size: 13px; -fx-font-weight: bold; "
+             + "-fx-background-radius: 0; "
+             + "-fx-alignment: CENTER_LEFT; "
+             + "-fx-padding: 0 0 0 24; "
+             + "-fx-max-width: Infinity;  -fx-pref-height: 44;";
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // BUTTON HELPERS
+    // ═══════════════════════════════════════════════════════════════
+    private Button actionBtn(String text) {
+        Button btn = new Button(text);
+        btn.setPrefHeight(36);
+        btn.setStyle(actionBtnStyle(false));
+        btn.setOnMouseEntered(e -> btn.setStyle(actionBtnStyle(true)));
+        btn.setOnMouseExited(e  -> btn.setStyle(actionBtnStyle(false)));
+        return btn;
+    }
+
+    private String actionBtnStyle(boolean hover) {
+        return "-fx-background-color: " + (hover ? "#d4920a" : C_AMBER) + "; "
+             + "-fx-text-fill: " + C_BG_DARK + "; "
+             + "-fx-font-size: 12px; -fx-font-weight: bold; "
+             + "-fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 16;";
+    }
+
+    private Button dangerBtn(String text) {
+        Button btn = new Button(text);
+        btn.setPrefHeight(32);
+        btn.setStyle(dangerBtnStyle(false));
+        btn.setOnMouseEntered(e -> btn.setStyle(dangerBtnStyle(true)));
+        btn.setOnMouseExited(e  -> btn.setStyle(dangerBtnStyle(false)));
+        return btn;
+    }
+
+    private String dangerBtnStyle(boolean hover) {
+        return "-fx-background-color: " + (hover ? "#c0392b" : C_DANGER) + "; "
+             + "-fx-text-fill: white; -fx-font-size: 12px; "
+             + "-fx-background-radius: 5; -fx-cursor: hand; -fx-padding: 0 12;";
+    }
+
+    private Button ghostBtn(String text) {
+        Button btn = new Button(text);
+        btn.setPrefHeight(32);
+        btn.setStyle(ghostBtnStyle(false));
+        btn.setOnMouseEntered(e -> btn.setStyle(ghostBtnStyle(true)));
+        btn.setOnMouseExited(e  -> btn.setStyle(ghostBtnStyle(false)));
+        return btn;
+    }
+
+    private String ghostBtnStyle(boolean hover) {
+        return "-fx-background-color: " + (hover ? C_BORDER : "transparent") + "; "
+             + "-fx-text-fill: " + (hover ? C_TEXT : C_MUTED) + "; "
+             + "-fx-border-color: " + C_BORDER + "; "
+             + "-fx-border-radius: 5; -fx-background-radius: 5; "
+             + "-fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 0 12;";
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // CARD / LABEL HELPERS
+    // ═══════════════════════════════════════════════════════════════
+    private VBox card(double spacing) {
+        VBox c = new VBox(spacing);
+        c.setPadding(new Insets(16));
+        c.setStyle("-fx-background-color: " + C_CARD + "; "
+                 + "-fx-background-radius: 8; "
+                 + "-fx-border-color: " + C_BORDER + "; "
+                 + "-fx-border-radius: 8;");
+        return c;
+    }
+
+    private Label pageTitle(String text) {
+        Label lbl = new Label(text);
+        lbl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 24px; -fx-font-weight: bold;");
+        return lbl;
+    }
+
+    private Label successBanner(String message) {
+        Label lbl = new Label("✔  " + message);
+        lbl.setStyle("-fx-text-fill: " + C_SUCCESS + "; "
+                   + "-fx-background-color: #1a3a28; "
+                   + "-fx-padding: 10 16; -fx-background-radius: 6; -fx-font-size: 13px;");
+        lbl.setMaxWidth(Double.MAX_VALUE);
+        return lbl;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MAIN MENU  — dashboard with quick-action cards
+    // ═══════════════════════════════════════════════════════════════
+    public void displayMenuClient(Scene scene) {
+		 VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+
+		Button btnProfile = navBtn("👤  My Reservations");
+		Button btnReserve = navBtn("🗺  Browse Trips");
+		btnProfile.setOnAction(e -> displayProfileMenu(scene));
+		btnReserve.setOnAction(e -> displayReserveMenu(scene, ""));
+
+		Region spacer = new Region();
+		VBox.setVgrow(spacer, Priority.ALWAYS);
+		Button btnLogout = navBtn("⎋  Logout");
+		btnLogout.setOnAction(e -> {
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+					"Are you sure you want to logout?", ButtonType.YES, ButtonType.NO);
+			alert.showAndWait().ifPresent(r -> { if (r == ButtonType.YES) scene.getWindow().hide(); });
 		});
 
-		Button tripsButton = new Button("Reserve a trip");
-		tripsButton.setMinWidth(200);
-		tripsButton.setPrefHeight(50);
-		tripsButton.setOnAction(e -> {
-			displayReserveMenu(scene, "");
-		});
+		nav.getChildren().addAll(btnProfile, btnReserve, spacer, btnLogout);
 
-		Button logoutButton = new Button("Logout");
-		logoutButton.setMinWidth(200);
-		logoutButton.setPrefHeight(50);
-		logoutButton.setOnAction(e -> {
-			Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to logout?", ButtonType.YES,
-					ButtonType.NO);
-			alert.showAndWait().ifPresent(response -> {
-				if (response == ButtonType.YES) {
-					scene.getWindow().hide();
-				}
-			});
-		});
+        // Main content
+        VBox main = new VBox(24);
+        main.setPadding(new Insets(40));
 
-		root.getChildren().addAll(editProfileButton, tripsButton, logoutButton);
+        Label title = pageTitle("Welcome Back");
+        Label subtitle = new Label("Where would you like to go today?");
+        subtitle.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 14px;");
 
-		BorderPane borderPane = new BorderPane();
-		borderPane.setLeft(root);
-		scene.setRoot(borderPane);
-	}
+        HBox cards = new HBox(20);
+        cards.getChildren().addAll(
+            quickCard("🗺", "Browse Trips",    "Explore all available trips",     () -> displayReserveMenu(scene, "")),
+            quickCard("👤", "My Reservations", "View and manage your bookings",   () -> displayProfileMenu(scene))
+        );
 
-	public void displayProfileMenu(Scene scene) {
-		HBox layout = new HBox(10);
+        main.getChildren().addAll(title, subtitle, cards);
+        scene.setRoot(buildShell(nav, main));
+    }
 
-		Button backButton = new Button("Back");
-		backButton.setMinWidth(100);
-		backButton.setPrefHeight(50);
-		backButton.setOnAction(e -> {
-			displayMenuClient(scene);
-		});
+    private VBox quickCard(String icon, String title, String subtitle, Runnable onClick) {
+        Label ico = new Label(icon);
+        ico.setStyle("-fx-font-size: 32px;");
+        Label ttl = new Label(title);
+        ttl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 15px; -fx-font-weight: bold;");
+        Label sub = new Label(subtitle);
+        sub.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+        sub.setWrapText(true);
 
-		VBox back = new VBox(backButton);
-		back.setPrefWidth(150);
-		back.setMinWidth(150);
-		back.setMaxWidth(150);
+        VBox card = new VBox(8, ico, ttl, sub);
+        card.setPadding(new Insets(24));
+        card.setPrefWidth(200);
+        card.setStyle(quickCardStyle(false));
+        card.setOnMouseEntered(e -> card.setStyle(quickCardStyle(true)));
+        card.setOnMouseExited(e  -> card.setStyle(quickCardStyle(false)));
+        card.setOnMouseClicked(e -> onClick.run());
+        return card;
+    }
 
-		VBox content = new VBox(10);
-		content.setPadding(new Insets(20));
-		content.getChildren().add(new Label("Your Reservations:"));
+    private String quickCardStyle(boolean hover) {
+        return "-fx-background-color: " + (hover ? "#243040" : C_CARD) + "; "
+             + "-fx-background-radius: 10; "
+             + "-fx-border-color: " + (hover ? C_AMBER : C_BORDER) + "; "
+             + "-fx-border-radius: 10; -fx-cursor: hand;";
+    }
 
-		ArrayList<Reservation> reservations = reservationControllerForClientMenu.fetchUserReservations();
+    // ═══════════════════════════════════════════════════════════════
+    // PROFILE / RESERVATIONS
+    // ═══════════════════════════════════════════════════════════════
+    public void displayProfileMenu(Scene scene) {
+		VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
 
-		VBox reservationList = new VBox(8);
-		reservationList.setPadding(new Insets(10));
+		Button btnBack    = navBtn("←  Back");
+		Button btnProfile = navBtn("👤  My Reservations");
+		btnBack.setOnAction(e    -> displayMenuClient(scene));
+		btnProfile.setStyle(navBtnActiveStyle()); // highlight active
 
-		for (Reservation res : reservations) {
-			String line = "Reservation #" + res.getReservationNumber()
-					+ " - Trip ID: " + res.getTripId()
-					+ " - Seat: " + res.getReservedSeat()
-					+ " - Paid: " + (res.isPaid() ? "Yes" : "No");
+		nav.getChildren().addAll(btnBack, new Separator(), btnProfile);
 
-			Label resLabel = new Label(line);
-			resLabel.setWrapText(true);
-			resLabel.setStyle("-fx-border-color: #ccc; -fx-border-radius: 5; -fx-padding: 8;");
-			resLabel.setPrefWidth(300);
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
 
-			VBox buttons = new VBox(5);
-			Button payButton = new Button("Pay");
-			payButton.setDisable(res.isPaid()); // Disable if already paid
-			payButton.setOnAction(e -> {
-				reservationControllerForClientMenu.payReservation(res);
-				displayProfileMenu(scene);
-			});
-			payButton.setMinWidth(80);
+        Label title = pageTitle("My Reservations");
 
-			Button cancelButton = new Button("Cancel");
-			cancelButton.setOnAction(e -> {
-				reservationControllerForClientMenu.cancelReservation(res);
-				displayProfileMenu(scene); // Refresh after deletion
-			});
-			cancelButton.setMinWidth(80);
+        ArrayList<Reservation> reservations = reservationControllerForClientMenu.fetchUserReservations();
 
-			buttons.getChildren().addAll(payButton, cancelButton);
+        VBox listBox = new VBox(12);
 
-			reservationList.getChildren().add(new HBox(10, resLabel, buttons));
-		}
+        if (reservations.isEmpty()) {
+            Label empty = new Label("You have no reservations yet.");
+            empty.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 14px;");
+            Button browseBtn = actionBtn("  Browse Trips  ");
+            browseBtn.setOnAction(e -> displayReserveMenu(scene, ""));
+            listBox.getChildren().addAll(empty, browseBtn);
+        } else {
+            for (Reservation res : reservations) {
+                VBox resCard = card(10);
 
-		ScrollPane scroll = new ScrollPane(reservationList);
-		scroll.setFitToWidth(true);
-		scroll.setPrefHeight(350);
+                // Header row: reservation number + paid badge
+                HBox header = new HBox(10);
+                header.setAlignment(Pos.CENTER_LEFT);
+                Label numLbl = new Label("Reservation #" + res.getReservationNumber());
+                numLbl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 14px; -fx-font-weight: bold;");
+                Region sp = new Region(); HBox.setHgrow(sp, Priority.ALWAYS);
+                Label paidBadge = new Label(res.isPaid() ? "✔ PAID" : "⏳ UNPAID");
+                paidBadge.setStyle("-fx-text-fill: " + (res.isPaid() ? C_SUCCESS : C_AMBER) + "; "
+                        + "-fx-font-size: 11px; -fx-font-weight: bold; "
+                        + "-fx-background-color: " + (res.isPaid() ? "#1a3a28" : "#3a2a00") + "; "
+                        + "-fx-padding: 4 10; -fx-background-radius: 20;");
+                header.getChildren().addAll(numLbl, sp, paidBadge);
 
-		content.getChildren().add(scroll);
+                // Details
+                Label tripLbl = new Label("Trip ID:   " + res.getTripId());
+                tripLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 12px;");
+                Label seatLbl = new Label("Seat:       " + res.getReservedSeat());
+                seatLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 12px;");
 
-		HBox.setHgrow(content, Priority.ALWAYS);
-		layout.getChildren().addAll(back, content);
-		scene.setRoot(layout);
-	}
+                Separator sep = new Separator();
+                sep.setStyle("-fx-background-color: " + C_BORDER + ";");
 
-	public void displayReserveMenu(Scene scene, String message) {
-		ListTripsDataStructure structure = tripControllerForClientMenu.fetchAllTripsAsStructure();
+                // Action buttons
+                Button payBtn = actionBtn("💳  Pay Now");
+                payBtn.setDisable(res.isPaid());
+                payBtn.setOnAction(e -> {
+                    reservationControllerForClientMenu.payReservation(res);
+                    displayProfileMenu(scene);
+                });
 
-		// ── Collecter paires (affichage, node) ────────────────────────
-		ArrayList<javafx.util.Pair<String, JsonNode>> pairs = new ArrayList<>();
-		pairs.addAll(structure.acceptWithNodes(new ConcreteFlightVisitor()));
-		pairs.addAll(structure.acceptWithNodes(new ConcreteRouteVisitor()));
-		pairs.addAll(structure.acceptWithNodes(new ConcreteCruiseLineVisitor()));
+                Button cancelBtn = dangerBtn("🗑  Cancel");
+                cancelBtn.setOnAction(e -> {
+                    reservationControllerForClientMenu.cancelReservation(res);
+                    displayProfileMenu(scene);
+                });
 
-		// ── Liste des trips ───────────────────────────────────────────
-		VBox tripList = new VBox(8);
-		tripList.setPadding(new Insets(10));
-		for (javafx.util.Pair<String, JsonNode> pair : pairs) {
-			String line   = pair.getKey();
-			JsonNode node = pair.getValue();
+                HBox btnRow = new HBox(10, payBtn, cancelBtn);
 
-			Label label = new Label(line);
-			label.setWrapText(true);
-			label.setStyle("-fx-border-color: #ccc; -fx-border-radius: 5; -fx-padding: 8;");
-			label.setPrefWidth(300);
+                resCard.getChildren().addAll(header, tripLbl, seatLbl, sep, btnRow);
+                listBox.getChildren().add(resCard);
+            }
+        }
 
-			Button reserveButton = new Button("Reserve");
-			reserveButton.setOnAction(e -> {
-				displayAvailableSeats(scene, node);
-			});
-			reserveButton.setMinWidth(80);
+        ScrollPane scroll = new ScrollPane(listBox);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+        VBox.setVgrow(scroll, Priority.ALWAYS);
 
-			tripList.getChildren().add(new HBox(10, label, reserveButton));
-		}
+        main.getChildren().addAll(title, scroll);
+        scene.setRoot(buildShell(nav, main));
+    }
 
-		ScrollPane scroll = new ScrollPane(tripList);
-		scroll.setFitToWidth(true);
-		scroll.setPrefHeight(350);
+    // ═══════════════════════════════════════════════════════════════
+    // BROWSE / RESERVE TRIPS
+    // ═══════════════════════════════════════════════════════════════
+    public void displayReserveMenu(Scene scene, String message) {
+		VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
 
-		// ── Message si applicable ─────────────────────────────────────
-		VBox content = new VBox(10);
-		Label header = new Label("Available Trips:");
-		content.getChildren().add(header);
-		content.setPadding(new Insets(20));
-		if (message != null && !message.isBlank()) {
-			Label msgLabel = new Label(message);
-			msgLabel.setStyle("-fx-text-fill: green;");
-			content.getChildren().add(msgLabel);
-		}
-		content.getChildren().add(scroll);
+		Button btnBack    = navBtn("←  Back");
+		Button btnReserve = navBtn("🗺  Browse Trips");
+		btnBack.setOnAction(e    -> displayMenuClient(scene));
+		btnReserve.setStyle(navBtnActiveStyle()); // highlight active
 
-		// ── Bouton Back ───────────────────────────────────────────────
-		Button backButton = new Button("Back");
-		backButton.setMinWidth(100);
-		backButton.setPrefHeight(50);
-		backButton.setOnAction(e -> displayMenuClient(scene));
+		nav.getChildren().addAll(btnBack, new Separator(), btnReserve);
 
-		VBox back = new VBox(backButton);
-		back.setPrefWidth(150);
-		back.setMinWidth(150);
-		back.setMaxWidth(150);
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
 
-		HBox.setHgrow(content, Priority.ALWAYS);
-		HBox layout = new HBox(back, content);
-		scene.setRoot(layout);
-	}
+        Label title = pageTitle("Available Trips");
 
-	public void displayAvailableSeats(Scene scene, JsonNode tripNode) {
-		JsonNode transport = tripNode.get("transport");
-		String type = tripNode.get("type").asText();
-		ObjectMapper mapper = new ObjectMapper();
-		File file = new File("src/Database/Transport.json");
-		
-		try {
-			JsonNode root = mapper.readTree(file);
-			if (root == null || !root.isArray()) return;
+        ListTripsDataStructure structure = tripControllerForClientMenu.fetchAllTripsAsStructure();
 
-			ListView<String> listView = new ListView<>();
-			if(type.equals("CruiseLine")) {
-				for (JsonNode node : root) {
-					if (node.has("transportID") && node.get("transportID").asText().equals(transport.asText())) {
-						for (JsonNode section : node.get("sections")) {
-							for (JsonNode cabin : section.get("cabins")) {
-								if (cabin.get("occupied").asBoolean() == false) {
-									listView.getItems().add("Cabin ID: " + cabin.get("seatID").asText());
-								}
-							}
-						}
-					}
-				}
-			} else {
-				for (JsonNode node : root) {
-					if (node.has("transportID") && node.get("transportID").asText().equals(transport.asText())) {
-						for (JsonNode Section : node.get("sections")) {
-							for (JsonNode seat : Section.get("seats")) {
-								if (seat.get("occupied").asBoolean() == false) {
-									listView.getItems().add("Seat ID: " + seat.get("seatID").asText());
-								}
-							}
-						}
-					}
-				}
-			}
-			VBox layout = new VBox(10);
-			layout.setPadding(new Insets(20));	
-			layout.getChildren().add(new Label("Available Seats:"));
-			layout.getChildren().add(listView); // Placeholder for seat list
-			Button backButton = new Button("Back");
-			backButton.setOnAction(e -> displayReserveMenu(scene, ""));
-			Button reserveButton = new Button("Reserve now");
-			reserveButton.setOnAction(e -> {
-				String selected = listView.getSelectionModel().getSelectedItem();
-				if (selected == null) {
-					new Alert(Alert.AlertType.WARNING, "Please select a seat.").showAndWait();
-					return;
-				}
-				String seatID = selected.split(": ")[1];
-				reservationControllerForClientMenu.reserveTrip(tripNode, seatID);
-				displayReserveMenu(scene, "Reservation successful for seat: " + seatID);
-			});
-			Region spacer = new Region();
-			HBox.setHgrow(spacer, Priority.ALWAYS);
-			HBox buttons = new HBox(10, backButton, spacer, reserveButton);
-			layout.getChildren().add(buttons);
-			scene.setRoot(layout);
+        ArrayList<javafx.util.Pair<String, JsonNode>> pairs = new ArrayList<>();
+        pairs.addAll(structure.acceptWithNodes(new ConcreteFlightVisitor()));
+        pairs.addAll(structure.acceptWithNodes(new ConcreteRouteVisitor()));
+        pairs.addAll(structure.acceptWithNodes(new ConcreteCruiseLineVisitor()));
 
-		} catch (Exception e) {
-			Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load transport data");
-			alert.showAndWait();
-		}
+        VBox tripList = new VBox(12);
 
-		
-	}
+        if (pairs.isEmpty()) {
+            Label empty = new Label("No trips available at the moment.");
+            empty.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 14px;");
+            tripList.getChildren().add(empty);
+        } else {
+            for (javafx.util.Pair<String, JsonNode> pair : pairs) {
+                String line   = pair.getKey();
+                JsonNode node = pair.getValue();
 
-	public void setTripControllerForClientMenu(tripController tripControllerForClientMenu) {
-		this.tripControllerForClientMenu = tripControllerForClientMenu;
-	}
+                VBox tripCard = card(8);
+                tripCard.setMaxWidth(Double.MAX_VALUE);
 
-	public void setReservationControllerForClientMenu(reservationController reservationControllerForClientMenu) {
-		this.reservationControllerForClientMenu = reservationControllerForClientMenu;
-	}
+                // Parse type for badge
+                String type = node.has("type") ? node.get("type").asText() : "Trip";
+                String typeIcon = switch (type) {
+                    case "Flight"     -> "✈";
+                    case "CruiseLine" -> "🚢";
+                    case "Route"      -> "🚂";
+                    default           -> "🗺";
+                };
 
+                Label typeBadge = new Label(typeIcon + "  " + type.toUpperCase());
+                typeBadge.setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-size: 10px; -fx-font-weight: bold;");
 
+                Label infoLbl = new Label(line);
+                infoLbl.setWrapText(true);
+                infoLbl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 13px;");
+
+                Separator sep = new Separator();
+                sep.setStyle("-fx-background-color: " + C_BORDER + ";");
+
+                Button reserveBtn = actionBtn("  Reserve  →");
+                reserveBtn.setOnAction(e -> displayAvailableSeats(scene, node));
+
+                HBox footer = new HBox(reserveBtn);
+                footer.setAlignment(Pos.CENTER_RIGHT);
+
+                tripCard.getChildren().addAll(typeBadge, infoLbl, sep, footer);
+                tripList.getChildren().add(tripCard);
+            }
+        }
+
+        ScrollPane scroll = new ScrollPane(tripList);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+        VBox.setVgrow(scroll, Priority.ALWAYS);
+
+        if (message != null && !message.isBlank())
+            main.getChildren().addAll(title, successBanner(message), scroll);
+        else
+            main.getChildren().addAll(title, scroll);
+
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SEAT SELECTION
+    // ═══════════════════════════════════════════════════════════════
+    public void displayAvailableSeats(Scene scene, JsonNode tripNode) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+
+		Button btnBack    = navBtn("←  Back");
+		Button btnReserve = navBtn("🗺  Browse Trips");
+		btnBack.setOnAction(e    -> displayReserveMenu(scene, ""));
+		btnReserve.setStyle(navBtnActiveStyle());
+
+		nav.getChildren().addAll(btnBack, new Separator(), btnReserve);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+
+        Label title = pageTitle("Select a Seat");
+
+        String type = tripNode.get("type").asText();
+        JsonNode transport = tripNode.get("transport");
+        ObjectMapper mapper = new ObjectMapper();
+        File file = new File("src/Database/Transport.json");
+
+        VBox content = new VBox(16);
+
+        try {
+            JsonNode root = mapper.readTree(file);
+            if (root == null || !root.isArray()) return;
+
+            ListView<String> listView = new ListView<>();
+            listView.setStyle(
+                "-fx-background-color: " + C_BG_DARK + "; "
+              + "-fx-border-color: " + C_BORDER + "; "
+              + "-fx-border-radius: 6; "
+              + "-fx-background-radius: 6;"
+            );
+            listView.setPrefHeight(300);
+
+            if (type.equals("CruiseLine")) {
+                for (JsonNode node : root) {
+                    if (node.has("transportID") && node.get("transportID").asText().equals(transport.asText())) {
+                        for (JsonNode section : node.get("sections")) {
+                            for (JsonNode cabin : section.get("cabins")) {
+                                if (!cabin.get("occupied").asBoolean()) {
+                                    listView.getItems().add("Cabin ID: " + cabin.get("seatID").asText());
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (JsonNode node : root) {
+                    if (node.has("transportID") && node.get("transportID").asText().equals(transport.asText())) {
+                        for (JsonNode section : node.get("sections")) {
+                            for (JsonNode seat : section.get("seats")) {
+                                if (!seat.get("occupied").asBoolean()) {
+                                    listView.getItems().add("Seat ID: " + seat.get("seatID").asText());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Seat count info
+            Label countLbl = new Label(listView.getItems().size() + " seats available");
+            countLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 12px;");
+
+            VBox seatCard = card(12);
+            seatCard.getChildren().addAll(countLbl, listView);
+
+            Button backBtn    = ghostBtn("←  Back to Trips");
+            Button reserveBtn = actionBtn("  Confirm Reservation  →");
+            reserveBtn.setPrefHeight(42);
+
+            backBtn.setOnAction(e -> displayReserveMenu(scene, ""));
+            reserveBtn.setOnAction(e -> {
+                String selected = listView.getSelectionModel().getSelectedItem();
+                if (selected == null) {
+                    new Alert(Alert.AlertType.WARNING, "Please select a seat first.").showAndWait();
+                    return;
+                }
+                String seatID = selected.split(": ")[1];
+                reservationControllerForClientMenu.reserveTrip(tripNode, seatID);
+                displayReserveMenu(scene, "✔  Reservation confirmed for seat: " + seatID);
+            });
+
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            HBox btnRow = new HBox(10, backBtn, spacer, reserveBtn);
+            btnRow.setAlignment(Pos.CENTER_LEFT);
+
+            content.getChildren().addAll(seatCard, btnRow);
+
+        } catch (Exception e) {
+            Label errLbl = new Label("Failed to load seat data.");
+            errLbl.setStyle("-fx-text-fill: " + C_DANGER + ";");
+            content.getChildren().add(errLbl);
+        }
+
+        main.getChildren().addAll(title, content);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SETTERS
+    // ═══════════════════════════════════════════════════════════════
+    public void setTripControllerForClientMenu(tripController t)               { this.tripControllerForClientMenu = t; }
+    public void setReservationControllerForClientMenu(reservationController r) { this.reservationControllerForClientMenu = r; }
 }

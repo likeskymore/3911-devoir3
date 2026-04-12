@@ -2,7 +2,6 @@ package com.tripPortal.Menu;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +16,7 @@ import com.tripPortal.Mediateur.transportController;
 import com.tripPortal.Mediateur.tripController;
 import com.tripPortal.Model.Airport;
 import com.tripPortal.Model.Boat;
-import com.tripPortal.Model.BoatCompany;
 import com.tripPortal.Model.Company;
-import com.tripPortal.Model.FlightCompany;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Plane;
 import com.tripPortal.Model.Port;
@@ -27,10 +24,8 @@ import com.tripPortal.Model.SectionBoat;
 import com.tripPortal.Model.SectionPlane;
 import com.tripPortal.Model.SectionTrain;
 import com.tripPortal.Model.Train;
-import com.tripPortal.Model.TrainCompany;
 import com.tripPortal.Model.TrainStation;
 import com.tripPortal.Model.Transport;
-import com.tripPortal.Model.Trip;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -45,1325 +40,1605 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class AdminMenu {
-	private tripController tripControllerForAdminMenu;
-	private companyController CompanyControllerForAdminMenu;
-	private locationController LocationControllerForAdminMenu;
-	private transportController TransportControllerForAdminMenu;
 
-	public void start(Stage stage) {
-		// TODO - implement com.tripPortal.Menu.AdminMenu.start
-		Stage newStage = new Stage();
+    // ═══════════════════════════════════════════════════════════════
+    // DESIGN TOKENS
+    // ═══════════════════════════════════════════════════════════════
+    private static final String C_BG_DARK   = "#0f1117";
+    private static final String C_SIDEBAR   = "#161b27";
+    private static final String C_CARD      = "#1e2535";
+    private static final String C_BORDER    = "#2a3450";
+    private static final String C_AMBER     = "#f0a500";
+    private static final String C_AMBER_DIM = "#a06d00";
+    private static final String C_TEXT      = "#e8eaf0";
+    private static final String C_MUTED     = "#7a8499";
+    private static final String C_SUCCESS   = "#2ecc71";
+    private static final String C_DANGER    = "#e74c3c";
+    private static final String C_MAIN_BG   = "#111520";
 
-		Scene scene = new Scene(new VBox(), 600, 400);
-		displayMenuAdmin(scene);
+    private tripController       tripControllerForAdminMenu;
+    private companyController    CompanyControllerForAdminMenu;
+    private locationController   LocationControllerForAdminMenu;
+    private transportController  TransportControllerForAdminMenu;
 
-		newStage.setTitle("Admin");
-		newStage.setScene(scene);
+    // ═══════════════════════════════════════════════════════════════
+    // SHELL BUILDER  — persistent sidebar + swappable content
+    // ═══════════════════════════════════════════════════════════════
+    /**
+     * Builds the full-screen shell: a fixed sidebar on the left and
+     * whatever content pane you pass on the right.
+     */
+    private HBox buildShell(VBox sidebarContent, VBox mainContent) {
+        // Sidebar wrapper
+        VBox sidebar = new VBox(0);
+        sidebar.setPrefWidth(230);
+        sidebar.setMinWidth(230);
+        sidebar.setMaxWidth(230);
+        sidebar.setStyle("-fx-background-color: " + C_SIDEBAR + ";");
 
-		newStage.show();
+        // Brand header inside sidebar
+        Label brand = new Label("✈  TripPortal");
+        brand.setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-size: 17px; -fx-font-weight: bold; -fx-padding: 28 24 10 24;");
+
+        Separator sep = new Separator();
+        sep.setStyle("-fx-background-color: " + C_BORDER + "; -fx-opacity: 1;");
+        sep.setPadding(new Insets(0, 0, 8, 0));
+
+        sidebar.getChildren().addAll(brand, sep, sidebarContent);
+
+        // Main area
+        mainContent.setStyle("-fx-background-color: " + C_MAIN_BG + ";");
+        HBox.setHgrow(mainContent, Priority.ALWAYS);
+
+        HBox shell = new HBox(sidebar, mainContent);
+        shell.setStyle("-fx-background-color: " + C_BG_DARK + ";");
+        return shell;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SIDEBAR NAV BUTTON
+    // ═══════════════════════════════════════════════════════════════
+    private Button navBtn(String text) {
+        Button btn = new Button(text);
+        btn.setMaxWidth(Double.MAX_VALUE);
+        btn.setPrefHeight(44);
+        btn.setStyle(navBtnStyle(false));
+        btn.setOnMouseEntered(e -> btn.setStyle(navBtnStyle(true)));
+        btn.setOnMouseExited(e  -> btn.setStyle(navBtnStyle(false)));
+        return btn;
+    }
+
+    private String navBtnStyle(boolean hover) {
+        String bg = hover ? C_AMBER     : "transparent";
+        String fg = hover ? C_BG_DARK   : C_TEXT;
+        return "-fx-background-color: " + bg + "; "
+             + "-fx-text-fill: " + fg + "; "
+             + "-fx-font-size: 13px; "
+             + "-fx-background-radius: 0; "
+             + "-fx-cursor: hand; "
+             + "-fx-alignment: CENTER_LEFT; "
+             + "-fx-padding: 0 0 0 24;";
+    }
+
+	private String activeNavStyle() {
+		return "-fx-background-color: " + C_AMBER_DIM + "; "
+			+ "-fx-text-fill: " + C_AMBER + "; "
+			+ "-fx-font-size: 13px; -fx-font-weight: bold; "
+			+ "-fx-background-radius: 0; "
+			+ "-fx-alignment: CENTER_LEFT; "
+			+ "-fx-padding: 0 0 0 24; "
+			+ "-fx-max-width: Infinity; -fx-pref-height: 44;";
 	}
 
-	public void displayMenuAdmin(Scene scene) {
-		// TODO - implement com.tripPortal.Menu.AdminMenu.displayMenuAdmin
-		VBox root = new VBox();
-		Button editProfileButton = new Button("Profile");
-		editProfileButton.setMinWidth(200);
-		editProfileButton.setPrefHeight(50);
+    // ═══════════════════════════════════════════════════════════════
+    // GENERIC ACTION BUTTON  (amber filled)
+    // ═══════════════════════════════════════════════════════════════
+    private Button actionBtn(String text) {
+        Button btn = new Button(text);
+        btn.setPrefHeight(38);
+        btn.setStyle(actionBtnStyle(false));
+        btn.setOnMouseEntered(e -> btn.setStyle(actionBtnStyle(true)));
+        btn.setOnMouseExited(e  -> btn.setStyle(actionBtnStyle(false)));
+        return btn;
+    }
 
-		Button tripsButton = new Button("Trips");
-		tripsButton.setMinWidth(200);
-		tripsButton.setPrefHeight(50);
-		tripsButton.setOnAction(e -> {
-			displayTripsMenu(scene, "");
-		});
+    private String actionBtnStyle(boolean hover) {
+        String bg = hover ? "#d4920a" : C_AMBER;
+        return "-fx-background-color: " + bg + "; "
+             + "-fx-text-fill: " + C_BG_DARK + "; "
+             + "-fx-font-size: 13px; "
+             + "-fx-font-weight: bold; "
+             + "-fx-background-radius: 6; "
+             + "-fx-cursor: hand; "
+             + "-fx-padding: 0 20;";
+    }
 
-		Button companiesButton = new Button("Companies");
-		companiesButton.setMinWidth(200);
-		companiesButton.setPrefHeight(50);
-		companiesButton.setOnAction(e -> {
-			displayCompaniesMenu(scene, "");
-		});
-		Button locationsButton = new Button("Locations");
-		locationsButton.setMinWidth(200);
-		locationsButton.setPrefHeight(50);
-		locationsButton.setOnAction(e -> {
-			displayLocationsMenu(scene, "");
-		});
+    // ═══════════════════════════════════════════════════════════════
+    // DANGER BUTTON  (red, for delete)
+    // ═══════════════════════════════════════════════════════════════
+    private Button dangerBtn(String text) {
+        Button btn = new Button(text);
+        btn.setPrefHeight(32);
+        btn.setStyle(dangerBtnStyle(false));
+        btn.setOnMouseEntered(e -> btn.setStyle(dangerBtnStyle(true)));
+        btn.setOnMouseExited(e  -> btn.setStyle(dangerBtnStyle(false)));
+        return btn;
+    }
 
-		Button transportsButton = new Button("Transports");
-		transportsButton.setMinWidth(200);
-		transportsButton.setPrefHeight(50);
-		transportsButton.setOnAction(e -> {
-			displayTransportsMenu(scene);
-		});
+    private String dangerBtnStyle(boolean hover) {
+        String bg = hover ? "#c0392b" : C_DANGER;
+        return "-fx-background-color: " + bg + "; "
+             + "-fx-text-fill: white; "
+             + "-fx-font-size: 12px; "
+             + "-fx-background-radius: 5; "
+             + "-fx-cursor: hand; "
+             + "-fx-padding: 0 12;";
+    }
 
-		Button logoutButton = new Button("Logout");
-		logoutButton.setMinWidth(200);
-		logoutButton.setPrefHeight(50);
-		logoutButton.setOnAction(e -> {
-			Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to logout?", ButtonType.YES,
-					ButtonType.NO);
-			alert.showAndWait().ifPresent(response -> {
-				if (response == ButtonType.YES) {
-					scene.getWindow().hide();
-				}
-			});
-		});
+    // ═══════════════════════════════════════════════════════════════
+    // GHOST BUTTON  (outlined, for secondary actions)
+    // ═══════════════════════════════════════════════════════════════
+    private Button ghostBtn(String text) {
+        Button btn = new Button(text);
+        btn.setPrefHeight(32);
+        btn.setStyle(ghostBtnStyle(false));
+        btn.setOnMouseEntered(e -> btn.setStyle(ghostBtnStyle(true)));
+        btn.setOnMouseExited(e  -> btn.setStyle(ghostBtnStyle(false)));
+        return btn;
+    }
 
-		root.getChildren().addAll(editProfileButton, tripsButton, companiesButton, locationsButton, transportsButton,
-				logoutButton);
+    private String ghostBtnStyle(boolean hover) {
+        String bg  = hover ? C_BORDER : "transparent";
+        String fg  = hover ? C_TEXT   : C_MUTED;
+        return "-fx-background-color: " + bg + "; "
+             + "-fx-text-fill: " + fg + "; "
+             + "-fx-border-color: " + C_BORDER + "; "
+             + "-fx-border-radius: 5; "
+             + "-fx-background-radius: 5; "
+             + "-fx-font-size: 12px; "
+             + "-fx-cursor: hand; "
+             + "-fx-padding: 0 12;";
+    }
 
-		BorderPane borderPane = new BorderPane();
-		borderPane.setLeft(root);
-		scene.setRoot(borderPane);
-	}
+    // ═══════════════════════════════════════════════════════════════
+    // PAGE TITLE
+    // ═══════════════════════════════════════════════════════════════
+    private Label pageTitle(String text) {
+        Label lbl = new Label(text);
+        lbl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 24px; -fx-font-weight: bold;");
+        return lbl;
+    }
 
-	void displayTripsMenu(Scene scene, String message) {
-		// TODO - implement com.tripPortal.Menu.AdminMenu.displayTripsMenu
-		Button backButton = new Button("Back");
-		backButton.setMinWidth(100);
-		backButton.setPrefHeight(50);
-		backButton.setOnAction(e -> {
-			displayMenuAdmin(scene);
-		});
+    // ═══════════════════════════════════════════════════════════════
+    // CARD
+    // ═══════════════════════════════════════════════════════════════
+    private VBox card(double spacing) {
+        VBox c = new VBox(spacing);
+        c.setPadding(new Insets(16));
+        c.setStyle("-fx-background-color: " + C_CARD + "; "
+                 + "-fx-background-radius: 8; "
+                 + "-fx-border-color: " + C_BORDER + "; "
+                 + "-fx-border-radius: 8;");
+        return c;
+    }
 
-		VBox back = new VBox(backButton);
-		VBox pageContent = new VBox();
-		Button CreateTripButton = new Button("Create Trip");
-		CreateTripButton.setMinWidth(100);
-		CreateTripButton.setPrefHeight(50);
-		CreateTripButton.setOnAction(e -> {
-			displayTripCreationForm(scene);
-		});
+    // ═══════════════════════════════════════════════════════════════
+    // FORM FIELD helper
+    // ═══════════════════════════════════════════════════════════════
+    private VBox formField(String labelText, javafx.scene.Node input) {
+        Label lbl = new Label(labelText);
+        lbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+        VBox box = new VBox(4, lbl, input);
+        return box;
+    }
 
-		Button displayTripsButton = new Button("Display Trips");
-		displayTripsButton.setOnAction(displayingTrips -> {
-			displayTrips(scene);
-		});
-		// Button EditTripButton = new Button("Edit Trip");
-		// EditTripButton.setMinWidth(200);
-		// EditTripButton.setPrefHeight(50);
-		// Button DeleteTripButton = new Button("Delete Trip");
-		// DeleteTripButton.setMinWidth(100);
-		// DeleteTripButton.setPrefHeight(50);
-		pageContent.getChildren().addAll(CreateTripButton);
-		pageContent.setAlignment(Pos.CENTER);
-		back.setPrefWidth(200);
-		back.setMinWidth(200);
-		back.setMaxWidth(200);
-		HBox.setHgrow(pageContent, Priority.ALWAYS);
-		HBox layout = new HBox(back, pageContent, displayTripsButton);
+    private void styleInput(javafx.scene.control.Control ctrl) {
+        ctrl.setStyle("-fx-background-color: " + C_BG_DARK + "; "
+                    + "-fx-text-fill: " + C_TEXT + "; "
+                    + "-fx-border-color: " + C_BORDER + "; "
+                    + "-fx-border-radius: 5; "
+                    + "-fx-background-radius: 5; "
+                    + "-fx-prompt-text-fill: " + C_MUTED + ";");
+    }
 
-		scene.setRoot(layout);
-	}
+    private void styleStringComboBox(ComboBox<String> comboBox) {
+        comboBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item);
+                setStyle("-fx-text-fill: " + C_TEXT + "; -fx-background-color: transparent;");
+            }
+        });
+        comboBox.setCellFactory(listView -> new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item);
+                setStyle("-fx-text-fill: " + C_BG_DARK + "; -fx-background-color: transparent;");
+            }
+        });
+    }
 
-	public void displayTripCreationForm(Scene scene) {
+    private void styleTransportComboBox(ComboBox<Transport> comboBox) {
+        comboBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Transport item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item.getName());
+                setStyle("-fx-text-fill: " + C_TEXT + "; -fx-background-color: transparent;");
+            }
+        });
+        comboBox.setCellFactory(listView -> new ListCell<>() {
+            @Override
+            protected void updateItem(Transport item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item.getName());
+                setStyle("-fx-text-fill: " + C_BG_DARK + "; -fx-background-color: transparent;");
+            }
+        });
+    }
 
-    HBox layout = new HBox();
+    // ═══════════════════════════════════════════════════════════════
+    // STYLED CHECKBOX
+    // ═══════════════════════════════════════════════════════════════
+    private CheckBox styledCheckBox(String text) {
+        CheckBox cb = new CheckBox(text);
+        cb.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 13px;");
+        return cb;
+    }
 
-    // ---------------- BACK BUTTON ----------------
-    Button backButton = new Button("Back");
-    backButton.setMinWidth(100);
-    backButton.setPrefHeight(50);
-    backButton.setOnAction(e -> displayTripsMenu(scene, ""));
-    VBox back = new VBox(backButton);
+    // ═══════════════════════════════════════════════════════════════
+    // SUCCESS BANNER
+    // ═══════════════════════════════════════════════════════════════
+    private Label successBanner(String message) {
+        Label lbl = new Label("✔  " + message);
+        lbl.setStyle("-fx-text-fill: " + C_SUCCESS + "; "
+                   + "-fx-background-color: #1a3a28; "
+                   + "-fx-padding: 10 16; "
+                   + "-fx-background-radius: 6; "
+                   + "-fx-font-size: 13px;");
+        lbl.setMaxWidth(Double.MAX_VALUE);
+        return lbl;
+    }
 
-    // ---------------- FORM ----------------
-    VBox form = new VBox(10);
-    form.setAlignment(Pos.CENTER);
+    // ═══════════════════════════════════════════════════════════════
+    // ENTRY POINT
+    // ═══════════════════════════════════════════════════════════════
+    public void start(Stage stage) {
+        Stage newStage = new Stage();
+        Scene scene = new Scene(new VBox(), 900, 600);
+        displayMenuAdmin(scene);
+        newStage.setTitle("TripPortal — Admin");
+        newStage.setScene(scene);
+        newStage.show();
+    }
 
-    CheckBox flightCheckBox = new CheckBox("Flight");
-    CheckBox boatCheckBox   = new CheckBox("Cruise");
-    CheckBox trainCheckBox  = new CheckBox("Route");
-    HBox checkboxes = new HBox(5, flightCheckBox, boatCheckBox, trainCheckBox);
+    // ═══════════════════════════════════════════════════════════════
+    // MAIN MENU
+    // ═══════════════════════════════════════════════════════════════
+    public void displayMenuAdmin(Scene scene) {
+        // Sidebar nav
+        VBox nav = new VBox(2);
+        nav.setPadding(new Insets(12, 0, 0, 0));
 
-    Label companyLabel = new Label("Select Company:");
-    ComboBox<String> CompanyComboBox = new ComboBox<>();
-    VBox companyBox = new VBox(5, companyLabel, CompanyComboBox);
+        Button btnTrips      = navBtn("🗺  Trips");
+        Button btnCompanies  = navBtn("🏢  Companies");
+        Button btnLocations  = navBtn("📍  Locations");
+        Button btnTransports = navBtn("🚌  Transports");
 
-	Label locationLabel = new Label("Select Path (hold Ctrl to multi-select):");
-	ListView<Location> LocationListView = new ListView<>();
-	LocationListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-	LocationListView.setPrefHeight(100);
-	LocationListView.setMaxWidth(350);
-	LocationListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-		if (flightCheckBox.isSelected()) {
-			List<Location> selected = LocationListView.getSelectionModel().getSelectedItems();
-			if (selected.size() >= 2) {
-				LocationListView.setCellFactory(lv -> new ListCell<Location>() {
-					@Override
-					protected void updateItem(Location loc, boolean empty) {
-						super.updateItem(loc, empty);
-						setText(empty || loc == null ? "" : loc.getCity());
-						setDisable(!empty && !selected.contains(loc));
-						setOpacity(!empty && !selected.contains(loc) ? 0.4 : 1.0);
-					}
-				});
-			} else {
-				LocationListView.setCellFactory(lv -> new ListCell<Location>() {
-					@Override
-					protected void updateItem(Location loc, boolean empty) {
-						super.updateItem(loc, empty);
-						setText(empty || loc == null ? "" : loc.getCity());
-						setDisable(false);
-						setOpacity(1.0);
-					}
-				});
-			}
-		}
-	});
-    VBox locationBox = new VBox(5, locationLabel, LocationListView);
+        // Spacer pushes logout to bottom
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+        Button btnLogout = navBtn("⎋  Logout");
 
-    // ── ComboBox<Transport> affiche le nom, stocke l'objet ────────
-    Label transportLabel = new Label("Select Transport:");
-    ComboBox<Transport> TransportComboBox = new ComboBox<>();
-    TransportComboBox.setConverter(new StringConverter<Transport>() {
-        @Override
-        public String toString(Transport t) {
-            return t != null ? t.getName() : "";
+        btnTrips.setOnAction(e      -> displayTripsMenu(scene, ""));
+        btnCompanies.setOnAction(e  -> displayCompaniesMenu(scene, ""));
+        btnLocations.setOnAction(e  -> displayLocationsMenu(scene, ""));
+        btnTransports.setOnAction(e -> displayTransportsMenu(scene));
+        btnLogout.setOnAction(e -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Are you sure you want to logout?", ButtonType.YES, ButtonType.NO);
+            alert.showAndWait().ifPresent(r -> { if (r == ButtonType.YES) scene.getWindow().hide(); });
+        });
+
+        nav.getChildren().addAll(btnTrips, btnCompanies, btnLocations, btnTransports, spacer, btnLogout);
+
+        // Main content — welcome dashboard
+        VBox main = new VBox(24);
+        main.setPadding(new Insets(40));
+
+        Label title = pageTitle("Dashboard");
+        Label subtitle = new Label("Welcome back, Administrator");
+        subtitle.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 14px;");
+
+        // Quick-action cards row
+        HBox cards = new HBox(16);
+        cards.getChildren().addAll(
+            quickCard("🗺", "Trips",      "Create & manage trips",      () -> displayTripsMenu(scene, "")),
+            quickCard("🏢", "Companies",  "Manage travel companies",    () -> displayCompaniesMenu(scene, "")),
+            quickCard("📍", "Locations",  "Airports, ports, stations",  () -> displayLocationsMenu(scene, "")),
+            quickCard("🚌", "Transports", "Planes, boats, trains",      () -> displayTransportsMenu(scene))
+        );
+
+        main.getChildren().addAll(title, subtitle, cards);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    private VBox quickCard(String icon, String title, String subtitle, Runnable onClick) {
+        Label ico  = new Label(icon);
+        ico.setStyle("-fx-font-size: 28px;");
+        Label ttl  = new Label(title);
+        ttl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 15px; -fx-font-weight: bold;");
+        Label sub  = new Label(subtitle);
+        sub.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+
+        VBox card = new VBox(6, ico, ttl, sub);
+        card.setPadding(new Insets(20));
+        card.setPrefWidth(160);
+        card.setStyle(quickCardStyle(false));
+        card.setOnMouseEntered(e -> card.setStyle(quickCardStyle(true)));
+        card.setOnMouseExited(e  -> card.setStyle(quickCardStyle(false)));
+        card.setOnMouseClicked(e -> onClick.run());
+        card.setStyle(quickCardStyle(false));
+        return card;
+    }
+
+    private String quickCardStyle(boolean hover) {
+        String border = hover ? C_AMBER : C_BORDER;
+        String bg     = hover ? "#1e2d1e".replace("1e2d1e", "243040") : C_CARD;
+        return "-fx-background-color: " + bg + "; "
+             + "-fx-background-radius: 10; "
+             + "-fx-border-color: " + border + "; "
+             + "-fx-border-radius: 10; "
+             + "-fx-cursor: hand;";
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // TRIPS MENU
+    // ═══════════════════════════════════════════════════════════════
+    void displayTripsMenu(Scene scene, String message) {
+		VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack  = navBtn("←  Back");
+		Button btnTrips = navBtn("🗺  Trips");
+		btnTrips.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayMenuAdmin(scene));
+		nav.getChildren().addAll(btnBack, new Separator(), btnTrips);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+
+        Label title = pageTitle("Manage Trips");
+        HBox titleRow = new HBox(16, title);
+        titleRow.setAlignment(Pos.CENTER_LEFT);
+
+        Button createBtn = actionBtn("＋  Create Trip");
+        Button listBtn   = ghostBtn("☰  View All Trips");
+        createBtn.setOnAction(e -> displayTripCreationForm(scene));
+        listBtn.setOnAction(e   -> displayTrips(scene));
+
+        HBox btnRow = new HBox(10, createBtn, listBtn);
+
+        if (message != null && !message.isBlank())
+            main.getChildren().addAll(title, successBanner(message), btnRow);
+        else
+            main.getChildren().addAll(title, btnRow);
+
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // TRIP CREATION FORM
+    // ═══════════════════════════════════════════════════════════════
+    public void displayTripCreationForm(Scene scene) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack  = navBtn("←  Back");
+		Button btnTrips = navBtn("🗺  Trips");
+		btnTrips.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayTripsMenu(scene, ""));
+		nav.getChildren().addAll(btnBack, new Separator(), btnTrips);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+
+        Label title = pageTitle("Create New Trip");
+
+        // Type selection
+        CheckBox flightCB = styledCheckBox("✈  Flight");
+        CheckBox boatCB   = styledCheckBox("🚢  Cruise");
+        CheckBox trainCB  = styledCheckBox("🚂  Route");
+        HBox typeRow = new HBox(20, flightCB, boatCB, trainCB);
+
+        VBox typeCard = card(10);
+        Label typeLabel = new Label("Trip Type");
+        typeLabel.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+        typeCard.getChildren().addAll(typeLabel, typeRow);
+
+        // Company
+        ComboBox<String> companyCombo = new ComboBox<>();
+        styleInput(companyCombo);
+        styleStringComboBox(companyCombo);
+        companyCombo.setPrefWidth(280);
+        companyCombo.setMaxWidth(Double.MAX_VALUE);
+		
+
+        // Locations
+        ListView<Location> locationList = new ListView<>();
+        locationList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        locationList.setPrefHeight(120);
+        locationList.setStyle("-fx-background-color: " + C_BG_DARK + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 5;");
+        Label selectedStopsLabel = new Label("Selected stops: none");
+        selectedStopsLabel.setWrapText(true);
+        selectedStopsLabel.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+
+        // Transport
+        ComboBox<Transport> transportCombo = new ComboBox<>();
+        transportCombo.setConverter(new StringConverter<Transport>() {
+            public String toString(Transport t)        { return t != null ? t.getName() : ""; }
+            public Transport fromString(String s)      { return null; }
+        });
+        styleInput(transportCombo);
+        styleTransportComboBox(transportCombo);
+        transportCombo.setPrefWidth(280);
+        transportCombo.setMaxWidth(Double.MAX_VALUE);
+
+        // Dates & price
+        DatePicker startDate = new DatePicker();
+        DatePicker endDate   = new DatePicker();
+        styleInput(startDate);
+        styleInput(endDate);
+        TextField priceField = new TextField();
+        priceField.setPromptText("e.g. 299.99");
+        styleInput(priceField);
+
+        // Two-column layout for form fields
+        VBox col1 = new VBox(14,
+            formField("Company",       companyCombo),
+            formField("Transport",     transportCombo),
+            formField("Price ($)",     priceField)
+        );
+        VBox col2 = new VBox(14,
+            formField("Departure Date", startDate),
+            formField("Return Date",    endDate),
+            formField("Stops / Path (Ctrl+click for multi)", locationList),
+            selectedStopsLabel
+        );
+        HBox.setHgrow(col1, Priority.ALWAYS);
+        HBox.setHgrow(col2, Priority.ALWAYS);
+        HBox formRow = new HBox(24, col1, col2);
+
+        VBox formCard = card(16);
+        formCard.getChildren().addAll(typeCard, formRow);
+
+        Button submitBtn = actionBtn("  Create Trip  ");
+        submitBtn.setPrefHeight(44);
+
+        // ── Load JSON ──
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root1, root2, root3;
+        try {
+            root1 = mapper.readTree(new File("src/Database/Company.json"));
+            root2 = mapper.readTree(new File("src/Database/Location.json"));
+            root3 = mapper.readTree(new File("src/Database/Transport.json"));
+        } catch (Exception e) {
+            root1 = mapper.createArrayNode();
+            root2 = mapper.createArrayNode();
+            root3 = mapper.createArrayNode();
         }
-        @Override
-        public Transport fromString(String s) { return null; }
-    });
-    VBox transportBox = new VBox(5, transportLabel, TransportComboBox);
+        final JsonNode fr1 = root1, fr2 = root2, fr3 = root3;
+        final boolean[] updating = { false };
+        final boolean[] adjustingStops = { false };
+        final ArrayList<Location> selectedStopsSnapshot = new ArrayList<>();
 
-    DatePicker startDate = new DatePicker();
-    DatePicker endDate   = new DatePicker();
+        flightCB.selectedProperty().addListener((o, ov, nv) -> {
+            if (updating[0]) return;
+            if (nv) { updating[0] = true; boatCB.setSelected(false); trainCB.setSelected(false); updating[0] = false;
+                updateCompanies(fr1, companyCombo, "FlightCompany");
+                updateLocations(fr2, locationList, "Airport");
+                updateTransports(fr3, transportCombo, "Plane"); }
+        });
+        boatCB.selectedProperty().addListener((o, ov, nv) -> {
+            if (updating[0]) return;
+            if (nv) { updating[0] = true; flightCB.setSelected(false); trainCB.setSelected(false); updating[0] = false;
+                updateCompanies(fr1, companyCombo, "BoatCompany");
+                updateLocations(fr2, locationList, "Port");
+                updateTransports(fr3, transportCombo, "Boat"); }
+        });
+        trainCB.selectedProperty().addListener((o, ov, nv) -> {
+            if (updating[0]) return;
+            if (nv) { updating[0] = true; flightCB.setSelected(false); boatCB.setSelected(false); updating[0] = false;
+                updateCompanies(fr1, companyCombo, "TrainCompany");
+                updateLocations(fr2, locationList, "TrainStation");
+                updateTransports(fr3, transportCombo, "Train"); }
+        });
 
-    TextField priceField = new TextField();
-    priceField.setPromptText("Price");
-	priceField.setMaxWidth(100);
+        locationList.getSelectionModel().getSelectedItems().addListener((javafx.collections.ListChangeListener<Location>) change -> {
+            if (adjustingStops[0]) {
+                return;
+            }
 
-    Button submitButton = new Button("Submit");
-    submitButton.setMinWidth(100);
-    submitButton.setPrefHeight(20);
-    submitButton.setOnAction(e -> {
+            List<Location> selectedStops = locationList.getSelectionModel().getSelectedItems();
+            if (flightCB.isSelected() && selectedStops.size() > 2) {
+                Location newlyAddedStop = null;
+                for (Location stop : selectedStops) {
+                    if (!selectedStopsSnapshot.contains(stop)) {
+                        newlyAddedStop = stop;
+                        break;
+                    }
+                }
+                if (newlyAddedStop == null) {
+                    newlyAddedStop = selectedStops.get(selectedStops.size() - 1);
+                }
+
+                adjustingStops[0] = true;
+                locationList.getSelectionModel().clearSelection(locationList.getItems().indexOf(newlyAddedStop));
+                adjustingStops[0] = false;
+                selectedStops = new ArrayList<>(locationList.getSelectionModel().getSelectedItems());
+            }
+
+            if (selectedStops.isEmpty()) {
+                selectedStopsLabel.setText("Selected stops: none");
+                selectedStopsSnapshot.clear();
+                return;
+            }
+
+            StringBuilder selectedStopsText = new StringBuilder("Selected stops: ");
+            for (int i = 0; i < locationList.getSelectionModel().getSelectedItems().size(); i++) {
+                if (i > 0) selectedStopsText.append(", ");
+                selectedStopsText.append(locationList.getSelectionModel().getSelectedItems().get(i).getCity());
+            }
+            selectedStopsLabel.setText(selectedStopsText.toString());
+            selectedStopsSnapshot.clear();
+            selectedStopsSnapshot.addAll(locationList.getSelectionModel().getSelectedItems());
+        });
+
+        submitBtn.setOnAction(e -> {
+            try {
+                if (flightCB.isSelected() == false && boatCB.isSelected() == false && trainCB.isSelected() == false) {
+                    showError("Please select a trip type.");
+                    return;
+                }
+                if (companyCombo.getValue() == null || companyCombo.getValue().isBlank()) {
+                    showError("Please select a company.");
+                    return;
+                }
+                if (transportCombo.getValue() == null) {
+                    showError("Please select a transport.");
+                    return;
+                }
+                if (startDate.getValue() == null || endDate.getValue() == null) {
+                    showError("Please select both departure and return dates.");
+                    return;
+                }
+                if (priceField.getText() == null || priceField.getText().isBlank()) {
+                    showError("Please enter a trip price.");
+                    return;
+                }
+
+                JsonNode compRoot = mapper.readTree(new File("src/Database/Company.json"));
+                Company company = Company.fromJson(companyCombo.getValue(), compRoot);
+                ArrayList<Location> locations = new ArrayList<>(locationList.getSelectionModel().getSelectedItems());
+                String type = flightCB.isSelected() ? "Flight" : boatCB.isSelected() ? "CruiseLine" : trainCB.isSelected() ? "Route" : null;
+                if (type == null) { showError("Please select a trip type."); return; }
+                if (flightCB.isSelected() && locations.size() != 2) {
+                    showError("Flight trips must have exactly 2 stops/path locations.");
+                    return;
+                }
+                float price;
+                try {
+                    price = Float.parseFloat(priceField.getText().trim());
+                } catch (NumberFormatException numberFormatException) {
+                    showError("Please enter a valid trip price.");
+                    return;
+                }
+                tripControllerForAdminMenu.goCallCreateTrip(company, startDate.getValue(), endDate.getValue(),
+                    price,
+                    (int) ChronoUnit.DAYS.between(startDate.getValue(), endDate.getValue()),
+                    locations, transportCombo.getValue(), type);
+                displayTripsMenu(scene, "Trip created successfully!");
+            } catch (IOException ex) { 
+				showError("Filling all fields correctly is required to create a trip."); 
+				return;
+			}
+        });
+
+        main.getChildren().addAll(title, formCard, submitBtn);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // DISPLAY TRIPS
+    // ═══════════════════════════════════════════════════════════════
+    private void displayTrips(Scene scene) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack  = navBtn("←  Back");
+		Button btnTrips = navBtn("🗺  Trips");
+		btnTrips.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayTripsMenu(scene, ""));
+		nav.getChildren().addAll(btnBack, new Separator(), btnTrips);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("All Trips");
+
+        FlowPane grid = new FlowPane(14, 14);
+        grid.setPadding(new Insets(4));
+
+        try {
+            ObjectMapper displayMapper = new ObjectMapper();
+            File tripFile = new File("src/Database/Trip.json");
+            ArrayNode tripArray = (ArrayNode) displayMapper.readTree(tripFile);
+
+            for (JsonNode trip : tripArray) {
+                String tripId   = trip.get("id").asText();
+                String company  = trip.get("company").asText();
+                String type     = trip.get("type").asText();
+                String cities;
+                if (type.equals("Flight")) {
+                    cities = trip.get("origin").asText() + " → " + trip.get("destination").asText();
+                } else {
+                    ArrayList<String> path = new ArrayList<>();
+                    for (JsonNode c : trip.get("path")) path.add(c.asText());
+                    cities = path.get(0) + " → " + path.get(path.size() - 1);
+                }
+                String dates = trip.get("startDate").asText() + " — " + trip.get("endDate").asText();
+
+                // Trip card
+                VBox tc = card(8);
+                tc.setPrefWidth(240);
+
+                Label typeLbl   = new Label(type.toUpperCase());
+                typeLbl.setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-size: 10px; -fx-font-weight: bold;");
+                Label cityLbl   = new Label(cities);
+                cityLbl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 14px; -fx-font-weight: bold;");
+                cityLbl.setWrapText(true);
+                Label compLbl   = new Label(company);
+                compLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+                Label dateLbl   = new Label(dates);
+                dateLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+
+                Separator s = new Separator();
+                s.setStyle("-fx-background-color: " + C_BORDER + ";");
+
+                Button deleteBtn = dangerBtn("🗑  Delete");
+                Button updateBtn = ghostBtn("✏  Edit");
+
+                deleteBtn.setOnAction(del -> {
+                    for (int i = 0; i < tripArray.size(); i++) {
+                        if (tripArray.get(i).get("id").asText().equals(tripId)) { tripArray.remove(i); break; }
+                    }
+                    try { displayMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray); } catch (IOException ex) { ex.printStackTrace(); }
+                    try {
+                        ObjectMapper cm = new ObjectMapper();
+                        File cf = new File("src/Database/Company.json");
+                        ArrayNode ca = (ArrayNode) cm.readTree(cf);
+                        for (JsonNode cn : ca) {
+                            ArrayNode tn = (ArrayNode) cn.get("Trips");
+                            for (int i = 0; i < tn.size(); i++) { if (tn.get(i).asText().equals(tripId)) { tn.remove(i); break; } }
+                        }
+                        cm.writerWithDefaultPrettyPrinter().writeValue(cf, ca);
+                    } catch (IOException ex) { ex.printStackTrace(); }
+                    displayTrips(scene);
+                });
+                updateBtn.setOnAction(upd -> displayingTripsToUpdate(scene, trip));
+
+                HBox btnRow = new HBox(8, deleteBtn, updateBtn);
+                tc.getChildren().addAll(typeLbl, cityLbl, compLbl, dateLbl, s, btnRow);
+                grid.getChildren().add(tc);
+            }
+        } catch (IOException ex) { ex.printStackTrace(); }
+
+        ScrollPane scroll = new ScrollPane(grid);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+        VBox.setVgrow(scroll, Priority.ALWAYS);
+
+        main.getChildren().addAll(title, scroll);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // TRIP UPDATE
+    // ═══════════════════════════════════════════════════════════════
+    private void displayingTripsToUpdate(Scene scene, JsonNode trip) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack  = navBtn("←  Back");
+		Button btnTrips = navBtn("🗺  Trips");
+		btnTrips.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayTrips(scene));
+		nav.getChildren().addAll(btnBack, new Separator(), btnTrips);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("Edit Trip");
+
+        VBox formCard = card(16);
+        Label currentPrice = new Label("Current price: " + trip.path("price").asText("N/A"));
+        currentPrice.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 13px;");
+
+        TextField priceField = new TextField();
+        priceField.setPromptText("New price");
+        styleInput(priceField);
+
+        Button confirmBtn = actionBtn("  Save Changes  ");
+        confirmBtn.setOnAction(e -> {
+            try {
+                ObjectMapper m = new ObjectMapper();
+                File f = new File("src/Database/Trip.json");
+                ArrayNode arr = (ArrayNode) m.readTree(f);
+                for (int i = 0; i < arr.size(); i++) {
+                    if (arr.get(i).get("id").asText().equals(trip.get("id").asText())) {
+                        ((ObjectNode) arr.get(i)).put("price", priceField.getText()); break;
+                    }
+                }
+                m.writerWithDefaultPrettyPrinter().writeValue(f, arr);
+            } catch (IOException ex) { ex.printStackTrace(); }
+            displayTrips(scene);
+        });
+
+        formCard.getChildren().addAll(
+            formField("Price ($)", priceField),
+            currentPrice,
+            confirmBtn
+        );
+
+        main.getChildren().addAll(title, formCard);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // COMPANIES MENU
+    // ═══════════════════════════════════════════════════════════════
+    private void displayCompaniesMenu(Scene scene, String message) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack      = navBtn("←  Back");
+		Button btnCompanies = navBtn("🏢  Companies");
+		btnCompanies.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayMenuAdmin(scene));
+		nav.getChildren().addAll(btnBack, new Separator(), btnCompanies);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("Manage Companies");
+
+        Button createBtn = actionBtn("＋  Create Company");
+		Button listBtn   = ghostBtn("☰  View All Companies");
+        createBtn.setOnAction(e -> displayCompanyCreationForm(scene));
+		listBtn.setOnAction(e -> displayCompanies(scene));
+
+		HBox btnRow = new HBox(10, createBtn, listBtn);
+
+        if (message != null && !message.isBlank())
+            main.getChildren().addAll(title, successBanner(message), btnRow);
+        else
+            main.getChildren().addAll(title, btnRow);
+
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    private void displayCompanies(Scene scene) {
+
+         VBox nav = new VBox(2);
+		 nav.setPadding(new Insets(12, 0, 0, 0));
+		 Button btnBack      = navBtn("←  Back");
+		 Button btnCompanies = navBtn("🏢  Companies");
+		 btnCompanies.setStyle(activeNavStyle());
+		 btnBack.setOnAction(e -> displayCompaniesMenu(scene, ""));
+		 nav.getChildren().addAll(btnBack, new Separator(), btnCompanies);
+		 
+		 VBox main = new VBox(20);
+		 main.setPadding(new Insets(40));
+		 Label title = pageTitle("All Companies");
+
+		 FlowPane grid = new FlowPane(14, 14);
+		 grid.setPadding(new Insets(4));
+
+		 try {
+			 ObjectMapper mapper = new ObjectMapper();
+			 File file = new File("src/Database/Company.json");
+			 ArrayNode arr = (ArrayNode) mapper.readTree(file);
+
+			 for (JsonNode node : arr) {
+                Company company = Company.fromJson(node.get("name").asText(), arr);
+                String name = node.get("name").asText();
+                String type = node.get("type").asText();
+
+				VBox cc = card(8);
+				cc.setPrefWidth(240);
+
+                Label typeLbl   = new Label(type.toUpperCase());
+                typeLbl.setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-size: 10px; -fx-font-weight: bold;");
+				Label nameLbl   = new Label(name);
+				nameLbl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 14px; -fx-font-weight: bold;");
+                Label tripsLbl  = new Label("Trips: " + node.path("Trips").size());
+                tripsLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+
+				Button deleteBtn = dangerBtn("🗑  Delete");
+                deleteBtn.setOnAction(del -> deleteCompany(scene, company));
+
+				Button updateBtn = ghostBtn("✏  Edit");
+                updateBtn.setOnAction(upd -> displayCompanyUpdate(scene, company));
+
+				HBox btnRow = new HBox(8, deleteBtn, updateBtn);
+                cc.getChildren().addAll(typeLbl, nameLbl, tripsLbl, btnRow);
+				grid.getChildren().add(cc);
+			 }
+		 } catch (IOException ex) { ex.printStackTrace(); }
+
+		 ScrollPane scroll = new ScrollPane(grid);
+		 scroll.setFitToWidth(true);
+		 scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+		 VBox.setVgrow(scroll, Priority.ALWAYS);
+
+		 main.getChildren().addAll(title, scroll);
+		 scene.setRoot(buildShell(nav, main));
+    }
+
+    private void deleteCompany(Scene scene, Company company) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Delete company \"" + company.getName() + "\" and all of its trips?",
+                ButtonType.YES, ButtonType.NO);
+        alert.showAndWait().ifPresent(result -> {
+            if (result != ButtonType.YES) {
+                return;
+            }
+
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+
+                File companyFile = new File("src/Database/Company.json");
+                ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
+                for (int i = 0; i < companies.size(); i++) {
+                    if (companies.get(i).path("id").asText().equals(company.getId())) {
+                        companies.remove(i);
+                        break;
+                    }
+                }
+                mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
+
+                File tripFile = new File("src/Database/Trip.json");
+                ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
+                for (int i = trips.size() - 1; i >= 0; i--) {
+                    if (trips.get(i).path("company").asText().equals(company.getName())) {
+                        trips.remove(i);
+                    }
+                }
+                mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                showError("Unable to delete the company.");
+                return;
+            }
+
+            displayCompanies(scene);
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // COMPANY UPDATE
+    // ═══════════════════════════════════════════════════════════════
+    private void displayCompanyUpdate(Scene scene, Company company) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack      = navBtn("←  Back");
+		Button btnCompanies = navBtn("🏢  Companies");
+		btnCompanies.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayCompaniesMenu(scene, ""));
+		nav.getChildren().addAll(btnBack, new Separator(), btnCompanies);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("Edit: " + company.getName());
+
+        // Rename card
+        VBox renameCard = card(12);
+        Label renameHdr = new Label("RENAME COMPANY");
+        renameHdr.setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-size: 10px; -fx-font-weight: bold;");
+        TextField nameField = new TextField();
+        nameField.setPromptText("New company name");
+        styleInput(nameField);
+        Button confirmBtn = actionBtn("  Save Name  ");
+        confirmBtn.setOnAction(e -> {
+            String newName = nameField.getText();
+            if (newName.isBlank()) { showError("Name cannot be empty."); return; }
+            String oldName = company.getName();
+            try {
+                ObjectMapper m = new ObjectMapper();
+                File f = new File("src/Database/Company.json");
+                ArrayNode arr = (ArrayNode) m.readTree(f);
+                for (int i = 0; i < arr.size(); i++) {
+                    if (arr.get(i).get("id").asText().equals(company.getId())) {
+                        ((ObjectNode) arr.get(i)).put("name", newName);
+                        company.setName(newName); break;
+                    }
+                }
+                m.writerWithDefaultPrettyPrinter().writeValue(f, arr);
+                // Update trips
+                File tf = new File("src/Database/Trip.json");
+                ArrayNode ta = (ArrayNode) m.readTree(tf);
+                for (int i = 0; i < ta.size(); i++) {
+                    if (ta.get(i).get("company").asText().equals(oldName))
+                        ((ObjectNode) ta.get(i)).put("company", newName);
+                }
+                m.writerWithDefaultPrettyPrinter().writeValue(tf, ta);
+            } catch (IOException ex) { ex.printStackTrace(); }
+            displayCompanyUpdate(scene, company);
+        });
+        renameCard.getChildren().addAll(renameHdr, formField("New Name", nameField), confirmBtn);
+
+        // Trips card
+        VBox tripsCard = card(10);
+        Label tripsHdr = new Label("COMPANY TRIPS");
+        tripsHdr.setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-size: 10px; -fx-font-weight: bold;");
+        tripsCard.getChildren().add(tripsHdr);
+
+        try {
+            ObjectMapper m = new ObjectMapper();
+            for (JsonNode node : m.readTree(new File("src/Database/Company.json"))) {
+                if (!node.get("id").asText().equals(company.getId())) continue;
+                for (JsonNode tripNode : node.get("Trips")) {
+                    String tripId = tripNode.asText();
+                    HBox row = new HBox(10);
+                    row.setAlignment(Pos.CENTER_LEFT);
+                    row.setPadding(new Insets(6, 10, 6, 10));
+                    row.setStyle("-fx-background-color: " + C_BG_DARK + "; -fx-background-radius: 5;");
+
+                    Label idLbl = new Label(tripId);
+                    idLbl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 13px;");
+                    Region sp = new Region(); HBox.setHgrow(sp, Priority.ALWAYS);
+
+                    Button delBtn = dangerBtn("🗑");
+                    delBtn.setOnAction(ev -> {
+                        try {
+                            ObjectMapper dm = new ObjectMapper();
+                            File df = new File("src/Database/Company.json");
+                            JsonNode dr = dm.readTree(df);
+                            for (JsonNode c : dr) {
+                                if (c.get("id").asText().equals(company.getId())) {
+                                    ArrayNode ct = (ArrayNode) c.get("Trips");
+                                    for (int i = 0; i < ct.size(); i++) {
+                                        if (ct.get(i).asText().equals(tripId)) { ct.remove(i); break; }
+                                    }
+                                    break;
+                                }
+                            }
+                            dm.writerWithDefaultPrettyPrinter().writeValue(df, dr);
+                            File tf = new File("src/Database/Trip.json");
+                            ArrayNode ta = (ArrayNode) dm.readTree(tf);
+                            for (int i = 0; i < ta.size(); i++) {
+                                if (ta.get(i).get("id").asText().equals(tripId)) { ta.remove(i); break; }
+                            }
+                            dm.writerWithDefaultPrettyPrinter().writeValue(tf, ta);
+                        } catch (IOException ex) { ex.printStackTrace(); }
+                        displayCompanyUpdate(scene, company);
+                    });
+                    row.getChildren().addAll(idLbl, sp, delBtn);
+                    tripsCard.getChildren().add(row);
+                }
+            }
+        } catch (IOException ex) { ex.printStackTrace(); }
+
+        HBox twoCol = new HBox(20, renameCard, tripsCard);
+        HBox.setHgrow(renameCard, Priority.ALWAYS);
+        HBox.setHgrow(tripsCard, Priority.ALWAYS);
+
+        main.getChildren().addAll(title, twoCol);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // COMPANY CREATION FORM
+    // ═══════════════════════════════════════════════════════════════
+    private void displayCompanyCreationForm(Scene scene) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack      = navBtn("←  Back");
+		Button btnCompanies = navBtn("🏢  Companies");
+		btnCompanies.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayCompaniesMenu(scene, ""));
+		nav.getChildren().addAll(btnBack, new Separator(), btnCompanies);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("Create Company");
+
+        VBox formCard = card(16);
+
+        CheckBox flightCB = styledCheckBox("✈  Flight Company");
+        CheckBox boatCB   = styledCheckBox("🚢  Cruise Company");
+        CheckBox trainCB  = styledCheckBox("🚂  Train Company");
+        flightCB.selectedProperty().addListener((o,ov,nv) -> { if(nv){boatCB.setSelected(false);trainCB.setSelected(false);}});
+        boatCB.selectedProperty().addListener((o,ov,nv)   -> { if(nv){flightCB.setSelected(false);trainCB.setSelected(false);}});
+        trainCB.selectedProperty().addListener((o,ov,nv)  -> { if(nv){flightCB.setSelected(false);boatCB.setSelected(false);}});
+        HBox typeRow = new HBox(20, flightCB, boatCB, trainCB);
+
+        TextField nameField = new TextField();
+        nameField.setPromptText("Company Name");
+        styleInput(nameField);
+        nameField.setMaxWidth(300);
+
+        Button submitBtn = actionBtn("  Create Company  ");
+        submitBtn.setOnAction(e -> {
+            String type = flightCB.isSelected() ? "FlightCompany"
+                        : boatCB.isSelected()   ? "CruiseCompany"
+                        : trainCB.isSelected()  ? "TrainCompany" : null;
+            if (type == null) { showError("Please select a company type."); return; }
+            if (nameField.getText().isBlank()) { showError("Company name cannot be empty."); return; }
+            CompanyControllerForAdminMenu.goCallCreateCompany(nameField.getText(), type);
+            displayCompaniesMenu(scene, "Company created successfully!");
+        });
+
+        formCard.getChildren().addAll(
+            formField("Company Type", typeRow),
+            formField("Company Name", nameField),
+            submitBtn
+        );
+
+        main.getChildren().addAll(title, formCard);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // LOCATIONS MENU
+    // ═══════════════════════════════════════════════════════════════
+    private void displayLocationsMenu(Scene scene, String message) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack      = navBtn("←  Back");
+		Button btnLocations = navBtn("📍  Locations");
+		btnLocations.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayMenuAdmin(scene));
+		nav.getChildren().addAll(btnBack, new Separator(), btnLocations);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("Manage Locations");
+
+        Button createBtn = actionBtn("＋  Create Location");
+        Button listBtn   = ghostBtn("☰  View All Locations");
+        createBtn.setOnAction(e -> displayLocationCreationForm(scene));
+        listBtn.setOnAction(e -> displayLocations(scene));
+
+        HBox btnRow = new HBox(10, createBtn, listBtn);
+
+        if (message != null && !message.isBlank())
+            main.getChildren().addAll(title, successBanner(message), btnRow);
+        else
+            main.getChildren().addAll(title, btnRow);
+
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    private void displayLocations(Scene scene) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack      = navBtn("←  Back");
+		Button btnLocations = navBtn("📍  Locations");
+		btnLocations.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayLocationsMenu(scene, ""));
+		nav.getChildren().addAll(btnBack, new Separator(), btnLocations);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("All Locations");
+
+        FlowPane grid = new FlowPane(14, 14);
+        grid.setPadding(new Insets(4));
+
         try {
             ObjectMapper mapper = new ObjectMapper();
-            JsonNode root1 = mapper.readTree(new File("src/Database/Company.json"));
+            File file = new File("src/Database/Location.json");
+            ArrayNode arr = (ArrayNode) mapper.readTree(file);
 
-            Company company = Company.fromJson(CompanyComboBox.getValue(), root1);
+            for (JsonNode node : arr) {
+                String id = node.path("id").asText();
+                String city = node.path("city").asText();
+                String type = node.path("type").asText();
+                String name = node.path("name").asText(city);
+                Location location = switch (type) {
+                    case "Airport" -> new Airport(node);
+                    case "Port" -> new Port(node);
+                    case "TrainStation" -> new TrainStation(node);
+                    default -> null;
+                };
+                if (location == null) {
+                    continue;
+                }
 
-            ArrayList<Location> locations = new ArrayList<>(
-				LocationListView.getSelectionModel().getSelectedItems()
-			);
+                VBox cc = card(8);
+                cc.setPrefWidth(240);
 
-            // ✅ Transport récupéré directement — nom affiché, ID conservé
-            Transport transport = TransportComboBox.getValue();
-            if (transport == null) {
-                showError("Veuillez sélectionner un transport.");
+                Label typeLbl = new Label(type.toUpperCase());
+                typeLbl.setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-size: 10px; -fx-font-weight: bold;");
+
+                Label cityLbl = new Label(city);
+                cityLbl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 14px; -fx-font-weight: bold;");
+
+                Label nameLbl = new Label(name);
+                nameLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+                nameLbl.setWrapText(true);
+
+                Label idLbl = new Label("ID: " + id);
+                idLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+
+                Button editBtn = ghostBtn("✏  Edit");
+                editBtn.setOnAction(e -> displayLocationUpdate(scene, location));
+
+                Button deleteBtn = dangerBtn("🗑  Delete");
+                deleteBtn.setOnAction(e -> deleteLocation(scene, location));
+
+                HBox btnRow = new HBox(8, deleteBtn, editBtn);
+
+                cc.getChildren().addAll(typeLbl, cityLbl, nameLbl, idLbl, btnRow);
+                grid.getChildren().add(cc);
+            }
+        } catch (IOException ex) { ex.printStackTrace(); }
+
+        ScrollPane scroll = new ScrollPane(grid);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+        VBox.setVgrow(scroll, Priority.ALWAYS);
+
+        main.getChildren().addAll(title, scroll);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    private void displayLocationUpdate(Scene scene, Location location) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack      = navBtn("←  Back");
+		Button btnLocations = navBtn("📍  Locations");
+		btnLocations.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayLocations(scene));
+		nav.getChildren().addAll(btnBack, new Separator(), btnLocations);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("Edit Location");
+
+        VBox formCard = card(16);
+        Label currentName = new Label("Current name: " + location.getName());
+        currentName.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 13px;");
+        Label currentCity = new Label("Current city: " + location.getCity());
+        currentCity.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 13px;");
+
+        TextField nameField = new TextField();
+        nameField.setPromptText("New location name");
+        styleInput(nameField);
+
+        TextField cityField = new TextField();
+        cityField.setPromptText("New city name");
+        styleInput(cityField);
+
+        Button saveBtn = actionBtn("  Save Changes  ");
+        saveBtn.setOnAction(e -> {
+            String newCity = cityField.getText();
+            String newName = nameField.getText();
+            if (newCity == null || newCity.isBlank()) {
+                showError("City cannot be empty.");
+                return;
+            }
+            if (newName == null || newName.isBlank()) {
+                showError("Location name cannot be empty.");
+                return;
+            }
+            if (LocationControllerForAdminMenu == null || !LocationControllerForAdminMenu.editLocation(location, newCity.trim(), newName.trim())) {
+                showError("Unable to update the location.");
+                return;
+            }
+            displayLocations(scene);
+        });
+
+        formCard.getChildren().addAll(
+            currentName,
+            currentCity,
+            formField("New Name", nameField),
+            formField("New City", cityField),
+            saveBtn
+        );
+
+        main.getChildren().addAll(title, formCard);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    private void deleteLocation(Scene scene, Location location) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Delete location \"" + location.getCity() + "\" and all trips that use it?",
+                ButtonType.YES, ButtonType.NO);
+        alert.showAndWait().ifPresent(result -> {
+            if (result != ButtonType.YES) {
                 return;
             }
 
-            String type = flightCheckBox.isSelected() ? "Flight"     :
-                          boatCheckBox.isSelected()   ? "CruiseLine" :
-                          trainCheckBox.isSelected()  ? "Route"      : null;
-            if (type == null) {
-                showError("Veuillez sélectionner un type de voyage.");
+            if (LocationControllerForAdminMenu == null || !LocationControllerForAdminMenu.deleteLocation(location)) {
+                showError("Unable to delete the location.");
                 return;
             }
 
-            tripControllerForAdminMenu.goCallCreateTrip(
-                company, startDate.getValue(), endDate.getValue(),
-                Float.parseFloat(priceField.getText()),
-                (int) ChronoUnit.DAYS.between(startDate.getValue(), endDate.getValue()),
-                locations, transport, type
-            );
-
-            displayTripsMenu(scene, "Trip created successfully!");
-
-        } catch (IOException ex) {
-            System.err.println("Failed to read JSON: " + ex.getMessage());
-        }
-    });
-
-    // ---------------- LOAD JSON ----------------
-    ObjectMapper mapper = new ObjectMapper();
-    JsonNode temp1, temp2, temp3;
-    try {
-        temp1 = mapper.readTree(new File("src/Database/Company.json"));
-        temp2 = mapper.readTree(new File("src/Database/Location.json"));
-        temp3 = mapper.readTree(new File("src/Database/Transport.json"));
-    } catch (Exception e) {
-        e.printStackTrace();
-        temp1 = mapper.createArrayNode();
-        temp2 = mapper.createArrayNode();
-        temp3 = mapper.createArrayNode();
+            displayLocations(scene);
+        });
     }
 
-    final JsonNode root1 = temp1;
-    final JsonNode root2 = temp2;
-    final JsonNode root3 = temp3;
+    private void displayLocationCreationForm(Scene scene) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack      = navBtn("←  Back");
+		Button btnLocations = navBtn("📍  Locations");
+		btnLocations.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayLocationsMenu(scene, ""));
+		nav.getChildren().addAll(btnBack, new Separator(), btnLocations);
 
-    // ---------------- GUARD FLAG ----------------
-    final boolean[] updating = { false };
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("Create Location");
 
-    // ---------------- LOGIC ----------------
-    flightCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
-        if (updating[0]) return;
-        if (newVal) {
-            updating[0] = true;
-            boatCheckBox.setSelected(false);
-            trainCheckBox.setSelected(false);
-            updating[0] = false;
-            updateCompanies(root1, CompanyComboBox, "FlightCompany");
-            updateLocations(root2, LocationListView, "Airport");
-            updateTransports(root3, TransportComboBox, "Plane");
-        }
-    });
+        VBox formCard = card(16);
 
-    boatCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
-        if (updating[0]) return;
-        if (newVal) {
-            updating[0] = true;
-            flightCheckBox.setSelected(false);
-            trainCheckBox.setSelected(false);
-            updating[0] = false;
-            LocationListView.getSelectionModel().clearSelection();
-            LocationListView.setCellFactory(null);
-            updateCompanies(root1, CompanyComboBox, "BoatCompany");
-            updateLocations(root2, LocationListView, "Port");
-            updateTransports(root3, TransportComboBox, "Boat");
-        }
-    });
+        CheckBox airportCB = styledCheckBox("✈  Airport");
+        CheckBox portCB    = styledCheckBox("⚓  Port");
+        CheckBox stationCB = styledCheckBox("🚉  Train Station");
+        airportCB.selectedProperty().addListener((o,ov,nv) -> { if(nv){portCB.setSelected(false);stationCB.setSelected(false);}});
+        portCB.selectedProperty().addListener((o,ov,nv)    -> { if(nv){airportCB.setSelected(false);stationCB.setSelected(false);}});
+        stationCB.selectedProperty().addListener((o,ov,nv) -> { if(nv){airportCB.setSelected(false);portCB.setSelected(false);}});
+        HBox typeRow = new HBox(20, airportCB, portCB, stationCB);
 
-    trainCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
-        if (updating[0]) return;
-        if (newVal) {
-            updating[0] = true;
-            flightCheckBox.setSelected(false);
-            boatCheckBox.setSelected(false);
-            updating[0] = false;
-            LocationListView.getSelectionModel().clearSelection();
-            LocationListView.setCellFactory(null);
-            updateCompanies(root1, CompanyComboBox, "TrainCompany");
-            updateLocations(root2, LocationListView, "TrainStation");
-            updateTransports(root3, TransportComboBox, "Train");
-        }
-    });
+        TextField cityField = new TextField();
+        cityField.setPromptText("City name");
+        styleInput(cityField);
+        cityField.setMaxWidth(300);
 
-    // ---------------- ADD COMPONENTS ----------------
-    form.getChildren().addAll(
-        checkboxes,
-        companyBox,
-        locationBox,
-        transportBox,
-        startDate,
-        endDate,
-        priceField,
-        submitButton
-    );
+        TextField locationNameField = new TextField();
+        locationNameField.setPromptText("Location name");
+        styleInput(locationNameField);
+        locationNameField.setMaxWidth(300);
 
-    // ---------------- LAYOUT ----------------
-    back.setMinWidth(150);
-    back.setMaxWidth(150);
+        Button submitBtn = actionBtn("  Create Location  ");
+        submitBtn.setOnAction(e -> {
+            String type = airportCB.isSelected() ? "Airport" : portCB.isSelected() ? "Port" : stationCB.isSelected() ? "Station" : null;
+            if (type == null) { showError("Please select a location type."); return; }
+            if (cityField.getText().isBlank()) { showError("City name cannot be empty."); return; }
+            if (locationNameField.getText().isBlank()) { showError("Location name cannot be empty."); return; }
+            LocationControllerForAdminMenu.goCallCreateLocation(cityField.getText().trim(), locationNameField.getText().trim(), type);
+            displayLocationsMenu(scene, "Location created successfully!");
+        });
 
-    HBox.setHgrow(form, Priority.ALWAYS);
-    layout.getChildren().addAll(back, form);
-    scene.setRoot(layout);
-}
+        formCard.getChildren().addAll(
+            formField("Location Type", typeRow),
+            formField("City Name", cityField),
+            formField("Location Name", locationNameField),
+            submitBtn
+        );
 
-// ── Helpers ───────────────────────────────────────────────────────
-private void displayTrips(Scene scene){
-
-	Button backDisplay = new Button("back");
-	backDisplay.setOnAction(back -> {
-		displayTripsMenu(scene, "");
-	});
-
-	
-	FlowPane trips = new FlowPane(10,10);
-	try{
-		ObjectMapper displayMapper = new ObjectMapper();
-		File tripFile = new File("src/Database/Trip.json");
-		JsonNode tripRoot = displayMapper.readTree(tripFile); 
-		ArrayNode tripArray = (ArrayNode) tripRoot;
-
-	
-	for (JsonNode trip : tripRoot){
-		VBox tripInfo = new VBox(5);
-		String tripCompany = trip.get("company").asText();
-		String tripId = trip.get("id").asText();
-		String tripCities = trip.get("origin").asText() + " to " + 
-		trip.get("destination").asText();
-		String tripDate = trip.get("startDate").asText() + " to " +
-		trip.get("endDate").asText();
-		Button deleteTrip = new Button("delete");
-		Button updateTrip = new Button("update");
-
-		deleteTrip.setOnAction(delete -> {
-			for (int i = 0; i < tripArray.size(); i++){
-				if (tripArray.get(i).get("id").asText().equals(tripId)){
-					tripArray.remove(i);
-					break;
-				}
-			}
-			try {
-				displayMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-
-
-			try {
-				ObjectMapper companyMapper = new ObjectMapper();
-				File companyFile = new File("src/Database/Company.json");
-				JsonNode companyRoot = companyMapper.readTree(companyFile);
-				ArrayNode companyArray = (ArrayNode) companyRoot;
-
-				for (JsonNode companyNode : companyArray){
-					ArrayNode tripsNode = (ArrayNode) companyNode.get("Trips");
-					for (int i = 0 ; i < tripsNode.size(); i++){
-						if (tripsNode.get(i).get("id").asText().equals(tripId)){
-							tripsNode.remove(i);
-							break;
-						}
-					}
-				}
-				companyMapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companyArray);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			displayTrips(scene); // self call
-		});
-
-		updateTrip.setOnAction(update -> {
-			displayingTripsToUpdate(scene, trip); // UNIQUE CODE TO FIND FUNCTION WITH CTRL F: lakske
-		});
-
-		tripInfo.getChildren().addAll(new Label(tripCompany), new Label(tripId), new Label(tripCities), 
-		new Label(tripDate), deleteTrip,updateTrip);
-		trips.getChildren().add(tripInfo);
-	}} catch(IOException ex){
-		ex.printStackTrace();
-	}
-
-	HBox layout = new HBox(10);
-	layout.getChildren().addAll(backDisplay, trips);
-	scene.setRoot(layout);
-	
-}
-
-// Displaying trips to update from displayTrips above UNIQUE CODE TO FIND FUNCTION WITH CTRL F: lakske
-private void displayingTripsToUpdate(Scene scene, JsonNode trip){
-
-	Button back = new Button("back");
-	back.setOnAction(e -> {
-		displayTrips(scene);
-	});
-	
-	Label priceLabel = new Label("Price");
-	TextField priceField = new TextField();
-	HBox priceBox = new HBox(10);
-	Button confirmPrice = new Button("confirm");
-	priceBox.getChildren().addAll(priceLabel, priceField,confirmPrice);
-
-	confirmPrice.setOnAction(confirm -> {
-		try {
-		ObjectMapper tripMapper = new ObjectMapper();
-		File tripFile = new File("src/Database/Trip.json");
-		JsonNode trips = tripMapper.readTree(tripFile);
-		ArrayNode tripsNode = (ArrayNode) trips;
-		for (int i = 0; i < tripsNode.size() ; i++){
-			if (tripsNode.get(i).get("id").asText().equals(trip.get("id").asText())){
-				ObjectNode tripNode = (ObjectNode) tripsNode.get(i);
-				tripNode.put("price", (priceField.getText()));
-				break;
-			}
-		}
-		tripMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripsNode);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		displayingTripsToUpdate(scene, trip);
-	});
-
-	VBox layout = new VBox(10);
-	layout.getChildren().addAll(back, priceBox);
-	scene.setRoot(layout);
-}
-
-private void updateCompanies(JsonNode root, ComboBox<String> comboBox, String type) {
-    comboBox.getItems().clear();
-    for (JsonNode node : root) {
-        if (node.has("type") && node.get("type").asText().equals(type) && node.has("name"))
-            comboBox.getItems().add(node.get("name").asText());
+        main.getChildren().addAll(title, formCard);
+        scene.setRoot(buildShell(nav, main));
     }
-}
 
-private void updateLocations(JsonNode root, ListView<Location> listView, String type) {
-    listView.getItems().clear();
-    for (JsonNode node : root) {
-        if (node.has("type") && node.get("type").asText().equals(type)
-                && node.has("id") && node.has("city")) {
-            Location loc = switch (node.get("type").asText()) {
-                case "Airport"      -> new Airport(node);
-                case "Port"         -> new Port(node);
-                case "TrainStation" -> new TrainStation(node);
+    // ═══════════════════════════════════════════════════════════════
+    // TRANSPORTS MENU
+    // ═══════════════════════════════════════════════════════════════
+    private void displayTransportsMenu(Scene scene) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack       = navBtn("←  Back");
+		Button btnTransports = navBtn("🚌  Transports");
+		btnTransports.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayMenuAdmin(scene));
+		nav.getChildren().addAll(btnBack, new Separator(), btnTransports);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("Manage Transports");
+
+        Button createBtn = actionBtn("＋  Create Transport");
+        createBtn.setOnAction(e -> displayTransportCreationForm(scene));
+
+        main.getChildren().addAll(title, createBtn);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // TRANSPORT CREATION FORM
+    // ═══════════════════════════════════════════════════════════════
+    private void displayTransportCreationForm(Scene scene) {
+        VBox nav = new VBox(2);
+		nav.setPadding(new Insets(12, 0, 0, 0));
+		Button btnBack       = navBtn("←  Back");
+		Button btnTransports = navBtn("🚌  Transports");
+		btnTransports.setStyle(activeNavStyle());
+		btnBack.setOnAction(e -> displayTransportsMenu(scene));
+		nav.getChildren().addAll(btnBack, new Separator(), btnTransports);
+
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("Create Transport");
+
+        TextField nameField = new TextField();
+        nameField.setPromptText("Transport name");
+        styleInput(nameField);
+        nameField.setMaxWidth(300);
+
+        CheckBox planeCB = styledCheckBox("✈  Plane");
+        CheckBox boatCB  = styledCheckBox("🚢  Boat");
+        CheckBox trainCB = styledCheckBox("🚂  Train");
+        HBox typeRow = new HBox(20, planeCB, boatCB, trainCB);
+
+        VBox planeArea = buildPlaneArea();
+        VBox boatArea  = buildBoatArea();
+        VBox trainArea = buildTrainArea();
+        planeArea.setVisible(false); planeArea.setManaged(false);
+        boatArea.setVisible(false);  boatArea.setManaged(false);
+        trainArea.setVisible(false); trainArea.setManaged(false);
+
+        planeCB.selectedProperty().addListener((o,ov,nv) -> { boatCB.setSelected(false); trainCB.setSelected(false);
+            planeArea.setVisible(nv); planeArea.setManaged(nv);
+            boatArea.setVisible(false); boatArea.setManaged(false);
+            trainArea.setVisible(false); trainArea.setManaged(false); });
+        boatCB.selectedProperty().addListener((o,ov,nv) -> { planeCB.setSelected(false); trainCB.setSelected(false);
+            boatArea.setVisible(nv); boatArea.setManaged(nv);
+            planeArea.setVisible(false); planeArea.setManaged(false);
+            trainArea.setVisible(false); trainArea.setManaged(false); });
+        trainCB.selectedProperty().addListener((o,ov,nv) -> { planeCB.setSelected(false); boatCB.setSelected(false);
+            trainArea.setVisible(nv); trainArea.setManaged(nv);
+            planeArea.setVisible(false); planeArea.setManaged(false);
+            boatArea.setVisible(false); boatArea.setManaged(false); });
+
+        Button submitBtn = actionBtn("  Create Transport  ");
+        submitBtn.setOnAction(e -> handleSubmit(scene, nameField, planeCB, boatCB, trainCB, planeArea, boatArea, trainArea));
+
+        VBox formCard = card(16);
+        formCard.getChildren().addAll(
+			formField("Type", typeRow),
+            formField("Transport Name", nameField),
+            planeArea, boatArea, trainArea,
+            submitBtn
+        );
+
+        main.getChildren().addAll(title, formCard);
+        scene.setRoot(buildShell(nav, main));
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // PLANE / BOAT / TRAIN SECTION BUILDERS  (unchanged logic, restyled)
+    // ═══════════════════════════════════════════════════════════════
+    private final List<SectionPlane> pendingPlaneSections = new ArrayList<>();
+    private VBox pendingPlaneSectionsBox;
+
+    private VBox buildPlaneArea() {
+        pendingPlaneSections.clear();
+        pendingPlaneSectionsBox = new VBox(6);
+
+        ComboBox<SectionPlane.SectionPlaneType> secTypeCombo = new ComboBox<>();
+        secTypeCombo.getItems().addAll(SectionPlane.SectionPlaneType.values());
+        secTypeCombo.setPromptText("Section type");
+        styleInput(secTypeCombo);
+
+        ComboBox<SectionPlane.Layout> layoutCombo = new ComboBox<>();
+        layoutCombo.getItems().addAll(SectionPlane.Layout.values());
+        layoutCombo.setPromptText("Layout");
+        styleInput(layoutCombo);
+
+        Spinner<Integer> rowsSpinner = new Spinner<>(1, 100, 10);
+        rowsSpinner.setEditable(true);
+        rowsSpinner.setPrefWidth(80);
+
+        Button addBtn = ghostBtn("＋  Add Section");
+        addBtn.setOnAction(e -> {
+            if (secTypeCombo.getValue() == null || layoutCombo.getValue() == null) { showError("Select type and layout."); return; }
+            SectionPlane.SectionPlaneType type = secTypeCombo.getValue();
+            if (pendingPlaneSections.stream().anyMatch(s -> s.getSectionType() == type)) { showError("Section already added."); return; }
+            SectionPlane sec = new SectionPlane(type, layoutCombo.getValue(), rowsSpinner.getValue());
+            pendingPlaneSections.add(sec);
+            addSectionRow(pendingPlaneSectionsBox, sec.toString(), () -> pendingPlaneSections.remove(sec));
+            secTypeCombo.setValue(null); layoutCombo.setValue(null); rowsSpinner.getValueFactory().setValue(10);
+        });
+
+        ScrollPane scroll = new ScrollPane(pendingPlaneSectionsBox);
+        scroll.setFitToWidth(true); scroll.setPrefHeight(150);
+        scroll.setStyle("-fx-background-color: transparent; -fx-background: " + C_BG_DARK + ";");
+
+        VBox area = new VBox(10,
+            new Label("✈  Plane Sections") {{ setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-weight: bold;"); }},
+            new HBox(10, formField("Section Type", secTypeCombo), formField("Layout", layoutCombo), formField("Rows", rowsSpinner)),
+            addBtn, scroll);
+        area.setPadding(new Insets(14));
+        area.setStyle("-fx-background-color: " + C_CARD + "; -fx-background-radius: 8; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 8;");
+        return area;
+    }
+
+    private final List<SectionBoat> pendingBoatSections = new ArrayList<>();
+    private VBox pendingBoatSectionsBox;
+
+    private VBox buildBoatArea() {
+        pendingBoatSections.clear();
+        pendingBoatSectionsBox = new VBox(6);
+
+        ComboBox<SectionBoat.SectionBoatType> secTypeCombo = new ComboBox<>();
+        secTypeCombo.getItems().addAll(SectionBoat.SectionBoatType.values());
+        secTypeCombo.setPromptText("Section type");
+        styleInput(secTypeCombo);
+
+        Label capLabel = new Label("Max capacity: —");
+        capLabel.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+        secTypeCombo.valueProperty().addListener((o,ov,val) -> {
+            if (val != null) capLabel.setText("Max capacity: " + val.getMaxCapacity() + " per cabin");
+        });
+
+        Spinner<Integer> cabinsSpinner = new Spinner<>(1, 500, 10);
+        cabinsSpinner.setEditable(true); cabinsSpinner.setPrefWidth(80);
+
+        Button addBtn = ghostBtn("＋  Add Section");
+        addBtn.setOnAction(e -> {
+            if (secTypeCombo.getValue() == null) { showError("Select a section type."); return; }
+            SectionBoat.SectionBoatType type = secTypeCombo.getValue();
+            if (pendingBoatSections.stream().anyMatch(s -> s.getSectionType() == type)) { showError("Section already added."); return; }
+            SectionBoat sec = new SectionBoat(type, cabinsSpinner.getValue());
+            pendingBoatSections.add(sec);
+            addSectionRow(pendingBoatSectionsBox, sec.toString(), () -> pendingBoatSections.remove(sec));
+            secTypeCombo.setValue(null); cabinsSpinner.getValueFactory().setValue(10);
+        });
+
+        ScrollPane scroll = new ScrollPane(pendingBoatSectionsBox);
+        scroll.setFitToWidth(true); scroll.setPrefHeight(150);
+        scroll.setStyle("-fx-background-color: transparent; -fx-background: " + C_BG_DARK + ";");
+
+        VBox area = new VBox(10,
+            new Label("🚢  Boat Sections") {{ setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-weight: bold;"); }},
+            new HBox(10, formField("Section Type", secTypeCombo), formField("Cabins", cabinsSpinner)),
+            capLabel, addBtn, scroll);
+        area.setPadding(new Insets(14));
+        area.setStyle("-fx-background-color: " + C_CARD + "; -fx-background-radius: 8; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 8;");
+        return area;
+    }
+
+    @SuppressWarnings("unchecked")
+    private VBox buildTrainArea() {
+        Spinner<Integer> rowsP = new Spinner<>(1, 100, 10);
+        rowsP.setEditable(true); rowsP.setPrefWidth(80);
+        Spinner<Integer> rowsE = new Spinner<>(1, 100, 30);
+        rowsE.setEditable(true); rowsE.setPrefWidth(80);
+
+        VBox area = new VBox(10,
+            new Label("🚂  Train Sections") {{ setStyle("-fx-text-fill: " + C_AMBER + "; -fx-font-weight: bold;"); }},
+            new HBox(20, formField("First Class (P) — Rows", rowsP), formField("Economy (E) — Rows", rowsE)));
+        area.setPadding(new Insets(14));
+        area.setStyle("-fx-background-color: " + C_CARD + "; -fx-background-radius: 8; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 8;");
+        area.setUserData(new Spinner[]{ rowsP, rowsE });
+        return area;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SUBMIT TRANSPORT
+    // ═══════════════════════════════════════════════════════════════
+    @SuppressWarnings("unchecked")
+    private void handleSubmit(Scene scene, TextField nameField,
+            CheckBox flightCB, CheckBox boatCB, CheckBox trainCB,
+            VBox planeArea, VBox boatArea, VBox trainArea) {
+        if (nameField.getText().isBlank()) { showError("Please enter a transport name."); return; }
+        String type = flightCB.isSelected() ? "Plane" : boatCB.isSelected() ? "Boat" : trainCB.isSelected() ? "Train" : null;
+        if (type == null) { showError("Please select a transport type."); return; }
+        switch (type) {
+            case "Plane" -> TransportControllerForAdminMenu.goCallCreateTransport(nameField.getText(), type, pendingPlaneSections);
+            case "Boat"  -> TransportControllerForAdminMenu.goCallCreateTransport(nameField.getText(), type, pendingBoatSections);
+            case "Train" -> {
+                Spinner<Integer>[] spinners = (Spinner<Integer>[]) trainArea.getUserData();
+                TransportControllerForAdminMenu.goCallCreateTransport(nameField.getText(), type,
+                    List.of(new SectionTrain(SectionTrain.SectionTrainType.P, spinners[0].getValue()),
+                            new SectionTrain(SectionTrain.SectionTrainType.E, spinners[1].getValue())));
+            }
+        }
+        displayTransportsMenu(scene);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SECTION ROW (with remove button)
+    // ═══════════════════════════════════════════════════════════════
+    private void addSectionRow(VBox container, String label, Runnable onRemove) {
+        Label lbl = new Label("✔  " + label);
+        lbl.setStyle("-fx-text-fill: " + C_SUCCESS + "; -fx-font-size: 12px;");
+        Button rm = dangerBtn("✕");
+        HBox row = new HBox(10, lbl, rm);
+        row.setAlignment(Pos.CENTER_LEFT);
+        row.setPadding(new Insets(4, 8, 4, 8));
+        row.setStyle("-fx-background-color: " + C_BG_DARK + "; -fx-background-radius: 4;");
+        rm.setOnAction(e -> { onRemove.run(); container.getChildren().remove(row); });
+        container.getChildren().add(row);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // JSON HELPERS
+    // ═══════════════════════════════════════════════════════════════
+    private void updateCompanies(JsonNode root, ComboBox<String> combo, String type) {
+        combo.getItems().clear();
+        for (JsonNode n : root)
+            if (n.has("type") && n.get("type").asText().equals(type) && n.has("name"))
+                combo.getItems().add(n.get("name").asText());
+    }
+
+    private void updateLocations(JsonNode root, ListView<Location> list, String type) {
+        list.getItems().clear();
+        for (JsonNode n : root) {
+            if (!n.has("type") || !n.get("type").asText().equals(type)) continue;
+            Location loc = switch (n.get("type").asText()) {
+                case "Airport"      -> new Airport(n);
+                case "Port"         -> new Port(n);
+                case "TrainStation" -> new TrainStation(n);
                 default -> null;
             };
-            if (loc != null) listView.getItems().add(loc);
+            if (loc != null) list.getItems().add(loc);
         }
-    }
-	listView.setCellFactory(lv -> new ListCell<Location>() {
-        @Override
-        protected void updateItem(Location loc, boolean empty) {
-            super.updateItem(loc, empty);
-            setText(empty || loc == null ? "" : loc.getCity());
-        }
-    });
-}
+        list.setCellFactory(lv -> new ListCell<>() {
+            protected void updateItem(Location loc, boolean empty) {
+                super.updateItem(loc, empty);
+                setText(empty || loc == null ? "" : loc.getCity());
+                if (empty || loc == null) {
+                    setStyle("-fx-background-color: transparent;");
+                } else if (isSelected()) {
+                    setStyle("-fx-text-fill: " + C_BG_DARK + "; -fx-background-color: " + C_AMBER + ";");
+                } else {
+                    setStyle("-fx-text-fill: " + C_TEXT + "; -fx-background-color: transparent;");
+                }
+            }
 
-private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, String type) {
-    comboBox.getItems().clear();
-    for (JsonNode node : root) {
-        if (node.has("type") && node.get("type").asText().equals(type)
-                && node.has("transportID") && node.has("name")) {
-            Transport t = switch (node.get("type").asText()) {
-                case "Plane" -> new Plane(node);
-                case "Boat"  -> new Boat(node);
-                case "Train" -> new Train(node);
+            @Override
+            public void updateSelected(boolean selected) {
+                super.updateSelected(selected);
+                if (getItem() == null) {
+                    return;
+                }
+                if (selected) {
+                    setStyle("-fx-text-fill: " + C_BG_DARK + "; -fx-background-color: " + C_AMBER + ";");
+                } else {
+                    setStyle("-fx-text-fill: " + C_TEXT + "; -fx-background-color: transparent;");
+                }
+            }
+        });
+    }
+
+    private void updateTransports(JsonNode root, ComboBox<Transport> combo, String type) {
+        combo.getItems().clear();
+        for (JsonNode n : root) {
+            if (!n.has("type") || !n.get("type").asText().equals(type)) continue;
+            Transport t = switch (n.get("type").asText()) {
+                case "Plane" -> new Plane(n);
+                case "Boat"  -> new Boat(n);
+                case "Train" -> new Train(n);
                 default      -> null;
             };
-            if (t != null) comboBox.getItems().add(t);
+            if (t != null) combo.getItems().add(t);
         }
     }
-}
 
-	private void displayCompaniesMenu(Scene scene, String message) {
-		// TODO - implement com.tripPortal.Menu.AdminMenu.displayCompaniesMenu
-		Button backButton = new Button("Back");
-		backButton.setMinWidth(100);
-		backButton.setPrefHeight(50);
-		backButton.setOnAction(e -> {
-			displayMenuAdmin(scene);
-		});
-
-		VBox back = new VBox(backButton);
-		VBox pageContent = new VBox();
-
-		Button CreateCompanyButton = new Button("Create Company");
-		CreateCompanyButton.setMinWidth(100);
-		CreateCompanyButton.setPrefHeight(50);
-		CreateCompanyButton.setOnAction(e -> {
-			displayCompanyCreationForm(scene);
-		});
-		ArrayList<Company> companies = new ArrayList<>();
-
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			JsonNode root = mapper.readTree(new File("src/Database/Company.json"));
-
-			for (JsonNode node : root) {
-				String type = node.get("type").asText();
-				Company company = switch (type) {
-					case "FlightCompany" -> new FlightCompany(node);
-					case "BoatCompany"   -> new BoatCompany(node);
-					case "TrainCompany"  -> new TrainCompany(node);
-					default -> throw new IllegalArgumentException("Unknown type: " + type);
-				};
-				companies.add(company);
-			}
-		} catch (IOException e) {
-			e.printStackTrace(); // prints the error if something goes wrong
-		}
-
-		VBox displayBox = new VBox();
-		Button displayCompanies = new Button("display Companies");
-		displayCompanies.setMinWidth(50);
-		displayCompanies.setPrefHeight(50);
-		FlowPane companyBox = new FlowPane(10,10);
-		displayBox.getChildren().addAll(displayCompanies, companyBox);
-
-		// Display Companies ==================================
-		displayCompanies.setOnAction(e ->{
-			displayCompanies(scene, companyBox, companies);
-		});
-		// Display Company ========================
-
-		
-
-		// Button EditCompanyButton = new Button("Edit Company");
-		// EditCompanyButton.setMinWidth(200);
-		// EditCompanyButton.setPrefHeight(50);
-		// Button DeleteCompanyButton = new Button("Delete Company");
-		// DeleteCompanyButton.setMinWidth(100);
-		// DeleteCompanyButton.setPrefHeight(50);
-
-		pageContent.getChildren().addAll(CreateCompanyButton);
-		pageContent.setAlignment(Pos.CENTER);
-		back.setMinWidth(150);
-		back.setMaxWidth(150);
-		HBox.setHgrow(pageContent, Priority.ALWAYS);
-		HBox layout = new HBox(back, pageContent, displayBox);
-
-		scene.setRoot(layout);
-	}
-
-	private void displayCompanies (Scene scene, FlowPane companyBox, ArrayList<Company> companies){
-		companyBox.getChildren().clear();
-			for (Company company : companies){
-
-				VBox companyInfo = new VBox();
-				Label companyName = new Label(company.getName());
-				Label companyId = new Label(company.getId());
-				VBox trips = new VBox();
-				for (Trip trip : company.getTrips()){
-					Label tripsId = new Label(trip.getId());
-					trips.getChildren().add(tripsId);
-				}	 
-				VBox transports = new VBox();
-				for (Transport transport : company.getTransports()){
-					Label transportsId = new Label(transport.getTransportID());
-					transports.getChildren().add(transportsId);
-				}	
-
-				HBox modifyCompany = new HBox();
-				Button deleteCompany = new Button("delete");
-				Button updateCompany = new Button("update");
-				modifyCompany.getChildren().addAll(deleteCompany, updateCompany);
-
-				companyInfo.getChildren().addAll( companyName, companyId, trips, transports, modifyCompany);
-				companyBox.getChildren().add(companyInfo);
-				deleteCompany.setOnAction(delete -> {
-					try {
-						ObjectMapper mapper = new ObjectMapper();
-						File file = new File("src/Database/Company.json");
-						JsonNode root = mapper.readTree(file);
-						ArrayNode array = mapper.createArrayNode();
-
-						// rebuild array without the deleted company
-						for (JsonNode node : root) {
-							if (!node.get("id").asText().equals(company.getId())) {
-								array.add(node);
-							}
-						}
-
-						mapper.writerWithDefaultPrettyPrinter().writeValue(file, array);
-
-						companies.remove(company);
-
-						companyBox.getChildren().clear();
-						displayCompanies(scene, companyBox, companies); 
-
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
-				});
-
-				updateCompany.setOnAction(update -> {
-					displayCompanyUpdate(scene, company);
-				});
-			}
-	}
-
-	private void displayCompanyUpdate(Scene scene, Company company){
-		Button updateBack = new Button("back");
-		updateBack.setOnAction(backUpdateButton -> {
-			displayCompaniesMenu(scene, "");
-		});
-		
-		HBox newCompanyName = new HBox();
-		Label newCompanyNameLabel = new Label("new Company Name: ");
-		TextField newCompanyNameField = new TextField();
-		newCompanyNameField.setPrefHeight(10);
-		newCompanyNameField.setPrefWidth(50);
-		Button confirmButton = new Button("confirm");
-		newCompanyName.getChildren().addAll(newCompanyNameLabel, newCompanyNameField, confirmButton);
-
-		confirmButton.setOnAction(e -> {
-			String newName = newCompanyNameField.getText();
-			if (newName.equals("")){
-				System.err.println("name is invalid");
-				return;
-			}
-			String oldName = company.getName();
-			try{
-				ObjectMapper companyMapper = new ObjectMapper();
-				File companyFile = new File("src/Database/Company.json");
-				JsonNode root = companyMapper.readTree(companyFile);
-				ArrayNode companyArray = (ArrayNode) root;
-
-				for (int i = 0; i < companyArray.size(); i++){
-					if (companyArray.get(i).get("id").asText().equals(company.getId())){
-						ObjectNode newCompany = (ObjectNode) companyArray.get(i);
-						newCompany.put("name", newName);
-						company.setName(newName);
-						break;
-					}
-				}
-				companyMapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companyArray);
-
-				ObjectMapper tripMapper = new ObjectMapper(); 
-				File tripFile = new File("src/Database/Trip.json");
-				JsonNode tripRoot = tripMapper.readTree(tripFile);
-				ArrayNode tripArray = (ArrayNode) tripRoot;
-
-				for (int i = 0; i < tripArray.size(); i++){
-					if (tripArray.get(i).get("company").asText().equals(oldName)){
-						ObjectNode newTrip = (ObjectNode) tripArray.get(i);
-						newTrip.put("company", newName);
-						break;
-					}
-				}
-				tripMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray);
-
-			}
-			catch(IOException ex){
-				ex.printStackTrace();
-			}
-			displayCompanyUpdate(scene, company);
-		});				
-
-
-		VBox tripsPane = new VBox(10);
-		FlowPane tripsData = new FlowPane(10,10);
-		tripsData.setAlignment(Pos.CENTER);
-		Label tripLabel = new Label("trips");
-		tripsPane.getChildren().addAll(tripLabel, tripsData);
-
-		try {
-			ObjectMapper tripMapper = new ObjectMapper();
-			JsonNode root = tripMapper.readTree(new File("src/Database/Company.json"));
-
-					
-			for (JsonNode node : root) {
-				if (node.get("id").asText().equals(company.getId())){
-					
-					JsonNode tripsNode = node.get("Trips");
-					for (JsonNode tripNode: tripsNode){
-						String tripId = tripNode.get("id").asText();
-						VBox tripsInfo = new VBox(5);
-						Label TripId = new Label(tripId);
-						Button deleteTrip = new Button("delete");
-
-						deleteTrip.setOnAction(deleteTrips -> {
-							try{
-							ObjectMapper deleteMapper = new ObjectMapper();
-							File deleteFile = new File("src/Database/Company.json");
-							JsonNode deleteRoot = deleteMapper.readTree(deleteFile);
-
-							for (JsonNode c : deleteRoot){
-								if (c.get("id").asText().equals(company.getId())){
-									ArrayNode companyTrips = (ArrayNode) c.get("Trips");
-									for (int i = 0; i < companyTrips.size(); i++) {
-										if (companyTrips.get(i).get("id").asText().equals(tripId)) {
-											companyTrips.remove(i);
-											break;
-											}
-										} 
-									break;
-								}
-							}
-							deleteMapper.writerWithDefaultPrettyPrinter().writeValue(deleteFile, deleteRoot);
-
-							deleteFile = new File("src/Database/Trip.json");
-							ArrayNode tripArray = (ArrayNode) deleteMapper.readTree(deleteFile);
-							for (int i = 0; i < tripArray.size(); i ++){
-								if (tripArray.get(i).get("id").asText().equals(tripId)){
-									tripArray.remove(i);
-									break;
-								}
-							}
-							deleteMapper.writerWithDefaultPrettyPrinter().writeValue(deleteFile, tripArray);
-							displayCompanyUpdate(scene, company);
-						} catch (IOException ex){
-							ex.printStackTrace();
-						}
-
-					});
-						tripsInfo.getChildren().addAll(TripId, deleteTrip);
-						tripsData.getChildren().add(tripsInfo);
-						
-						
-					} 
-				}
-			
-			}
-			
-			
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-
-			newCompanyName.setAlignment(Pos.CENTER); 
-			tripsPane.setAlignment(Pos.CENTER);  
-
-			VBox centerContent = new VBox(10);
-			centerContent.setAlignment(Pos.CENTER);
-			centerContent.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
-			centerContent.getChildren().addAll(newCompanyName, tripsPane);
-
-			BorderPane newLayout = new BorderPane();
-			newLayout.setTop(updateBack);        // back button top left
-			newLayout.setCenter(centerContent);  // rest centered
-			newLayout.setPrefSize(scene.getWidth(), scene.getHeight());
-
-			scene.setRoot(newLayout); 
-	}
-
-	
-
-	private void displayCompanyCreationForm(Scene scene) {
-		HBox layout = new HBox();
-
-		// ---------------- BACK BUTTON ----------------
-		Button backButton = new Button("Back");
-		backButton.setMinWidth(100);
-		backButton.setPrefHeight(50);
-		backButton.setOnAction(e -> displayCompaniesMenu(scene, ""));
-
-		VBox back = new VBox(backButton);
-
-		// ---------------- FORM ----------------
-		VBox form = new VBox(10);
-		form.setAlignment(Pos.CENTER);
-
-		CheckBox flightCheckBox = new CheckBox("Flight Company");
-		CheckBox boatCheckBox = new CheckBox("Cruise Company");
-		CheckBox trainCheckBox = new CheckBox("Train Company");
-		flightCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
-			if (newVal) {
-				boatCheckBox.setSelected(false);
-				trainCheckBox.setSelected(false);
-			}
-		});
-
-		boatCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
-			if (newVal) {
-				flightCheckBox.setSelected(false);
-				trainCheckBox.setSelected(false);
-			}
-		});
-
-		trainCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
-			if (newVal) {
-				flightCheckBox.setSelected(false);
-				boatCheckBox.setSelected(false);
-			}
-		});
-		// RadioButton flightCheckBox = new RadioButton("Flight Company");
-		// RadioButton boatCheckBox = new RadioButton("Cruise Company");
-		// RadioButton trainCheckBox = new RadioButton("Train Company");
-		// HBox checkboxes = new HBox(5, flightCheckBox, boatCheckBox, trainCheckBox);
-
-		HBox checkboxes = new HBox(5, flightCheckBox, boatCheckBox, trainCheckBox);
-		checkboxes.setAlignment(Pos.CENTER);
-
-		TextField nameField = new TextField();
-		nameField.setPromptText("Company Name");
-		nameField.setMaxWidth(200);
-
-		Button submitButton = new Button("Submit");
-		submitButton.setMinWidth(100);
-		submitButton.setPrefHeight(20);
-		submitButton.setOnAction(e -> {
-			String type = flightCheckBox.isSelected() ? "FlightCompany"
-					: boatCheckBox.isSelected() ? "CruiseCompany" : trainCheckBox.isSelected() ? "TrainCompany" : null;
-
-			if (type == null) {
-				showError("Please select a company type.");
-				return;
-			}
-
-			if (nameField.getText().isEmpty()) {
-				showError("Company name cannot be empty.");
-				return;
-			}
-
-			CompanyControllerForAdminMenu.goCallCreateCompany(nameField.getText(), type);
-			displayCompaniesMenu(scene, "Company created successfully!");
-		});
-
-		form.getChildren().addAll(
-				checkboxes,
-				nameField,
-				submitButton);
-
-		back.setMinWidth(150);
-		back.setMaxWidth(150);
-
-		HBox.setHgrow(form, Priority.ALWAYS);
-		layout.getChildren().addAll(back, form);
-		scene.setRoot(layout);
-
-	}
-
-	private void displayLocationsMenu(Scene scene, String message) {
-		// TODO - implement com.tripPortal.Menu.AdminMenu.displayCompaniesMenu
-		Button backButton = new Button("Back");
-		backButton.setMinWidth(100);
-		backButton.setPrefHeight(50);
-		backButton.setOnAction(e -> {
-			displayMenuAdmin(scene);
-		});
-
-		Label messageLabel = new Label(message);
-		messageLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-
-		VBox back = new VBox(backButton);
-		VBox pageContent = new VBox();
-		Button CreateLocationButton = new Button("Create Location");
-		CreateLocationButton.setMinWidth(100);
-		CreateLocationButton.setPrefHeight(50);
-		CreateLocationButton.setOnAction(e -> {
-			displayLocationCreationForm(scene);
-		});
-
-		// Button EditLocationButton = new Button("Edit Location");
-		// EditLocationButton.setMinWidth(200);
-		// EditLocationButton.setPrefHeight(50);
-		// Button DeleteLocationButton = new Button("Delete Location");
-		// DeleteLocationButton.setMinWidth(100);
-		// DeleteLocationButton.setPrefHeight(50);
-		pageContent.getChildren().addAll(messageLabel, CreateLocationButton);
-		pageContent.setAlignment(Pos.CENTER);
-		back.setMinWidth(150);
-		back.setMaxWidth(150);
-		HBox.setHgrow(pageContent, Priority.ALWAYS);
-		HBox layout = new HBox(back, pageContent);
-
-		scene.setRoot(layout);
-	}
-
-	private void displayLocationCreationForm(Scene scene) {
-
-		HBox layout = new HBox();
-
-		Button backButton = new Button("Back");
-		backButton.setMinWidth(100);
-		backButton.setPrefHeight(50);
-		backButton.setOnAction(e -> displayLocationsMenu(scene, ""));
-		VBox back = new VBox(backButton);
-
-		// ---------------- FORM ----------------
-		VBox form = new VBox(10);
-		form.setAlignment(Pos.CENTER);
-
-		Label typeLabel = new Label("Select Location Type:");
-		CheckBox airportCheckBox = new CheckBox("Airport");
-		CheckBox portCheckBox = new CheckBox("Port");
-		CheckBox stationCheckBox = new CheckBox("Train Station");
-		airportCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
-			if (newVal) {
-				portCheckBox.setSelected(false);
-				stationCheckBox.setSelected(false);
-			}
-		});
-
-		portCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
-			if (newVal) {
-				airportCheckBox.setSelected(false);
-				stationCheckBox.setSelected(false);
-			}
-		});
-
-		stationCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
-			if (newVal) {
-				airportCheckBox.setSelected(false);
-				portCheckBox.setSelected(false);
-			}
-		});
-		HBox checkboxes = new HBox(5, airportCheckBox, portCheckBox, stationCheckBox);
-		checkboxes.setAlignment(Pos.CENTER);
-
-
-		TextField nameField = new TextField();
-		nameField.setPromptText("Location Name (City)");
-		nameField.setMaxWidth(200);
-
-		Button submitButton = new Button("Submit");
-		submitButton.setMinWidth(100);
-		submitButton.setPrefHeight(20);
-		submitButton.setOnAction(e -> {
-			String type = airportCheckBox.isSelected() ? "Airport"
-					: portCheckBox.isSelected() ? "Port" : stationCheckBox.isSelected() ? "Station" : null;
-			if (type == null) {
-				showError("Please select a location type.");
-				return;
-			}
-
-			if (nameField.getText().isEmpty()) {
-				showError("Location name cannot be empty.");
-				return;
-			}
-
-			LocationControllerForAdminMenu.goCallCreateLocation(nameField.getText(), type);
-			displayLocationsMenu(scene, "Location created successfully!");
-		});
-
-		form.getChildren().addAll(
-				typeLabel,
-				checkboxes,
-				nameField,
-				submitButton);
-
-		back.setMinWidth(150);
-		back.setMaxWidth(150);
-
-		HBox.setHgrow(form, Priority.ALWAYS);
-		layout.getChildren().addAll(back, form);
-		scene.setRoot(layout);
-
-	}
-
-	private void displayTransportsMenu(Scene scene) {
-		// TODO - implement com.tripPortal.Menu.AdminMenu.displayTransportsMenu
-		Button backButton = new Button("Back");
-		backButton.setMinWidth(100);
-		backButton.setPrefHeight(50);
-		backButton.setOnAction(e -> {
-			displayMenuAdmin(scene);
-		});
-
-		VBox back = new VBox(backButton);
-		VBox pageContent = new VBox();
-		Button CreateTransportButton = new Button("Create Transport");
-		CreateTransportButton.setMinWidth(100);
-		CreateTransportButton.setPrefHeight(50);
-		CreateTransportButton.setOnAction(e -> {
-			displayTransportCreationForm(scene);
-		});
-
-		pageContent.getChildren().addAll(CreateTransportButton);
-		pageContent.setAlignment(Pos.CENTER);
-		back.setMinWidth(150);
-		back.setMaxWidth(150);
-		HBox.setHgrow(pageContent, Priority.ALWAYS);
-		HBox layout = new HBox(back, pageContent);
-
-		scene.setRoot(layout);
-	}
-
-	private void displayTransportCreationForm(Scene scene) {
-
-		// ── Bouton Retour ──────────────────────────────────────────────
-		Button backButton = new Button("Back");
-		backButton.setMinWidth(100);
-		backButton.setPrefHeight(50);
-		backButton.setOnAction(e -> displayTransportsMenu(scene));
-		VBox back = new VBox(backButton);
-		back.setMinWidth(150);
-		back.setMaxWidth(150);
-
-		// ── Nom du transport ───────────────────────────────────────────
-		TextField nameField = new TextField();
-		nameField.setPromptText("Transport Name");
-
-		// ── Sélection du type ──────────────────────────────────────────
-		CheckBox flightCheckBox = new CheckBox("Plane");
-		CheckBox boatCheckBox = new CheckBox("Boat");
-		CheckBox trainCheckBox = new CheckBox("Train");
-		HBox checkboxes = new HBox(10, flightCheckBox, boatCheckBox, trainCheckBox);
-
-		// ── Zone dynamique selon le type ───────────────────────────────
-		VBox planeArea = buildPlaneArea();
-		VBox boatArea = buildBoatArea();
-		VBox trainArea = buildTrainArea();
-		planeArea.setVisible(false);
-		planeArea.setManaged(false);
-		boatArea.setVisible(false);
-		boatArea.setManaged(false);
-		trainArea.setVisible(false);
-		trainArea.setManaged(false);
-
-		// Comportement radio + affichage de la bonne zone
-		flightCheckBox.selectedProperty().addListener((obs, o, newVal) -> {
-			boatCheckBox.setSelected(false);
-			trainCheckBox.setSelected(false);
-			planeArea.setVisible(newVal);
-			planeArea.setManaged(newVal);
-			boatArea.setVisible(false);
-			boatArea.setManaged(false);
-			trainArea.setVisible(false);
-			trainArea.setManaged(false);
-		});
-		boatCheckBox.selectedProperty().addListener((obs, o, newVal) -> {
-			flightCheckBox.setSelected(false);
-			trainCheckBox.setSelected(false);
-			boatArea.setVisible(newVal);
-			boatArea.setManaged(newVal);
-			planeArea.setVisible(false);
-			planeArea.setManaged(false);
-			trainArea.setVisible(false);
-			trainArea.setManaged(false);
-		});
-		trainCheckBox.selectedProperty().addListener((obs, o, newVal) -> {
-			flightCheckBox.setSelected(false);
-			boatCheckBox.setSelected(false);
-			trainArea.setVisible(newVal);
-			trainArea.setManaged(newVal);
-			planeArea.setVisible(false);
-			planeArea.setManaged(false);
-			boatArea.setVisible(false);
-			boatArea.setManaged(false);
-		});
-
-		// ── Bouton Submit ──────────────────────────────────────────────
-		Button submitButton = new Button("Submit");
-		submitButton.setMinWidth(100);
-		submitButton.setPrefHeight(30);
-		submitButton.setOnAction(e -> handleSubmit(
-				scene, nameField,
-				flightCheckBox, boatCheckBox, trainCheckBox,
-				planeArea, boatArea, trainArea));
-
-		// ── Assemblage ─────────────────────────────────────────────────
-		VBox form = new VBox(12,
-				new Label("Type de transport :"), checkboxes,
-				new Label("Nom :"), nameField,
-				planeArea, boatArea, trainArea,
-				submitButton);
-		form.setAlignment(Pos.TOP_LEFT);
-		form.setPadding(new Insets(20));
-
-		HBox.setHgrow(form, Priority.ALWAYS);
-		HBox layout = new HBox(back, form);
-		scene.setRoot(layout);
-	}
-
-	// ══════════════════════════════════════════════════════════════════
-	// ZONE AVION
-	// ══════════════════════════════════════════════════════════════════
-	private final List<SectionPlane> pendingPlaneSections = new ArrayList<>();
-	private VBox pendingPlaneSectionsBox;
-
-	private VBox buildPlaneArea() {
-		pendingPlaneSections.clear();
-		pendingPlaneSectionsBox = new VBox(4);
-
-		// Sélecteurs
-		ComboBox<SectionPlane.SectionPlaneType> secTypeCombo = new ComboBox<>();
-		secTypeCombo.getItems().addAll(SectionPlane.SectionPlaneType.values());
-		secTypeCombo.setPromptText("Type (F/A/P/E)");
-
-		ComboBox<SectionPlane.Layout> layoutCombo = new ComboBox<>();
-		layoutCombo.getItems().addAll(SectionPlane.Layout.values());
-		layoutCombo.setPromptText("Disposition (S/C/M/L)");
-
-		Spinner<Integer> rowsSpinner = new Spinner<>(1, 100, 10);
-		rowsSpinner.setEditable(true);
-		rowsSpinner.setPrefWidth(80);
-
-		Button addSecBtn = new Button("+ Ajouter section");
-		addSecBtn.setOnAction(e -> {
-			if (secTypeCombo.getValue() == null || layoutCombo.getValue() == null) {
-				showError("Veuillez choisir un type et une disposition.");
-				return;
-			}
-			SectionPlane.SectionPlaneType type = secTypeCombo.getValue();
-			boolean duplicate = pendingPlaneSections.stream()
-					.anyMatch(s -> s.getSectionType() == type);
-			if (duplicate) {
-				showError("La section " + type + " est déjà ajoutée.");
-				return;
-			}
-			SectionPlane section = new SectionPlane(type, layoutCombo.getValue(), rowsSpinner.getValue());
-			pendingPlaneSections.add(section);
-			addSectionRow(pendingPlaneSectionsBox, section.toString(), () -> pendingPlaneSections.remove(section));
-
-			secTypeCombo.setValue(null);
-			layoutCombo.setValue(null);
-			rowsSpinner.getValueFactory().setValue(10);
-		});
-
-		ScrollPane scrollPane = new ScrollPane(pendingPlaneSectionsBox);
-		scrollPane.setFitToWidth(true);
-		scrollPane.setPrefHeight(200); // hauteur fixe — scroll si ça dépasse
-		scrollPane.setStyle("-fx-background-color: transparent;");
-
-		VBox area = new VBox(8,
-				new Label("─── Sections de l'avion ───"),
-				new HBox(8, new Label("Type :"), secTypeCombo),
-				new HBox(8, new Label("Disposition :"), layoutCombo),
-				new HBox(8, new Label("Rangées :"), rowsSpinner),
-				addSecBtn,
-				scrollPane);
-		area.setStyle("-fx-border-color: #aaa; -fx-border-radius:5; -fx-padding:10;");
-		return area;
-	}
-
-	// ══════════════════════════════════════════════════════════════════
-	// ZONE BATEAU
-	// ══════════════════════════════════════════════════════════════════
-	private final List<SectionBoat> pendingBoatSections = new ArrayList<>();
-	private VBox pendingBoatSectionsBox;
-
-	private VBox buildBoatArea() {
-		pendingBoatSections.clear();
-		pendingBoatSectionsBox = new VBox(4);
-
-		ComboBox<SectionBoat.SectionBoatType> secTypeCombo = new ComboBox<>();
-		secTypeCombo.getItems().addAll(SectionBoat.SectionBoatType.values());
-		secTypeCombo.setPromptText("Section (I/O/S/F/D)");
-
-		// Affiche la capacité max selon la section choisie
-		Label capacityLabel = new Label("Capacité max : -");
-		secTypeCombo.valueProperty().addListener((obs, o, val) -> {
-			if (val != null)
-				capacityLabel.setText("Capacité max : " + val.getMaxCapacity() + " personnes/cabine");
-		});
-
-		Spinner<Integer> cabinsSpinner = new Spinner<>(1, 500, 10);
-		cabinsSpinner.setEditable(true);
-		cabinsSpinner.setPrefWidth(80);
-
-		Button addSecBtn = new Button("+ Ajouter section");
-		addSecBtn.setOnAction(e -> {
-			if (secTypeCombo.getValue() == null) {
-				showError("Veuillez choisir un type de section.");
-				return;
-			}
-			SectionBoat.SectionBoatType type = secTypeCombo.getValue();
-			boolean duplicate = pendingBoatSections.stream()
-					.anyMatch(s -> s.getSectionType() == type);
-			if (duplicate) {
-				showError("La section " + type + " est déjà ajoutée.");
-				return;
-			}
-			SectionBoat section = new SectionBoat(type, cabinsSpinner.getValue());
-			pendingBoatSections.add(section);
-			addSectionRow(pendingBoatSectionsBox, section.toString(), () -> pendingBoatSections.remove(section));
-
-			secTypeCombo.setValue(null);
-			cabinsSpinner.getValueFactory().setValue(10);
-			capacityLabel.setText("Capacité max : -");
-		});
-
-		ScrollPane scrollPane = new ScrollPane(pendingBoatSectionsBox);
-		scrollPane.setFitToWidth(true);
-		scrollPane.setPrefHeight(200);
-		scrollPane.setStyle("-fx-background-color: transparent;");
-
-		VBox area = new VBox(8,
-				new Label("─── Sections du paquebot ───"),
-				new HBox(8, new Label("Type :"), secTypeCombo),
-				capacityLabel,
-				new HBox(8, new Label("Cabines :"), cabinsSpinner),
-				addSecBtn,
-				scrollPane);
-		area.setStyle("-fx-border-color: #aaa; -fx-border-radius:5; -fx-padding:10;");
-		return area;
-	}
-
-	// ══════════════════════════════════════════════════════════════════
-	// ZONE TRAIN (P + E automatiques, on configure juste les rangées)
-	// ══════════════════════════════════════════════════════════════════
-	private VBox buildTrainArea() {
-		Spinner<Integer> rowsP = new Spinner<>(1, 100, 10);
-		rowsP.setEditable(true);
-		rowsP.setPrefWidth(80);
-
-		Spinner<Integer> rowsE = new Spinner<>(1, 100, 30);
-		rowsE.setEditable(true);
-		rowsE.setPrefWidth(80);
-
-		VBox area = new VBox(8,
-				new Label("─── Sections du train (Étroit S — 3 colonnes) ───"),
-				new HBox(8, new Label("Première (P) — rangées :"), rowsP),
-				new HBox(8, new Label("Économie  (E) — rangées :"), rowsE));
-		area.setStyle("-fx-border-color: #aaa; -fx-border-radius:5; -fx-padding:10;");
-		area.setUserData(new Spinner[] { rowsP, rowsE }); // récupéré au submit
-		return area;
-	}
-
-	// ══════════════════════════════════════════════════════════════════
-	// SUBMIT
-	// ══════════════════════════════════════════════════════════════════
-	private void handleSubmit(Scene scene, TextField nameField,
-			CheckBox flightCB, CheckBox boatCB, CheckBox trainCB,
-			VBox planeArea, VBox boatArea, VBox trainArea) {
-
-		if (nameField.getText().isBlank()) {
-			showError("Veuillez entrer un nom de transport.");
-			return;
-		}
-
-		String type = flightCB.isSelected() ? "Plane"
-				: boatCB.isSelected() ? "Boat" : trainCB.isSelected() ? "Train" : null;
-		if (type == null) {
-			showError("Veuillez sélectionner un type de transport.");
-			return;
-		}
-
-		switch (type) {
-			case "Plane" -> {
-				TransportControllerForAdminMenu.goCallCreateTransport(
-						nameField.getText(), type, pendingPlaneSections);
-			}
-			case "Boat" -> {
-				TransportControllerForAdminMenu.goCallCreateTransport(
-						nameField.getText(), type, pendingBoatSections);
-			}
-			case "Train" -> {
-				Spinner[] spinners = (Spinner[]) trainArea.getUserData();
-				int rowsP = (int) spinners[0].getValue();
-				int rowsE = (int) spinners[1].getValue();
-				List<SectionTrain> trainSections = List.of(
-						new SectionTrain(SectionTrain.SectionTrainType.P, rowsP),
-						new SectionTrain(SectionTrain.SectionTrainType.E, rowsE));
-				TransportControllerForAdminMenu.goCallCreateTransport(
-						nameField.getText(), type, trainSections);
-			}
-		}
-
-		displayTransportsMenu(scene);
-	}
-
-	// ══════════════════════════════════════════════════════════════════
-	// UTILITAIRES
-	// ══════════════════════════════════════════════════════════════════
-
-	/** Ajoute une ligne avec un bouton ✕ pour supprimer */
-	private void addSectionRow(VBox container, String label, Runnable onRemove) {
-		Label lbl = new Label("✔ " + label);
-		Button removeBtn = new Button("✕");
-		HBox row = new HBox(8, lbl, removeBtn);
-		row.setAlignment(Pos.CENTER_LEFT);
-		removeBtn.setOnAction(e -> {
-			onRemove.run();
-			container.getChildren().remove(row);
-		});
-		container.getChildren().add(row);
-	}
-
-	private void showError(String message) {
-		Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
-		alert.showAndWait();
-	}
-
-	public void setCompanyControllerForAdminMenu(companyController companyControllerForAdminMenu) {
-		this.CompanyControllerForAdminMenu = companyControllerForAdminMenu;
-	}
-
-	public void setLocationControllerForAdminMenu(locationController locationControllerForAdminMenu) {
-		this.LocationControllerForAdminMenu = locationControllerForAdminMenu;
-	}
-
-	public void setTransportControllerForAdminMenu(transportController transportControllerForAdminMenu) {
-		this.TransportControllerForAdminMenu = transportControllerForAdminMenu;
-	}
-
-	public void setTripControllerForAdminMenu(tripController tripControllerForAdminMenu) {
-		this.tripControllerForAdminMenu = tripControllerForAdminMenu;
-	}
-
+    // ═══════════════════════════════════════════════════════════════
+    // SHOW ERROR
+    // ═══════════════════════════════════════════════════════════════
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+        alert.showAndWait();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SETTERS
+    // ═══════════════════════════════════════════════════════════════
+    public void setCompanyControllerForAdminMenu(companyController c)    { this.CompanyControllerForAdminMenu = c; }
+    public void setLocationControllerForAdminMenu(locationController c)  { this.LocationControllerForAdminMenu = c; }
+    public void setTransportControllerForAdminMenu(transportController c){ this.TransportControllerForAdminMenu = c; }
+    public void setTripControllerForAdminMenu(tripController c)          { this.tripControllerForAdminMenu = c; }
 }

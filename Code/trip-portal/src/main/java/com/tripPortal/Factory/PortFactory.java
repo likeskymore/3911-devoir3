@@ -32,7 +32,11 @@ public class PortFactory extends BoatTripFactory {
 
 	// Patron de fabrique
 	public Location createLocation(String city) {
-		Port port = new Port(city);
+		return createLocation(city, city);
+	}
+
+	public Location createLocation(String city, String name) {
+		Port port = new Port(city, name);
 
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -55,6 +59,7 @@ public class PortFactory extends BoatTripFactory {
 			newPort.put("type", "Port");
 			newPort.put("id", port.getId());
 			newPort.put("city", city);
+			newPort.put("name", name);
 			
 			// Append and write back
 			array.add(newPort);

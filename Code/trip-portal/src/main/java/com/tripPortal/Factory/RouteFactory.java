@@ -100,7 +100,7 @@ public class RouteFactory extends TrainTripFactory {
         for (JsonNode companyNode : companyArray){
             if (companyNode.get("id").asText().equals(company.getId())){
                 ArrayNode trips = (ArrayNode) companyNode.get("Trips");
-                trips.add(mapper.valueToTree(route));
+                trips.add(route.getId());
                 break;
             }
         }
