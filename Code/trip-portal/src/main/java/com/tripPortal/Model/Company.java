@@ -15,13 +15,12 @@ public abstract class Company {
 	private ArrayList<Transport> transports;
 	private ArrayList<Trip> trips;
 
-	public Company(){
-
-	}
 	public Company(String name) {
 		this.id = randomGenerateID(5);
 		this.tripID = randomGenerateID(2);
 		this.name = name;
+		this.trips = new ArrayList<Trip>();
+		this.transports = new ArrayList<Transport>();
 
 	}
 

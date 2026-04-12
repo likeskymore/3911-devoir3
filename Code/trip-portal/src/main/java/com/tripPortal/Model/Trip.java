@@ -15,6 +15,7 @@ public abstract class Trip {
 	private float price;
 	private int tripDuration;
 	private TripFactory tripFactory;
+	private Boolean active;
 
 	public Trip(Company servicedBy, LocalDate departureTime, LocalDate arrivalTime, float price, int tripDuration) {
 		this.id = randomGenerateID(servicedBy);
@@ -23,6 +24,7 @@ public abstract class Trip {
 		this.arrivalTime = arrivalTime;
 		this.price = price;
 		this.tripDuration = tripDuration;
+		this.active = true;
 	}
 
 	private String randomGenerateID(Company servicedBy) {

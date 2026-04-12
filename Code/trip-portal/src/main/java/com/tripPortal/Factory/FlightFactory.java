@@ -66,6 +66,7 @@ public class FlightFactory extends PlaneTripFactory {
     try {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("src/Database/Trip.json");
+        File companyFile = new File("src/Database/Company.json");
 
         JsonNode root = mapper.readTree(file);
         ArrayNode array;
@@ -89,15 +90,28 @@ public class FlightFactory extends PlaneTripFactory {
         node.put("origin",      origin.getId());
         node.put("destination", destination.getId());
         node.put("transport",   plane.getTransportID());
+        node.put("active", 1);
 
+        JsonNode CompanyRoot = mapper.readTree(companyFile);
+        ArrayNode companyArray = (ArrayNode) CompanyRoot;
+
+        for (JsonNode companyNode : companyArray){
+            if (companyNode.get("id").asText().equals(company.getId())){
+                ArrayNode trips = (ArrayNode) companyNode.get("Trips");
+                trips.add(mapper.valueToTree(flight));
+                break;
+            }
+        }
         array.add(node);
         mapper.writerWithDefaultPrettyPrinter().writeValue(file, array);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companyArray);
 
     } catch (IOException e) {
         System.err.println("Failed to write Flight to JSON: " + e.getMessage());
         e.printStackTrace();
     }
 
+    
     return flight;
 }
 }

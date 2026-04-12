@@ -2,19 +2,24 @@ package com.tripPortal.Menu;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Mediateur.locationController;
 import com.tripPortal.Mediateur.transportController;
 import com.tripPortal.Mediateur.tripController;
 import com.tripPortal.Model.Airport;
 import com.tripPortal.Model.Boat;
+import com.tripPortal.Model.BoatCompany;
 import com.tripPortal.Model.Company;
+import com.tripPortal.Model.FlightCompany;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Plane;
 import com.tripPortal.Model.Port;
@@ -22,8 +27,10 @@ import com.tripPortal.Model.SectionBoat;
 import com.tripPortal.Model.SectionPlane;
 import com.tripPortal.Model.SectionTrain;
 import com.tripPortal.Model.Train;
+import com.tripPortal.Model.TrainCompany;
 import com.tripPortal.Model.TrainStation;
 import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.Trip;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -45,9 +52,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -143,6 +152,10 @@ public class AdminMenu {
 			displayTripCreationForm(scene);
 		});
 
+		Button displayTripsButton = new Button("Display Trips");
+		displayTripsButton.setOnAction(displayingTrips -> {
+			displayTrips(scene);
+		});
 		// Button EditTripButton = new Button("Edit Trip");
 		// EditTripButton.setMinWidth(200);
 		// EditTripButton.setPrefHeight(50);
@@ -155,7 +168,7 @@ public class AdminMenu {
 		back.setMinWidth(200);
 		back.setMaxWidth(200);
 		HBox.setHgrow(pageContent, Priority.ALWAYS);
-		HBox layout = new HBox(back, pageContent);
+		HBox layout = new HBox(back, pageContent, displayTripsButton);
 
 		scene.setRoot(layout);
 	}
@@ -367,6 +380,126 @@ public class AdminMenu {
 }
 
 // ── Helpers ───────────────────────────────────────────────────────
+private void displayTrips(Scene scene){
+
+	Button backDisplay = new Button("back");
+	backDisplay.setOnAction(back -> {
+		displayTripsMenu(scene, "");
+	});
+
+	
+	FlowPane trips = new FlowPane(10,10);
+	try{
+		ObjectMapper displayMapper = new ObjectMapper();
+		File tripFile = new File("src/Database/Trip.json");
+		JsonNode tripRoot = displayMapper.readTree(tripFile); 
+		ArrayNode tripArray = (ArrayNode) tripRoot;
+
+	
+	for (JsonNode trip : tripRoot){
+		VBox tripInfo = new VBox(5);
+		String tripCompany = trip.get("company").asText();
+		String tripId = trip.get("id").asText();
+		String tripCities = trip.get("origin").asText() + " to " + 
+		trip.get("destination").asText();
+		String tripDate = trip.get("startDate").asText() + " to " +
+		trip.get("endDate").asText();
+		Button deleteTrip = new Button("delete");
+		Button updateTrip = new Button("update");
+
+		deleteTrip.setOnAction(delete -> {
+			for (int i = 0; i < tripArray.size(); i++){
+				if (tripArray.get(i).get("id").asText().equals(tripId)){
+					tripArray.remove(i);
+					break;
+				}
+			}
+			try {
+				displayMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+
+
+			try {
+				ObjectMapper companyMapper = new ObjectMapper();
+				File companyFile = new File("src/Database/Company.json");
+				JsonNode companyRoot = companyMapper.readTree(companyFile);
+				ArrayNode companyArray = (ArrayNode) companyRoot;
+
+				for (JsonNode companyNode : companyArray){
+					ArrayNode tripsNode = (ArrayNode) companyNode.get("Trips");
+					for (int i = 0 ; i < tripsNode.size(); i++){
+						if (tripsNode.get(i).get("id").asText().equals(tripId)){
+							tripsNode.remove(i);
+							break;
+						}
+					}
+				}
+				companyMapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companyArray);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			displayTrips(scene); // self call
+		});
+
+		updateTrip.setOnAction(update -> {
+			displayingTripsToUpdate(scene, trip); // UNIQUE CODE TO FIND FUNCTION WITH CTRL F: lakske
+		});
+
+		tripInfo.getChildren().addAll(new Label(tripCompany), new Label(tripId), new Label(tripCities), 
+		new Label(tripDate), deleteTrip,updateTrip);
+		trips.getChildren().add(tripInfo);
+	}} catch(IOException ex){
+		ex.printStackTrace();
+	}
+
+	HBox layout = new HBox(10);
+	layout.getChildren().addAll(backDisplay, trips);
+	scene.setRoot(layout);
+	
+}
+
+// Displaying trips to update from displayTrips above UNIQUE CODE TO FIND FUNCTION WITH CTRL F: lakske
+private void displayingTripsToUpdate(Scene scene, JsonNode trip){
+
+	Button back = new Button("back");
+	back.setOnAction(e -> {
+		displayTrips(scene);
+	});
+	
+	Label priceLabel = new Label("Price");
+	TextField priceField = new TextField();
+	HBox priceBox = new HBox(10);
+	Button confirmPrice = new Button("confirm");
+	priceBox.getChildren().addAll(priceLabel, priceField,confirmPrice);
+
+	confirmPrice.setOnAction(confirm -> {
+		try {
+		ObjectMapper tripMapper = new ObjectMapper();
+		File tripFile = new File("src/Database/Trip.json");
+		JsonNode trips = tripMapper.readTree(tripFile);
+		ArrayNode tripsNode = (ArrayNode) trips;
+		for (int i = 0; i < tripsNode.size() ; i++){
+			if (tripsNode.get(i).get("id").asText().equals(trip.get("id").asText())){
+				ObjectNode tripNode = (ObjectNode) tripsNode.get(i);
+				tripNode.put("price", (priceField.getText()));
+				break;
+			}
+		}
+		tripMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripsNode);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		displayingTripsToUpdate(scene, trip);
+	});
+
+	VBox layout = new VBox(10);
+	layout.getChildren().addAll(back, priceBox);
+	scene.setRoot(layout);
+}
 
 private void updateCompanies(JsonNode root, ComboBox<String> comboBox, String type) {
     comboBox.getItems().clear();
@@ -435,12 +568,38 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 		});
 		ArrayList<Company> companies = new ArrayList<>();
 
-		Button displayCompanies = new Button();
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode root = mapper.readTree(new File("src/Database/Company.json"));
+
+			for (JsonNode node : root) {
+				String type = node.get("type").asText();
+				Company company = switch (type) {
+					case "FlightCompany" -> new FlightCompany(node);
+					case "BoatCompany"   -> new BoatCompany(node);
+					case "TrainCompany"  -> new TrainCompany(node);
+					default -> throw new IllegalArgumentException("Unknown type: " + type);
+				};
+				companies.add(company);
+			}
+		} catch (IOException e) {
+			e.printStackTrace(); // prints the error if something goes wrong
+		}
+
+		VBox displayBox = new VBox();
+		Button displayCompanies = new Button("display Companies");
 		displayCompanies.setMinWidth(50);
 		displayCompanies.setPrefHeight(50);
+		FlowPane companyBox = new FlowPane(10,10);
+		displayBox.getChildren().addAll(displayCompanies, companyBox);
+
+		// Display Companies ==================================
 		displayCompanies.setOnAction(e ->{
-			
+			displayCompanies(scene, companyBox, companies);
 		});
+		// Display Company ========================
+
+		
 
 		// Button EditCompanyButton = new Button("Edit Company");
 		// EditCompanyButton.setMinWidth(200);
@@ -454,10 +613,214 @@ private void updateTransports(JsonNode root, ComboBox<Transport> comboBox, Strin
 		back.setMinWidth(150);
 		back.setMaxWidth(150);
 		HBox.setHgrow(pageContent, Priority.ALWAYS);
-		HBox layout = new HBox(back, pageContent);
+		HBox layout = new HBox(back, pageContent, displayBox);
 
 		scene.setRoot(layout);
 	}
+
+	private void displayCompanies (Scene scene, FlowPane companyBox, ArrayList<Company> companies){
+		companyBox.getChildren().clear();
+			for (Company company : companies){
+
+				VBox companyInfo = new VBox();
+				Label companyName = new Label(company.getName());
+				Label companyId = new Label(company.getId());
+				VBox trips = new VBox();
+				for (Trip trip : company.getTrips()){
+					Label tripsId = new Label(trip.getId());
+					trips.getChildren().add(tripsId);
+				}	 
+				VBox transports = new VBox();
+				for (Transport transport : company.getTransports()){
+					Label transportsId = new Label(transport.getTransportID());
+					transports.getChildren().add(transportsId);
+				}	
+
+				HBox modifyCompany = new HBox();
+				Button deleteCompany = new Button("delete");
+				Button updateCompany = new Button("update");
+				modifyCompany.getChildren().addAll(deleteCompany, updateCompany);
+
+				companyInfo.getChildren().addAll( companyName, companyId, trips, transports, modifyCompany);
+				companyBox.getChildren().add(companyInfo);
+				deleteCompany.setOnAction(delete -> {
+					try {
+						ObjectMapper mapper = new ObjectMapper();
+						File file = new File("src/Database/Company.json");
+						JsonNode root = mapper.readTree(file);
+						ArrayNode array = mapper.createArrayNode();
+
+						// rebuild array without the deleted company
+						for (JsonNode node : root) {
+							if (!node.get("id").asText().equals(company.getId())) {
+								array.add(node);
+							}
+						}
+
+						mapper.writerWithDefaultPrettyPrinter().writeValue(file, array);
+
+						companies.remove(company);
+
+						companyBox.getChildren().clear();
+						displayCompanies(scene, companyBox, companies); 
+
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				});
+
+				updateCompany.setOnAction(update -> {
+					displayCompanyUpdate(scene, company);
+				});
+			}
+	}
+
+	private void displayCompanyUpdate(Scene scene, Company company){
+		Button updateBack = new Button("back");
+		updateBack.setOnAction(backUpdateButton -> {
+			displayCompaniesMenu(scene, "");
+		});
+		
+		HBox newCompanyName = new HBox();
+		Label newCompanyNameLabel = new Label("new Company Name: ");
+		TextField newCompanyNameField = new TextField();
+		newCompanyNameField.setPrefHeight(10);
+		newCompanyNameField.setPrefWidth(50);
+		Button confirmButton = new Button("confirm");
+		newCompanyName.getChildren().addAll(newCompanyNameLabel, newCompanyNameField, confirmButton);
+
+		confirmButton.setOnAction(e -> {
+			String newName = newCompanyNameField.getText();
+			if (newName.equals("")){
+				System.err.println("name is invalid");
+				return;
+			}
+			String oldName = company.getName();
+			try{
+				ObjectMapper companyMapper = new ObjectMapper();
+				File companyFile = new File("src/Database/Company.json");
+				JsonNode root = companyMapper.readTree(companyFile);
+				ArrayNode companyArray = (ArrayNode) root;
+
+				for (int i = 0; i < companyArray.size(); i++){
+					if (companyArray.get(i).get("id").asText().equals(company.getId())){
+						ObjectNode newCompany = (ObjectNode) companyArray.get(i);
+						newCompany.put("name", newName);
+						company.setName(newName);
+						break;
+					}
+				}
+				companyMapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companyArray);
+
+				ObjectMapper tripMapper = new ObjectMapper(); 
+				File tripFile = new File("src/Database/Trip.json");
+				JsonNode tripRoot = tripMapper.readTree(tripFile);
+				ArrayNode tripArray = (ArrayNode) tripRoot;
+
+				for (int i = 0; i < tripArray.size(); i++){
+					if (tripArray.get(i).get("company").asText().equals(oldName)){
+						ObjectNode newTrip = (ObjectNode) tripArray.get(i);
+						newTrip.put("company", newName);
+						break;
+					}
+				}
+				tripMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray);
+
+			}
+			catch(IOException ex){
+				ex.printStackTrace();
+			}
+			displayCompanyUpdate(scene, company);
+		});				
+
+
+		VBox tripsPane = new VBox(10);
+		FlowPane tripsData = new FlowPane(10,10);
+		tripsData.setAlignment(Pos.CENTER);
+		Label tripLabel = new Label("trips");
+		tripsPane.getChildren().addAll(tripLabel, tripsData);
+
+		try {
+			ObjectMapper tripMapper = new ObjectMapper();
+			JsonNode root = tripMapper.readTree(new File("src/Database/Company.json"));
+
+					
+			for (JsonNode node : root) {
+				if (node.get("id").asText().equals(company.getId())){
+					
+					JsonNode tripsNode = node.get("Trips");
+					for (JsonNode tripNode: tripsNode){
+						String tripId = tripNode.get("id").asText();
+						VBox tripsInfo = new VBox(5);
+						Label TripId = new Label(tripId);
+						Button deleteTrip = new Button("delete");
+
+						deleteTrip.setOnAction(deleteTrips -> {
+							try{
+							ObjectMapper deleteMapper = new ObjectMapper();
+							File deleteFile = new File("src/Database/Company.json");
+							JsonNode deleteRoot = deleteMapper.readTree(deleteFile);
+
+							for (JsonNode c : deleteRoot){
+								if (c.get("id").asText().equals(company.getId())){
+									ArrayNode companyTrips = (ArrayNode) c.get("Trips");
+									for (int i = 0; i < companyTrips.size(); i++) {
+										if (companyTrips.get(i).get("id").asText().equals(tripId)) {
+											companyTrips.remove(i);
+											break;
+											}
+										} 
+									break;
+								}
+							}
+							deleteMapper.writerWithDefaultPrettyPrinter().writeValue(deleteFile, deleteRoot);
+
+							deleteFile = new File("src/Database/Trip.json");
+							ArrayNode tripArray = (ArrayNode) deleteMapper.readTree(deleteFile);
+							for (int i = 0; i < tripArray.size(); i ++){
+								if (tripArray.get(i).get("id").asText().equals(tripId)){
+									tripArray.remove(i);
+									break;
+								}
+							}
+							deleteMapper.writerWithDefaultPrettyPrinter().writeValue(deleteFile, tripArray);
+							displayCompanyUpdate(scene, company);
+						} catch (IOException ex){
+							ex.printStackTrace();
+						}
+
+					});
+						tripsInfo.getChildren().addAll(TripId, deleteTrip);
+						tripsData.getChildren().add(tripsInfo);
+						
+						
+					} 
+				}
+			
+			}
+			
+			
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+
+			newCompanyName.setAlignment(Pos.CENTER); 
+			tripsPane.setAlignment(Pos.CENTER);  
+
+			VBox centerContent = new VBox(10);
+			centerContent.setAlignment(Pos.CENTER);
+			centerContent.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
+			centerContent.getChildren().addAll(newCompanyName, tripsPane);
+
+			BorderPane newLayout = new BorderPane();
+			newLayout.setTop(updateBack);        // back button top left
+			newLayout.setCenter(centerContent);  // rest centered
+			newLayout.setPrefSize(scene.getWidth(), scene.getHeight());
+
+			scene.setRoot(newLayout); 
+	}
+
+	
 
 	private void displayCompanyCreationForm(Scene scene) {
 		HBox layout = new HBox();

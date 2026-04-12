@@ -14,5 +14,5 @@ public class FlightCompany extends Company {
         super(node.get("name").asText());
         setId(node.get("id").asText());
         setTripID(node.get("tripId").asText());
-    }
+        }
 }
