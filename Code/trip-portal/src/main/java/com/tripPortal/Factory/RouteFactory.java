@@ -65,6 +65,8 @@ public class RouteFactory extends TrainTripFactory {
     try {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("src/Database/Trip.json");
+        File companyFile = new File("src/Database/Company.json");
+
 
         JsonNode root = mapper.readTree(file);
         ArrayNode array;
@@ -86,13 +88,25 @@ public class RouteFactory extends TrainTripFactory {
         node.put("price",     price);
         node.put("duration",  duration);
         node.put("transport", train.getTransportID());
+        node.put("active", 1);
 
         ArrayNode stationsArray = mapper.createArrayNode();
         for (TrainStation st : stations) stationsArray.add(st.getCity());
         node.set("path", stationsArray);
 
+        JsonNode CompanyRoot = mapper.readTree(companyFile);
+        ArrayNode companyArray = (ArrayNode) CompanyRoot;
+
+        for (JsonNode companyNode : companyArray){
+            if (companyNode.get("id").asText().equals(company.getId())){
+                ArrayNode trips = (ArrayNode) companyNode.get("Trips");
+                trips.add(mapper.valueToTree(route));
+                break;
+            }
+        }
         array.add(node);
         mapper.writerWithDefaultPrettyPrinter().writeValue(file, array);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companyArray);
 
     } catch (IOException e) {
         System.err.println("Failed to write Route to JSON: " + e.getMessage());

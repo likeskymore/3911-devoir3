@@ -60,6 +60,11 @@ public class TrainCompanyFactory extends TrainTripFactory {
 			newCompany.put("id", company.getId());
 			newCompany.put("name", name);
 			newCompany.put("tripId", company.getTripID());
+			ArrayNode tripsArray = mapper.createArrayNode();
+			for (Trip trip : company.getTrips()){
+				tripsArray.add(mapper.valueToTree(trip));
+			}
+			newCompany.set("Trips", tripsArray);
 
 			// Append and write back
 			array.add(newCompany);

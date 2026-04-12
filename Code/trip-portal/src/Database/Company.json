@@ -1,31 +1,15 @@
 [ {
   "type" : "FlightCompany",
-  "id" : "YBOBR",
-  "name" : "dasdsq",
-  "tripId" : "JE"
-}, {
-  "type" : "TrainCompany",
-  "id" : "NFKOA",
-  "name" : "qsadq",
-  "tripId" : "CP"
+  "id" : "QPTHT",
+  "name" : "AirUsa",
+  "tripId" : "PF",
+  "Trips" : [ {
+    "id" : "PFUUXL"
+  } ]
 }, {
   "type" : "BoatCompany",
-  "id" : "GOYIA",
-  "name" : "dqaw",
-  "tripId" : "GT"
-}, {
-  "type" : "FlightCompany",
-  "id" : "EVXBJ",
-  "name" : "12345",
-  "tripId" : "DQ"
-}, {
-  "type" : "TrainCompany",
-  "id" : "BSEMB",
-  "name" : "321wqe1",
-  "tripId" : "JM"
-}, {
-  "type" : "BoatCompany",
-  "id" : "UMQUO",
-  "name" : "dwqdsadq",
-  "tripId" : "XI"
+  "id" : "BZKYX",
+  "name" : "BoatTest",
+  "tripId" : "CD",
+  "Trips" : [ ]
 } ]
