@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class SectionTrain extends Section {
 
-    // Seulement P (Première) et E (Économie) pour le train
-    public enum SectionTrainType { P, E }
+    public enum SectionTrainType {
+        P, E
+    }
 
-    // Disposition toujours Étroit (S) : 3 colonnes, aile entre 1 et 2
     private static final int COLUMNS = 3;
 
     private SectionTrainType sectionType;
@@ -29,14 +29,22 @@ public class SectionTrain extends Section {
         for (int row = 1; row <= numberOfRows; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 char colLetter = (char) ('A' + col); // A, B, C
-                seats.add(new TrainSeat(row, colLetter));
+                seats.add(new TrainSeat(sectionType, row, colLetter)); // ← pass sectionType
             }
         }
     }
 
-    public SectionTrainType getSectionType() { return sectionType; }
-    public int getNumberOfRows()             { return numberOfRows; }
-    public int getNumberOfColumns()          { return COLUMNS; }
+    public SectionTrainType getSectionType() {
+        return sectionType;
+    }
+
+    public int getNumberOfRows() {
+        return numberOfRows;
+    }
+
+    public int getNumberOfColumns() {
+        return COLUMNS;
+    }
 
     @Override
     public String toString() {

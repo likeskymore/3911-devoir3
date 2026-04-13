@@ -26,6 +26,17 @@ public class PlaneSeat extends Seat {
     public char getColumn() { return column; }
 
     @Override
+    public float calculatePrice(float basePrice) {
+        switch (sectionType) {
+            case F: return basePrice * 1.00f;
+            case A: return basePrice * 0.75f;
+            case P: return basePrice * 0.60f;
+            case E: return basePrice * 0.50f;
+            default: return basePrice;
+        }
+    }
+
+    @Override
     public String toString() {
         return getSeatID() + (occupied ? "[X]" : "[O]");
     }

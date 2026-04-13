@@ -4,7 +4,7 @@ import com.tripPortal.Etat.SeatState;
 
 public abstract class Seat {
 
-    protected String id;           // identifiant unique du siège (ex: "F12A", "Cabin-3", "2A")
+    protected String id; // identifiant unique du siège (ex: "F12A", "Cabin-3", "2A")
     protected SeatState currentState;
     protected boolean occupied;
 
@@ -15,7 +15,10 @@ public abstract class Seat {
 
     // ── Méthode abstraite ─────────────────────────────────────────
 
-    /** Retourne l'identifiant lisible du siège — chaque sous-classe définit son format */
+    /**
+     * Retourne l'identifiant lisible du siège — chaque sous-classe définit son
+     * format
+     */
     public abstract String getSeatID();
 
     // ── Méthodes communes ─────────────────────────────────────────
@@ -25,20 +28,34 @@ public abstract class Seat {
     }
 
     // public void event(String e) {
-    //     if (currentState != null) {
-    //         currentState.handle(e, this); // délègue à l'état courant
-    //     }
+    // if (currentState != null) {
+    // currentState.handle(e, this); // délègue à l'état courant
+    // }
     // }
 
     // ── Getters / Setters ─────────────────────────────────────────
 
-    public String getId()              { return id; }
-    public void setId(String id)       { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public boolean isOccupied()              { return occupied; }
-    public void setOccupied(boolean occupied){ this.occupied = occupied; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public SeatState getCurrentState()             { return currentState; }
+    public boolean isOccupied() {
+        return occupied;
+    }
+
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
+    }
+
+    public SeatState getCurrentState() {
+        return currentState;
+    }
+
+    public abstract float calculatePrice(float basePrice);
 
     @Override
     public String toString() {
