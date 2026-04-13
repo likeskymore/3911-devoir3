@@ -1,6 +1,6 @@
 package com.tripPortal.Commande;
 import com.tripPortal.Model.Company;
-public class updateCompanyMemento {
+public class editCompanyMemento {
 
 	private Company state;
 

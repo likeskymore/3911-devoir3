@@ -17,7 +17,7 @@ import com.tripPortal.Commande.deleteTransportCommand;
 import com.tripPortal.Commande.deleteTripCommand;
 import com.tripPortal.Commande.editCompanyCommand;
 import com.tripPortal.Commande.editPriceCommand;
-import com.tripPortal.Commande.updateLocationCommand;
+import com.tripPortal.Commande.editLocationCommand;
 import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Mediateur.locationController;
 import com.tripPortal.Mediateur.transportController;
@@ -1254,7 +1254,7 @@ public class AdminMenu {
             String newCity = cityField.getText();
             String newName = nameField.getText();
 
-            updateLocationCommand updateLocationCommand = new updateLocationCommand(location, newName, newCity);
+            editLocationCommand updateLocationCommand = new editLocationCommand(location, newName, newCity);
             LocationControllerForAdminMenu.setCommand(updateLocationCommand);
             LocationControllerForAdminMenu.updateLocation();
             displayLocations(scene);

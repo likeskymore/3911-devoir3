@@ -21,8 +21,8 @@
 }, {
   "type" : "TrainStation",
   "id" : "QOT",
-  "city" : "Calgary",
-  "name" : "Calgary Station"
+  "city" : "Toronto",
+  "name" : "Toronto Station"
 }, {
   "type" : "Airport",
   "id" : "AJT",
