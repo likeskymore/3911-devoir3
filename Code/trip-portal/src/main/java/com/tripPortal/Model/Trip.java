@@ -2,6 +2,7 @@ package com.tripPortal.Model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Random;
 
 import com.tripPortal.Factory.TripFactory;
@@ -61,9 +62,18 @@ public abstract class Trip {
 		return price;
 	}
 
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
 	public int getTripDuration() {
 		return tripDuration;
 	}
+
+	public abstract String getType();
+	public abstract String getDisplayCities();
+	public abstract Transport getTransport();
+
 
 
 }

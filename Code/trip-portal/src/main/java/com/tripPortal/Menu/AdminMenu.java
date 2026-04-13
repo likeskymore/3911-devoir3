@@ -17,16 +17,22 @@ import com.tripPortal.Mediateur.tripController;
 import com.tripPortal.Model.Airport;
 import com.tripPortal.Model.Boat;
 import com.tripPortal.Model.Company;
+import com.tripPortal.Model.CruiseLine;
+import com.tripPortal.Model.Flight;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Plane;
 import com.tripPortal.Model.Port;
+import com.tripPortal.Model.Route;
 import com.tripPortal.Model.SectionBoat;
 import com.tripPortal.Model.SectionPlane;
 import com.tripPortal.Model.SectionTrain;
 import com.tripPortal.Model.Train;
 import com.tripPortal.Model.TrainStation;
 import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.Trip;
+import com.tripPortal.Observateur.AdminStation;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -76,6 +82,7 @@ public class AdminMenu {
     private companyController    CompanyControllerForAdminMenu;
     private locationController   LocationControllerForAdminMenu;
     private transportController  TransportControllerForAdminMenu;
+    private AdminStation         adminStationForAdminMenu;
 
     // ═══════════════════════════════════════════════════════════════
     // SHELL BUILDER  — persistent sidebar + swappable content
@@ -690,7 +697,7 @@ public class AdminMenu {
                     showError("Please enter a valid trip price.");
                     return;
                 }
-                tripControllerForAdminMenu.goCallCreateTrip(company, startDate.getValue(), endDate.getValue(),
+                adminStationForAdminMenu.addTrip(company, startDate.getValue(), endDate.getValue(),
                     price,
                     (int) ChronoUnit.DAYS.between(startDate.getValue(), endDate.getValue()),
                     locations, transportCombo.getValue(), type);
@@ -725,23 +732,14 @@ public class AdminMenu {
         grid.setPadding(new Insets(4));
 
         try {
-            ObjectMapper displayMapper = new ObjectMapper();
-            File tripFile = new File("src/Database/Trip.json");
-            ArrayNode tripArray = (ArrayNode) displayMapper.readTree(tripFile);
+            ObservableList<Trip> tripArray = adminStationForAdminMenu.getAdminViewableTrips();
 
-            for (JsonNode trip : tripArray) {
-                String tripId   = trip.get("id").asText();
-                String company  = trip.get("company").asText();
-                String type     = trip.get("type").asText();
-                String cities;
-                if (type.equals("Flight")) {
-                    cities = trip.get("origin").asText() + " → " + trip.get("destination").asText();
-                } else {
-                    ArrayList<String> path = new ArrayList<>();
-                    for (JsonNode c : trip.get("path")) path.add(c.asText());
-                    cities = path.get(0) + " → " + path.get(path.size() - 1);
-                }
-                String dates = trip.get("startDate").asText() + " — " + trip.get("endDate").asText();
+            for (Trip trip : tripArray) {
+                String tripId  = trip.getId();
+                String company = trip.getServicedBy().getName();
+                String type    = trip.getType();
+                String cities  = trip.getDisplayCities();
+                String dates   = trip.getDepartureTime() + " — " + trip.getArrivalTime();
 
                 // Trip card
                 VBox tc = card(8);
@@ -764,21 +762,7 @@ public class AdminMenu {
                 Button updateBtn = ghostBtn("✏  Edit");
 
                 deleteBtn.setOnAction(del -> {
-                    for (int i = 0; i < tripArray.size(); i++) {
-                        if (tripArray.get(i).get("id").asText().equals(tripId)) { tripArray.remove(i); break; }
-                    }
-                    try { displayMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray); } catch (IOException ex) { ex.printStackTrace(); }
-                    try {
-                        ObjectMapper cm = new ObjectMapper();
-                        File cf = new File("src/Database/Company.json");
-                        ArrayNode ca = (ArrayNode) cm.readTree(cf);
-                        for (JsonNode cn : ca) {
-                            ArrayNode tn = (ArrayNode) cn.get("Trips");
-                            for (int i = 0; i < tn.size(); i++) { if (tn.get(i).asText().equals(tripId)) { tn.remove(i); break; } }
-                        }
-                        cm.writerWithDefaultPrettyPrinter().writeValue(cf, ca);
-                    } catch (IOException ex) { ex.printStackTrace(); }
-                    displayTrips(scene);
+                    tripControllerForAdminMenu.deleteTrip(tripId);
                 });
                 updateBtn.setOnAction(upd -> displayingTripsToUpdate(scene, trip));
 
@@ -786,7 +770,7 @@ public class AdminMenu {
                 tc.getChildren().addAll(typeLbl, cityLbl, compLbl, dateLbl, s, btnRow);
                 grid.getChildren().add(tc);
             }
-        } catch (IOException ex) { ex.printStackTrace(); }
+        } catch (Exception ex) { ex.printStackTrace(); }
 
         ScrollPane scroll = new ScrollPane(grid);
         scroll.setFitToWidth(true);
@@ -800,21 +784,23 @@ public class AdminMenu {
     // ═══════════════════════════════════════════════════════════════
     // TRIP UPDATE
     // ═══════════════════════════════════════════════════════════════
-    private void displayingTripsToUpdate(Scene scene, JsonNode trip) {
+    private void displayingTripsToUpdate(Scene scene, Trip trip) {
         VBox nav = new VBox(2);
-		nav.setPadding(new Insets(12, 0, 0, 0));
-		Button btnBack  = navBtn("←  Back");
-		Button btnTrips = navBtn("🗺  Trips");
-		btnTrips.setStyle(activeNavStyle());
-		btnBack.setOnAction(e -> displayTrips(scene));
-		nav.getChildren().addAll(btnBack, new Separator(), btnTrips);
+        nav.setPadding(new Insets(12, 0, 0, 0));
+        Button btnBack  = navBtn("←  Back");
+        Button btnTrips = navBtn("🗺  Trips");
+        btnTrips.setStyle(activeNavStyle());
+        btnBack.setOnAction(e -> displayTrips(scene));
+        nav.getChildren().addAll(btnBack, new Separator(), btnTrips);
 
         VBox main = new VBox(20);
         main.setPadding(new Insets(40));
         Label title = pageTitle("Edit Trip");
 
         VBox formCard = card(16);
-        Label currentPrice = new Label("Current price: " + trip.path("price").asText("N/A"));
+
+        // ✅ Use model
+        Label currentPrice = new Label("Current price: " + trip.getPrice());
         currentPrice.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 13px;");
 
         TextField priceField = new TextField();
@@ -824,16 +810,15 @@ public class AdminMenu {
         Button confirmBtn = actionBtn("  Save Changes  ");
         confirmBtn.setOnAction(e -> {
             try {
-                ObjectMapper m = new ObjectMapper();
-                File f = new File("src/Database/Trip.json");
-                ArrayNode arr = (ArrayNode) m.readTree(f);
-                for (int i = 0; i < arr.size(); i++) {
-                    if (arr.get(i).get("id").asText().equals(trip.get("id").asText())) {
-                        ((ObjectNode) arr.get(i)).put("price", priceField.getText()); break;
-                    }
-                }
-                m.writerWithDefaultPrettyPrinter().writeValue(f, arr);
-            } catch (IOException ex) { ex.printStackTrace(); }
+                float newPrice = Float.parseFloat(priceField.getText());
+
+                tripControllerForAdminMenu.updateTripPrice(trip.getId(), newPrice);
+
+            } catch (NumberFormatException ex) {
+                System.out.println("Invalid price");
+                return;
+            }
+
             displayTrips(scene);
         });
 
@@ -1891,4 +1876,6 @@ public class AdminMenu {
     public void setLocationControllerForAdminMenu(locationController c)  { this.LocationControllerForAdminMenu = c; }
     public void setTransportControllerForAdminMenu(transportController c){ this.TransportControllerForAdminMenu = c; }
     public void setTripControllerForAdminMenu(tripController c)          { this.tripControllerForAdminMenu = c; }
+    public void setAdminStationAdminMenu(AdminStation c)          { this.adminStationForAdminMenu = c; }
+    public tripController getTripController(){ return this.tripControllerForAdminMenu; }
 }

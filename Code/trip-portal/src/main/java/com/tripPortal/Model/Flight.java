@@ -1,8 +1,6 @@
 package com.tripPortal.Model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-
 public class Flight extends Trip {
 
 	private Airport departure;
@@ -15,5 +13,28 @@ public class Flight extends Trip {
 		this.departure = departure;
 		this.destination = destination;
 		this.plane = plane;
+	}
+
+	public Airport getDeparture() {
+		return departure;
+	}
+
+	public Airport getDestination() {
+		return destination;
+	}
+
+	@Override
+	public String getType() {
+		return "Flight";
+	}
+
+	@Override
+	public String getDisplayCities() {
+		return departure.getCity() + " → " + destination.getCity();
+	}
+
+	@Override
+	public Transport getTransport() {
+		return plane;
 	}
 }

@@ -2,16 +2,25 @@ package com.tripPortal.Etat;
 
 import com.tripPortal.Model.Seat;
 
-public class Occupied {
+public class Occupied implements SeatState {
+
+	public Occupied() {
+	}
 
 	/**
 	 * 
 	 * @param context
-	 * @param e
 	 */
-	public void event(Seat context, String e) {
-		// TODO - implement Occupied.event
-		throw new UnsupportedOperationException();
+	public void next(Seat context) {
+		return;
+	}
+
+	/**
+	 * @param context
+	 */
+	public void cancel(Seat context) {
+		context.setState(new Available());
+		return;
 	}
 
 }

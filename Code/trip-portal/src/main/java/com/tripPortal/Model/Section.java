@@ -35,21 +35,6 @@ public abstract class Section {
                 .orElse(null);
     }
 
-    /** Réserve un siège — retourne false si déjà occupé ou introuvable */
-    public boolean bookSeat(String seatId) {
-        Seat seat = findSeatById(seatId);
-        if (seat == null || seat.isOccupied()) return false;
-        seat.setOccupied(true);
-        return true;
-    }
-
-    /** Libère un siège */
-    public boolean releaseSeat(String seatId) {
-        Seat seat = findSeatById(seatId);
-        if (seat == null || !seat.isOccupied()) return false;
-        seat.setOccupied(false);
-        return true;
-    }
 
     // ── Getters / Setters ─────────────────────────────────────────
 

@@ -1,10 +1,12 @@
 package com.tripPortal.Mediateur;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.tripPortal.Factory.BoatFactory;
 import com.tripPortal.Factory.PlaneFactory;
 import com.tripPortal.Factory.TrainFactory;
+import com.tripPortal.Model.Seat;
 import com.tripPortal.Model.Section;
 import com.tripPortal.Model.SectionBoat;
 import com.tripPortal.Model.SectionPlane;
@@ -34,4 +36,7 @@ public class transportController {
         }
         return null;
     }
+
+    
+
 }

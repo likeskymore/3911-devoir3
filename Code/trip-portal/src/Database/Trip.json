@@ -10,4 +10,16 @@
   "destination" : "AJT",
   "transport" : "252415",
   "active" : 1
+}, {
+  "type" : "Flight",
+  "id" : "NVTKGX",
+  "company" : "Air Canada",
+  "startDate" : "2026-04-01",
+  "endDate" : "2026-04-29",
+  "price" : 600.0,
+  "duration" : 28,
+  "origin" : "QYD",
+  "destination" : "TKU",
+  "transport" : "884258",
+  "active" : 1
 } ]

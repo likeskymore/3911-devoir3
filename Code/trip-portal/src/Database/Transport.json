@@ -11,124 +11,124 @@
     "numberOfColumns" : 4,
     "seats" : [ {
       "seatID" : "A1A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A1B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A1C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A1D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A2A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A2B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A2C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A2D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A3A",
-      "occupied" : true
+      "currentState" : "Occupied"
     }, {
       "seatID" : "A3B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A3C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A3D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A4A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A4B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A4C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A4D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A5A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A5B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A5C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A5D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A6A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A6B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A6C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A6D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A7A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A7B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A7C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A7D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A8A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A8B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A8C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A8D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A9A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A9B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A9C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A9D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A10A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A10B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A10C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "A10D",
-      "occupied" : false
+      "currentState" : "Available"
     } ]
   }, {
     "sectionType" : "E",
@@ -137,124 +137,124 @@
     "numberOfColumns" : 4,
     "seats" : [ {
       "seatID" : "E1A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E1B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E1C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E1D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E2A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E2B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E2C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E2D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E3A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E3B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E3C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E3D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E4A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E4B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E4C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E4D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E5A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E5B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E5C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E5D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E6A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E6B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E6C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E6D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E7A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E7B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E7C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E7D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E8A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E8B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E8C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E8D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E9A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E9B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E9C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E9D",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E10A",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E10B",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E10C",
-      "occupied" : false
+      "currentState" : "Available"
     }, {
       "seatID" : "E10D",
-      "occupied" : false
+      "currentState" : "Available"
     } ]
   } ]
 } ]
