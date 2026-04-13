@@ -1,6 +1,5 @@
 package com.tripPortal.Observateur;
 
-import java.util.ArrayList;
 
 public interface Subject {
 
@@ -20,6 +19,9 @@ public interface Subject {
 	 * 
 	 * @param oList
 	 */
-	void notifyObservers(ArrayList<Observer> oList);
+	void notifyObservers(String event, Object data);
+
+	public Object getUpdate(Observer obj);
+	
 
 }

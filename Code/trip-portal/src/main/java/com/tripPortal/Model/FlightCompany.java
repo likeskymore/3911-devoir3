@@ -1,6 +1,5 @@
 package com.tripPortal.Model;
 
-import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

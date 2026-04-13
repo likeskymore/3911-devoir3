@@ -29,9 +29,12 @@ import com.tripPortal.Model.Boat;
 import com.tripPortal.Model.Company;
 import com.tripPortal.Model.CruiseLine;
 import com.tripPortal.Model.Flight;
+import com.tripPortal.Model.CruiseLine;
+import com.tripPortal.Model.Flight;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Plane;
 import com.tripPortal.Model.Port;
+import com.tripPortal.Model.Route;
 import com.tripPortal.Model.Route;
 import com.tripPortal.Model.SectionBoat;
 import com.tripPortal.Model.SectionPlane;
@@ -41,6 +44,7 @@ import com.tripPortal.Model.TrainStation;
 import com.tripPortal.Model.Transport;
 import com.tripPortal.Model.Trip;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -90,6 +94,7 @@ public class AdminMenu {
     private companyController    CompanyControllerForAdminMenu;
     private locationController   LocationControllerForAdminMenu;
     private transportController  TransportControllerForAdminMenu;
+    private AdminStation         adminStationForAdminMenu;
 
     // ═══════════════════════════════════════════════════════════════
     // SHELL BUILDER  — persistent sidebar + swappable content
@@ -704,7 +709,7 @@ public class AdminMenu {
                     showError("Please enter a valid trip price.");
                     return;
                 }
-                tripControllerForAdminMenu.goCallCreateTrip(company, startDate.getValue(), endDate.getValue(),
+                adminStationForAdminMenu.addTrip(company, startDate.getValue(), endDate.getValue(),
                     price,
                     (int) ChronoUnit.DAYS.between(startDate.getValue(), endDate.getValue()),
                     locations, transportCombo.getValue(), type);
@@ -805,7 +810,7 @@ public class AdminMenu {
                 tc.getChildren().addAll(typeLbl, cityLbl, compLbl, dateLbl, s, btnRow);
                 grid.getChildren().add(tc);
             }
-        } catch (IOException ex) { ex.printStackTrace(); }
+        } catch (Exception ex) { ex.printStackTrace(); }
 
         ScrollPane scroll = new ScrollPane(grid);
         scroll.setFitToWidth(true);
@@ -819,14 +824,14 @@ public class AdminMenu {
     // ═══════════════════════════════════════════════════════════════
     // TRIP UPDATE
     // ═══════════════════════════════════════════════════════════════
-    private void displayingTripsToUpdate(Scene scene, JsonNode trip) {
+    private void displayingTripsToUpdate(Scene scene, Trip trip) {
         VBox nav = new VBox(2);
-		nav.setPadding(new Insets(12, 0, 0, 0));
-		Button btnBack  = navBtn("←  Back");
-		Button btnTrips = navBtn("🗺  Trips");
-		btnTrips.setStyle(activeNavStyle());
-		btnBack.setOnAction(e -> displayTrips(scene));
-		nav.getChildren().addAll(btnBack, new Separator(), btnTrips);
+        nav.setPadding(new Insets(12, 0, 0, 0));
+        Button btnBack  = navBtn("←  Back");
+        Button btnTrips = navBtn("🗺  Trips");
+        btnTrips.setStyle(activeNavStyle());
+        btnBack.setOnAction(e -> displayTrips(scene));
+        nav.getChildren().addAll(btnBack, new Separator(), btnTrips);
 
         VBox main = new VBox(20);
         main.setPadding(new Insets(40));
@@ -2033,4 +2038,6 @@ public class AdminMenu {
     public void setLocationControllerForAdminMenu(locationController c)  { this.LocationControllerForAdminMenu = c; }
     public void setTransportControllerForAdminMenu(transportController c){ this.TransportControllerForAdminMenu = c; }
     public void setTripControllerForAdminMenu(tripController c)          { this.tripControllerForAdminMenu = c; }
+    public void setAdminStationAdminMenu(AdminStation c)          { this.adminStationForAdminMenu = c; }
+    public tripController getTripController(){ return this.tripControllerForAdminMenu; }
 }

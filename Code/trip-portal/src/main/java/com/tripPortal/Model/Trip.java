@@ -97,6 +97,10 @@ public abstract class Trip {
 		return price;
 	}
 
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
 	public int getTripDuration() {
 		return tripDuration;
 	}

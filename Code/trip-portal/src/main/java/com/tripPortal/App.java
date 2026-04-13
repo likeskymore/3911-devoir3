@@ -7,6 +7,8 @@ import com.tripPortal.Mediateur.transportController;
 import com.tripPortal.Mediateur.tripController;
 import com.tripPortal.Menu.AdminMenu;
 import com.tripPortal.Menu.ClientMenu;
+import com.tripPortal.Observateur.AdminStation;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -147,6 +149,7 @@ public class App extends Application {
         adminMenu.setCompanyControllerForAdminMenu(new companyController());
         adminMenu.setLocationControllerForAdminMenu(new locationController());
         adminMenu.setTransportControllerForAdminMenu(new transportController());
+        adminMenu.setAdminStationAdminMenu(new AdminStation(adminMenu.getTripController()));
         adminMenu.start(new Stage());
     }
 

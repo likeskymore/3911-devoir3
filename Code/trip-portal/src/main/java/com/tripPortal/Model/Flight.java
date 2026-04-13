@@ -1,8 +1,6 @@
 package com.tripPortal.Model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-
 public class Flight extends Trip {
 
 	private Airport departure;

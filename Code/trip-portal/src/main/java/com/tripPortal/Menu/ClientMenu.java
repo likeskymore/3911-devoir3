@@ -438,7 +438,7 @@ public class ClientMenu {
 
         Label title = pageTitle("Available Trips");
 
-        ListTripsDataStructure structure = tripControllerForClientMenu.fetchAllTripsAsStructure();
+        ListTripsDataStructure structure = tripControllerForClientMenu.fetchAllTripsAsStructure().getKey();
 
         ArrayList<javafx.util.Pair<String, JsonNode>> pairs = new ArrayList<>();
         pairs.addAll(structure.acceptWithNodes(new ConcreteFlightVisitor()));
