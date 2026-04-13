@@ -16,4 +16,8 @@ public class Flight extends Trip {
 		this.destination = destination;
 		this.plane = plane;
 	}
+
+	public Flight(String id){
+		super(id);
+	}
 }

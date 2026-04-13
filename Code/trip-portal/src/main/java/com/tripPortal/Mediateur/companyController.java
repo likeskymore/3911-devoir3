@@ -2,6 +2,7 @@ package com.tripPortal.Mediateur;
 
 //import com.sun.jdi.connect.Transport;
 import com.sun.jdi.connect.Transport;
+import com.tripPortal.Commande.Command;
 import com.tripPortal.Factory.AirportFactory;
 import com.tripPortal.Factory.BoatCompanyFactory;
 import com.tripPortal.Factory.FlightCompanyFactory;
@@ -13,6 +14,11 @@ import com.tripPortal.Model.Trip;
 import java.util.ArrayList;
 
 public class companyController {
+	Command command;
+
+	public void setCommand(Command command){
+		this.command = command;
+	}
 
 	public void goCallCreateCompany(String name, String type) {
 
@@ -29,14 +35,14 @@ public class companyController {
 	}
 
 
-	/**
-	 * 
-	 * @param name
-	 */
-	public void updateCompanyName(String name) {
-		// TODO - implement companyController.updateCompanyName
-		throw new UnsupportedOperationException();
-	}
+	// /**
+	//  * 
+	//  * @param name
+	//  */
+	// public void updateCompanyName(String name) {
+	// 	// TODO - implement companyController.updateCompanyName
+	// 	throw new UnsupportedOperationException();
+	// }
 
 	/**
 	 * 
@@ -56,14 +62,14 @@ public class companyController {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * 
-	 * @param company
-	 */
-	public void deleteCompany(Company company) {
-		// TODO - implement companyController.deleteCompany
-		throw new UnsupportedOperationException();
-	}
+	// /**
+	//  * 
+	//  * @param company
+	//  */
+	// public void deleteCompany(Company company) {
+	// 	// TODO - implement companyController.deleteCompany
+	// 	throw new UnsupportedOperationException();
+	// }
 
 	/**
 	 * 
@@ -81,6 +87,14 @@ public class companyController {
 	public void deleteCompanyTrips(Company company) {
 		// TODO - implement companyController.deleteCompanyTrips
 		throw new UnsupportedOperationException();
+	}
+
+	public void deleteCompany(){
+		command.execute();
+	}
+
+	public void updateCompanyName(){
+		command.execute();
 	}
 
 }

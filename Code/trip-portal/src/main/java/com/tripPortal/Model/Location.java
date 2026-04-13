@@ -1,7 +1,12 @@
 package com.tripPortal.Model;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 public abstract class Location {
 	private String id;
 	private String city;
@@ -69,5 +74,103 @@ public abstract class Location {
 			}
 		}
 		throw new IllegalArgumentException("Location not found: " + city);
+	}
+
+	public void update(String newName, String newCity){
+		 if (newCity == null || newCity.isBlank()) {
+			System.err.println("City cannot be empty.");
+			return;
+		}
+		if (newName == null || newName.isBlank()) {
+			System.err.println("Location name cannot be empty.");
+			return;
+		}
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			File file = new File("src/Database/Location.json");
+			ArrayNode locations = (ArrayNode) mapper.readTree(file);
+
+			for (int i = 0; i < locations.size(); i++) {
+				JsonNode node = locations.get(i);
+				if (node.path("id").asText().equals(this.getId())) {
+					((ObjectNode) node).put("city", newCity);
+					((ObjectNode) node).put("name", newName);
+					this.setCity(newCity);
+					this.setName(newName);
+					mapper.writerWithDefaultPrettyPrinter().writeValue(file, locations);
+					return;
+				}
+			}
+			System.err.println("Location not found: " + this.getId());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		return;
+	}
+
+	public void delete(){
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+
+			File locationFile = new File("src/Database/Location.json");
+			ArrayNode locations = (ArrayNode) mapper.readTree(locationFile);
+			for (int i = 0; i < locations.size(); i++) {
+				if (locations.get(i).path("id").asText().equals(this.getId())) {
+					locations.remove(i);
+					break;
+				}
+			}
+			mapper.writerWithDefaultPrettyPrinter().writeValue(locationFile, locations);
+
+			File tripFile = new File("src/Database/Trip.json");
+			ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
+			ArrayNode removedTripIds = mapper.createArrayNode();
+			for (int i = trips.size() - 1; i >= 0; i--) {
+				JsonNode trip = trips.get(i);
+				boolean referencesLocation = false;
+				if (this.getId().equals(trip.path("origin").asText()) || this.getId().equals(trip.path("destination").asText())) {
+					referencesLocation = true;
+				} else if (trip.has("path")) {
+					for (JsonNode stop : trip.get("path")) {
+						if (this.getId().equals(stop.asText())) {
+							referencesLocation = true;
+							break;
+						}
+					}
+				}
+
+				if (referencesLocation) {
+					removedTripIds.add(trip.path("id").asText());
+					trips.remove(i);
+				}
+			}
+			mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
+
+			if (removedTripIds.size() > 0) {
+				File companyFile = new File("src/Database/Company.json");
+				ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
+				for (JsonNode company : companies) {
+					if (!company.has("Trips")) {
+						continue;
+					}
+					ArrayNode companyTrips = (ArrayNode) company.get("Trips");
+					for (int i = companyTrips.size() - 1; i >= 0; i--) {
+						String tripId = companyTrips.get(i).asText();
+						for (JsonNode removedTripId : removedTripIds) {
+							if (removedTripId.asText().equals(tripId)) {
+								companyTrips.remove(i);
+								break;
+							}
+						}
+					}
+				}
+				mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
+			}
+
+			return;
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		return;
 	}
 }

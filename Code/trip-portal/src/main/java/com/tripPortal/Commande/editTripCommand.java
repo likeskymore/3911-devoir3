@@ -5,7 +5,12 @@ import com.tripPortal.Model.Trip;
 public class editTripCommand {
 
 	private Trip trip;
-	private Trip state;
+	String newName;
+
+	public editTripCommand(Trip trip, String newName){
+		this.trip = trip;
+		this.newName = newName;
+	}
 
 	public void execute() {
 		// TODO - implement editTripCommand.execute

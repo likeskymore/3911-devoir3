@@ -2,6 +2,7 @@ package com.tripPortal.Mediateur;
 
 import java.util.List;
 
+import com.tripPortal.Commande.Command;
 import com.tripPortal.Factory.BoatFactory;
 import com.tripPortal.Factory.PlaneFactory;
 import com.tripPortal.Factory.TrainFactory;
@@ -13,6 +14,10 @@ import com.tripPortal.Model.Transport;
 
 public class transportController {
 
+    Command command;
+    public void setCommand(Command command){
+        this.command = command;
+    }
     public Transport goCallCreateTransport(String name, String type, String companyName, List<? extends Section> sections) {
         if (name == null || name.isEmpty()) {
             System.err.println("Transport name cannot be empty.");
@@ -33,5 +38,9 @@ public class transportController {
             System.err.println("Unknown transport type: " + type);
         }
         return null;
+    }
+
+    public void deleteTransport(){
+        command.execute();
     }
 }

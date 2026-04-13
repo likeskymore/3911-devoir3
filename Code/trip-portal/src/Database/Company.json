@@ -1,7 +1,7 @@
 [ {
   "type" : "FlightCompany",
   "id" : "JHLZM",
-  "name" : "Air Canada",
+  "name" : "Air Canada Test",
   "tripId" : "LG",
-  "Trips" : [ "LGKDAG" ]
+  "Trips" : [ "LGNFDO" ]
 } ]
