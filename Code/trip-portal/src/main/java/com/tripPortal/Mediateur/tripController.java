@@ -194,6 +194,10 @@ public class tripController {
 		command.execute();
 	}
 
+	public void undoDeleteTrip(){
+		command.undo();
+	}
+
 	public void updatePrice(){
 		command.execute();
 	}

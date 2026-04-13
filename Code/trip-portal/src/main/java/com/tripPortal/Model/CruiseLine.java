@@ -20,4 +20,8 @@ public class CruiseLine extends Trip {
 		super(id);
 	}
 
+	public CruiseLine(){
+		super();
+	}
+
 }

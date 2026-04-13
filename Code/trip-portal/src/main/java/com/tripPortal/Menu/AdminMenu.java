@@ -735,6 +735,22 @@ public class AdminMenu {
         main.setPadding(new Insets(40));
         Label title = pageTitle("All Trips");
 
+        Button undoDeleteBtn = new Button("↩  Undo Delete");
+        undoDeleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+        + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        ObjectMapper historyMapper = new ObjectMapper();
+        File historyFile = new File("src/Database/tripDeleteHistory.json");
+        JsonNode historyRoot = null;
+        try {
+            historyRoot = historyMapper.readTree(historyFile);
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        Boolean history = historyRoot.size() > 0;
+        undoDeleteBtn.setVisible(history);
+
+
         FlowPane grid = new FlowPane(14, 14);
         grid.setPadding(new Insets(4));
 
@@ -799,7 +815,18 @@ public class AdminMenu {
                     tripControllerForAdminMenu.deleteTrip();
                     displayTrips(scene);
                 });
+                
+                undoDeleteBtn.setOnAction(undoDelete -> {
+                    
+                    deleteTripCommand deleteTripCommand = new deleteTripCommand();
+                    tripControllerForAdminMenu.setCommand(deleteTripCommand);
+                    tripControllerForAdminMenu.undoDeleteTrip();
+                    displayTrips(scene);
+                });
+
                 updateBtn.setOnAction(upd -> displayingTripsToUpdate(scene, trip));
+
+
 
                 HBox btnRow = new HBox(8, deleteBtn, updateBtn);
                 tc.getChildren().addAll(typeLbl, cityLbl, compLbl, dateLbl, s, btnRow);
@@ -812,7 +839,7 @@ public class AdminMenu {
         scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        main.getChildren().addAll(title, scroll);
+        main.getChildren().addAll(title, scroll, undoDeleteBtn);
         scene.setRoot(buildShell(nav, main));
     }
 

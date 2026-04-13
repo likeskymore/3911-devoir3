@@ -1,17 +1,5 @@
 [ {
   "type" : "Flight",
-  "id" : "LGAZUA",
-  "company" : "Air Canada Test",
-  "startDate" : "2026-04-09",
-  "endDate" : "2026-05-01",
-  "price" : 335.0,
-  "duration" : 22,
-  "origin" : "BTA",
-  "destination" : "ZBY",
-  "transport" : "715045",
-  "active" : 1
-}, {
-  "type" : "Flight",
   "id" : "LGZJKV",
   "company" : "Air Canada Test",
   "startDate" : "2026-04-02",
@@ -24,14 +12,14 @@
   "active" : 1
 }, {
   "type" : "Flight",
-  "id" : "LGIRPS",
+  "id" : "LGAUYT",
   "company" : "Air Canada Test",
-  "startDate" : "2026-04-21",
-  "endDate" : "2026-04-29",
-  "price" : 200.0,
-  "duration" : 8,
+  "startDate" : "2026-04-14",
+  "endDate" : "2026-04-16",
+  "price" : 312.0,
+  "duration" : 2,
   "origin" : "AJT",
   "destination" : "ZBY",
-  "transport" : "715045",
+  "transport" : "571308",
   "active" : 1
 } ]

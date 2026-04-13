@@ -36,6 +36,11 @@ public abstract class Trip {
 
 	public Trip(String id){
 		this.id = id;
+		// this one is for delete
+	}
+
+	public Trip(){
+		// this one is for undo delete
 	}
 
 	private String randomGenerateID(Company servicedBy) {
@@ -77,11 +82,16 @@ public abstract class Trip {
 	}
 
 	public void delete() throws IOException{
+
+		ObjectMapper historyMapper = new ObjectMapper();
+		File historyFile = new File("src/Database/tripDeleteHistory.json");
+
 		ObjectMapper displayMapper = new ObjectMapper();
 		File tripFile = new File("src/Database/Trip.json");
 		ArrayNode tripArray = (ArrayNode) displayMapper.readTree(tripFile);
 		for (int i = 0; i < tripArray.size(); i++) {
 			if (tripArray.get(i).get("id").asText().equals(this.id)) { 
+				historyMapper.writerWithDefaultPrettyPrinter().writeValue(historyFile, tripArray.get(i));
 				tripArray.remove(i); break; 
 			}
 		}
@@ -96,6 +106,9 @@ public abstract class Trip {
 			}
 			cm.writerWithDefaultPrettyPrinter().writeValue(cf, ca);
 		} catch (IOException ex) { ex.printStackTrace(); }
+
+		
+		
 	}
 
 
