@@ -198,4 +198,8 @@ public class tripController {
 		command.execute();
 	}
 
+	public void updateTrip(){
+		command.execute();
+	}
+
 }

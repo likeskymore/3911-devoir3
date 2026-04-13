@@ -2,6 +2,7 @@ package com.tripPortal.Menu;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import com.tripPortal.Commande.deleteTransportCommand;
 import com.tripPortal.Commande.deleteTripCommand;
 import com.tripPortal.Commande.editCompanyCommand;
 import com.tripPortal.Commande.editPriceCommand;
+import com.tripPortal.Commande.editTripCommand;
 import com.tripPortal.Commande.editLocationCommand;
 import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Mediateur.locationController;
@@ -739,7 +741,9 @@ public class AdminMenu {
         try {
             ObjectMapper displayMapper = new ObjectMapper();
             File tripFile = new File("src/Database/Trip.json");
+            File locationFile = new File("src/Database/Location.json");
             ArrayNode tripArray = (ArrayNode) displayMapper.readTree(tripFile);
+            JsonNode locationRoot = displayMapper.readTree(locationFile);
 
             for (JsonNode trip : tripArray) {
                 String tripId   = trip.get("id").asText();
@@ -747,10 +751,12 @@ public class AdminMenu {
                 String type     = trip.get("type").asText();
                 String cities;
                 if (type.equals("Flight")) {
-                    cities = trip.get("origin").asText() + " → " + trip.get("destination").asText();
+                    cities = resolveLocationLabel(locationRoot, trip.get("origin").asText())
+                            + " → "
+                            + resolveLocationLabel(locationRoot, trip.get("destination").asText());
                 } else {
                     ArrayList<String> path = new ArrayList<>();
-                    for (JsonNode c : trip.get("path")) path.add(c.asText());
+                    for (JsonNode c : trip.get("path")) path.add(resolveLocationLabel(locationRoot, c.asText()));
                     cities = path.get(0) + " → " + path.get(path.size() - 1);
                 }
                 String dates = trip.get("startDate").asText() + " — " + trip.get("endDate").asText();
@@ -827,36 +833,136 @@ public class AdminMenu {
         Label title = pageTitle("Edit Trip");
 
         VBox formCard = card(16);
-        Label currentPrice = new Label("Current price: " + trip.path("price").asText("N/A"));
-        currentPrice.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 13px;");
 
-        TextField priceField = new TextField();
+        String tripType = trip.path("type").asText("");
+        String currentCompany = trip.path("company").asText("");
+        String currentTransportId = trip.path("transport").asText("");
+        String companyType = getCompanyTypeForTripType(tripType);
+        String transportType = getTransportTypeForTripType(tripType);
+
+        Label currentCompanyLabel = new Label("Current company: " + currentCompany);
+        currentCompanyLabel.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 13px;");
+        Label currentTransportLabel = new Label("Current transport: " + currentTransportId);
+        currentTransportLabel.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 13px;");
+        Label currentDatesLabel = new Label("Current dates: " + trip.path("startDate").asText("N/A") + " — " + trip.path("endDate").asText("N/A"));
+        currentDatesLabel.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 13px;");
+
+        TextField priceField = new TextField(trip.path("price").asText(""));
         priceField.setPromptText("New price");
         styleInput(priceField);
 
+        ComboBox<String> companyCombo = new ComboBox<>();
+        styleInput(companyCombo);
+        styleStringComboBox(companyCombo);
+        companyCombo.setPrefWidth(280);
+        companyCombo.setMaxWidth(Double.MAX_VALUE);
+
+        DatePicker startDate = new DatePicker();
+        DatePicker endDate = new DatePicker();
+        styleInput(startDate);
+        styleInput(endDate);
+
+        ComboBox<Transport> transportCombo = new ComboBox<>();
+        styleInput(transportCombo);
+        styleTransportComboBox(transportCombo);
+        transportCombo.setPrefWidth(280);
+        transportCombo.setMaxWidth(Double.MAX_VALUE);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode companyRoot = mapper.readTree(new File("src/Database/Company.json"));
+            JsonNode transportRoot = mapper.readTree(new File("src/Database/Transport.json"));
+            Transport currentTransport = null;
+            if (transportRoot != null && currentTransportId != null && !currentTransportId.isBlank()) {
+                currentTransport = Transport.fromJson(currentTransportId, transportRoot);
+                currentTransportLabel.setText("Current transport: " + currentTransport.getName() + " (" + currentTransportId + ")");
+            }
+            if (companyType != null && companyRoot != null) {
+                updateCompanies(companyRoot, companyCombo, companyType);
+            }
+            companyCombo.valueProperty().addListener((o, ov, nv) -> {
+                if (nv == null) {
+                    transportCombo.getItems().clear();
+                    transportCombo.setValue(null);
+                    return;
+                }
+                if (transportType != null && transportRoot != null) {
+                    updateTransports(transportRoot, transportCombo, transportType, nv);
+                }
+            });
+            companyCombo.setValue(currentCompany);
+            startDate.setValue(LocalDate.parse(trip.path("startDate").asText()));
+            endDate.setValue(LocalDate.parse(trip.path("endDate").asText()));
+            if (currentTransport != null) {
+                for (Transport transport : transportCombo.getItems()) {
+                    if (currentTransportId.equals(transport.getTransportID())) {
+                        transportCombo.setValue(transport);
+                        break;
+                    }
+                }
+                if (transportCombo.getValue() == null) {
+                    transportCombo.setValue(currentTransport);
+                }
+            }
+        } catch (Exception exception) {
+            showError("Unable to load trip edit data.");
+            return;
+        }
+
         Button confirmBtn = actionBtn("  Save Changes  ");
         confirmBtn.setOnAction(e -> {
+            try {
+                if (companyCombo.getValue() == null || companyCombo.getValue().isBlank()) {
+                    showError("Please select a company.");
+                    return;
+                }
+                if (startDate.getValue() == null || endDate.getValue() == null) {
+                    showError("Please select both start and end dates.");
+                    return;
+                }
+                if (endDate.getValue().isBefore(startDate.getValue())) {
+                    showError("End date must be on or after the start date.");
+                    return;
+                }
+                if (transportCombo.getValue() == null) {
+                    showError("Please select a transport.");
+                    return;
+                }
 
-            Trip tripToModify = null;
-            if (trip.get("type").asText().equals("Flight")){
-                tripToModify = new Flight(trip.get("id").asText());
+                float newPrice;
+                try {
+                    newPrice = Float.parseFloat(priceField.getText().trim());
+                } catch (NumberFormatException numberFormatException) {
+                    showError("Please enter a valid trip price.");
+                    return;
+                }
+
+                Trip tripToModify = createTripShell(trip);
+                editTripCommand editTripCommand = new editTripCommand(
+                    tripToModify,
+                    companyCombo.getValue(),
+                    startDate.getValue(),
+                    endDate.getValue(),
+                    newPrice,
+                    transportCombo.getValue().getTransportID()
+                );
+                tripControllerForAdminMenu.setCommand(editTripCommand);
+                tripControllerForAdminMenu.updateTrip();
+                displayTrips(scene);
+            } catch (RuntimeException runtimeException) {
+                showError(runtimeException.getMessage() != null ? runtimeException.getMessage() : "Unable to update trip.");
             }
-            if (trip.get("type").asText().equals("CruiseLine")){
-                tripToModify = new CruiseLine(trip.get("id").asText());
-            }
-            if (trip.get("type").asText().equals("Route")){
-                tripToModify = new Route(trip.get("id").asText());
-            }
-            editPriceCommand editPriceCommand = new editPriceCommand(tripToModify, priceField.getText());
-            tripControllerForAdminMenu.setCommand(editPriceCommand);
-            tripControllerForAdminMenu.updatePrice();
-            
-            displayTrips(scene);
         });
 
         formCard.getChildren().addAll(
+            currentCompanyLabel,
+            currentTransportLabel,
+            currentDatesLabel,
+            formField("Company", companyCombo),
+            formField("Start Date", startDate),
+            formField("End Date", endDate),
+            formField("Transport", transportCombo),
             formField("Price ($)", priceField),
-            currentPrice,
             confirmBtn
         );
 
@@ -1866,6 +1972,50 @@ public class AdminMenu {
             case "Train" -> "TrainCompany";
             default -> null;
         };
+    }
+
+    private String getCompanyTypeForTripType(String tripType) {
+        return switch (tripType) {
+            case "Flight" -> "FlightCompany";
+            case "CruiseLine" -> "BoatCompany";
+            case "Route" -> "TrainCompany";
+            default -> null;
+        };
+    }
+
+    private String getTransportTypeForTripType(String tripType) {
+        return switch (tripType) {
+            case "Flight" -> "Plane";
+            case "CruiseLine" -> "Boat";
+            case "Route" -> "Train";
+            default -> null;
+        };
+    }
+
+    private Trip createTripShell(JsonNode trip) {
+        String tripId = trip.get("id").asText();
+        return switch (trip.get("type").asText()) {
+            case "Flight" -> new Flight(tripId);
+            case "CruiseLine" -> new CruiseLine(tripId);
+            case "Route" -> new Route(tripId);
+            default -> throw new IllegalArgumentException("Unknown trip type: " + trip.get("type").asText());
+        };
+    }
+
+    private String resolveLocationLabel(JsonNode locationRoot, String locationId) {
+        if (locationRoot != null && locationRoot.isArray()) {
+            for (JsonNode location : locationRoot) {
+                if (location.has("id") && locationId.equals(location.get("id").asText())) {
+                    if (location.has("city")) {
+                        return location.get("city").asText();
+                    }
+                    if (location.has("name")) {
+                        return location.get("name").asText();
+                    }
+                }
+            }
+        }
+        return locationId;
     }
 
     // ═══════════════════════════════════════════════════════════════
