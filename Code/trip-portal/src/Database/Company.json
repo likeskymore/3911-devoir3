@@ -16,4 +16,10 @@
   "name" : "Bui",
   "tripId" : "NX",
   "Trips" : [ ]
+}, {
+  "type" : "TrainCompany",
+  "id" : "TEYHL",
+  "name" : "STM",
+  "tripId" : "JJ",
+  "Trips" : [ "JJWFDF" ]
 } ]

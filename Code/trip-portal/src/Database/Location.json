@@ -33,4 +33,14 @@
   "id" : "ZBY",
   "city" : "Los Angeles",
   "name" : "Airport LA"
+}, {
+  "type" : "TrainStation",
+  "id" : "JXA",
+  "city" : "Montreal",
+  "name" : "Montreal Station"
+}, {
+  "type" : "Port",
+  "id" : "XJN",
+  "city" : "India",
+  "name" : "India Port"
 } ]

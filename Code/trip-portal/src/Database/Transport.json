@@ -1316,4 +1316,140 @@
       "occupied" : false
     } ]
   } ]
+}, {
+  "transportID" : "447165",
+  "type" : "Train",
+  "name" : "Blue Line",
+  "company" : "STM",
+  "available" : true,
+  "sections" : [ {
+    "sectionType" : "P",
+    "layout" : "S",
+    "numberOfRows" : 8,
+    "numberOfColumns" : 3,
+    "seats" : [ {
+      "seatID" : "P1A",
+      "occupied" : false
+    }, {
+      "seatID" : "P1B",
+      "occupied" : false
+    }, {
+      "seatID" : "P1C",
+      "occupied" : false
+    }, {
+      "seatID" : "P2A",
+      "occupied" : false
+    }, {
+      "seatID" : "P2B",
+      "occupied" : false
+    }, {
+      "seatID" : "P2C",
+      "occupied" : false
+    }, {
+      "seatID" : "P3A",
+      "occupied" : false
+    }, {
+      "seatID" : "P3B",
+      "occupied" : false
+    }, {
+      "seatID" : "P3C",
+      "occupied" : false
+    }, {
+      "seatID" : "P4A",
+      "occupied" : false
+    }, {
+      "seatID" : "P4B",
+      "occupied" : false
+    }, {
+      "seatID" : "P4C",
+      "occupied" : false
+    }, {
+      "seatID" : "P5A",
+      "occupied" : false
+    }, {
+      "seatID" : "P5B",
+      "occupied" : false
+    }, {
+      "seatID" : "P5C",
+      "occupied" : false
+    }, {
+      "seatID" : "P6A",
+      "occupied" : false
+    }, {
+      "seatID" : "P6B",
+      "occupied" : false
+    }, {
+      "seatID" : "P6C",
+      "occupied" : false
+    }, {
+      "seatID" : "P7A",
+      "occupied" : false
+    }, {
+      "seatID" : "P7B",
+      "occupied" : false
+    }, {
+      "seatID" : "P7C",
+      "occupied" : false
+    }, {
+      "seatID" : "P8A",
+      "occupied" : false
+    }, {
+      "seatID" : "P8B",
+      "occupied" : false
+    }, {
+      "seatID" : "P8C",
+      "occupied" : false
+    } ]
+  }, {
+    "sectionType" : "E",
+    "layout" : "S",
+    "numberOfRows" : 5,
+    "numberOfColumns" : 3,
+    "seats" : [ {
+      "seatID" : "E1A",
+      "occupied" : false
+    }, {
+      "seatID" : "E1B",
+      "occupied" : false
+    }, {
+      "seatID" : "E1C",
+      "occupied" : false
+    }, {
+      "seatID" : "E2A",
+      "occupied" : false
+    }, {
+      "seatID" : "E2B",
+      "occupied" : false
+    }, {
+      "seatID" : "E2C",
+      "occupied" : false
+    }, {
+      "seatID" : "E3A",
+      "occupied" : false
+    }, {
+      "seatID" : "E3B",
+      "occupied" : false
+    }, {
+      "seatID" : "E3C",
+      "occupied" : false
+    }, {
+      "seatID" : "E4A",
+      "occupied" : false
+    }, {
+      "seatID" : "E4B",
+      "occupied" : false
+    }, {
+      "seatID" : "E4C",
+      "occupied" : false
+    }, {
+      "seatID" : "E5A",
+      "occupied" : false
+    }, {
+      "seatID" : "E5B",
+      "occupied" : false
+    }, {
+      "seatID" : "E5C",
+      "occupied" : false
+    } ]
+  } ]
 } ]

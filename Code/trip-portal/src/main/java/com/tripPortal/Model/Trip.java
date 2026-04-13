@@ -39,18 +39,42 @@ public abstract class Trip {
 	}
 
 	private String randomGenerateID(Company servicedBy) {
-		String id = servicedBy.getTripID();
+		String baseId = servicedBy.getTripID();
 		Random rand = new Random();
-
-		for (int i = 0; i < 4; i++) {
-			char letter = (char) (rand.nextInt(26) + 'A');
-			id += letter;
+		String id = "";
+		boolean isUnique = false;
+		
+		while (!isUnique) {
+			id = baseId;
+			for (int i = 0; i < 4; i++) {
+				char letter = (char) (rand.nextInt(26) + 'A');
+				id += letter;
+			}
+			
+			isUnique = isTripIDUnique(id);
 		}
-
-		// a complete
 
 		return id;
 
+	}
+	
+	private boolean isTripIDUnique(String tripId) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			File file = new File("src/Database/Trip.json");
+			if (!file.exists()) {
+				return true;
+			}
+			ArrayNode trips = (ArrayNode) mapper.readTree(file);
+			for (JsonNode node : trips) {
+				if (node.has("id") && node.get("id").asText().equals(tripId)) {
+					return false;
+				}
+			}
+			return true;
+		} catch (IOException ex) {
+			return true;
+		}
 	}
 
 	public String getId() {

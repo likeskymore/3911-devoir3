@@ -35,7 +35,39 @@ public abstract class Transport {
             int number = (rand.nextInt(9));
             id += number;
         }
+
+        boolean isUnique = false;
+        
+        while (!isUnique) {
+            id = "";
+            for (int i = 0; i < 6; i++) {
+                int number = (rand.nextInt(9));
+                id += number;
+            }
+            
+            isUnique = isTransportIDUnique(id);
+        }
+
         return id;
+    }
+    
+    private boolean isTransportIDUnique(String transportId) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            File file = new File("src/Database/Transport.json");
+            if (!file.exists()) {
+                return true;
+            }
+            ArrayNode transports = (ArrayNode) mapper.readTree(file);
+            for (JsonNode node : transports) {
+                if (node.has("transportID") && node.get("transportID").asText().equals(transportId)) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (IOException ex) {
+            return true;
+        }
     }
 
     public String getName() {

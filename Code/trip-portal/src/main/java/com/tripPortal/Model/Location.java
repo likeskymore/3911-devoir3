@@ -51,15 +51,39 @@ public abstract class Location {
 	private String randomGenerateID() {
 		String id = "";
 		Random rand = new Random();
-		for (int i = 0; i < 3; i++) {
-			char letter = (char) (rand.nextInt(26) + 'A');
-			id += letter;
+		boolean isUnique = false;
+		
+		while (!isUnique) {
+			id = "";
+			for (int i = 0; i < 3; i++) {
+				char letter = (char) (rand.nextInt(26) + 'A');
+				id += letter;
+			}
+			
+			isUnique = isLocationIDUnique(id);
 		}
-
-		// complete verification ...
 
 		return id;
 
+	}
+	
+	private boolean isLocationIDUnique(String id) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			File file = new File("src/Database/Location.json");
+			if (!file.exists()) {
+				return true;
+			}
+			ArrayNode locations = (ArrayNode) mapper.readTree(file);
+			for (JsonNode node : locations) {
+				if (node.has("id") && node.get("id").asText().equals(id)) {
+					return false;
+				}
+			}
+			return true;
+		} catch (IOException ex) {
+			return true;
+		}
 	}
 
 	public static Location fromJson(String city, JsonNode root) {

@@ -32,15 +32,46 @@ public abstract class Company {
 	private String randomGenerateID(int n) {
 		String id = "";
 		Random rand = new Random();
-		for (int i = 0; i < n; i++) {
-			char letter = (char) (rand.nextInt(26) + 'A');
-			id += letter;
-		}
+		if (n == 5) {
+			boolean isUnique = false;
+			while (!isUnique) {
+				id = "";
+				for (int i = 0; i < n; i++) {
+					char letter = (char) (rand.nextInt(26) + 'A');
+					id += letter;
+				}
 
-		// complete verification ...
+				isUnique = isCompanyIdentifierUnique(id);
+			}
+		} else {
+			for (int i = 0; i < n; i++) {
+				char letter = (char) (rand.nextInt(26) + 'A');
+				id += letter;
+			}
+		}
 
 		return id;
 
+	}
+
+	private boolean isCompanyIdentifierUnique(String generatedId) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			File file = new File("src/Database/Company.json");
+			if (!file.exists()) {
+				return true;
+			}
+
+			ArrayNode companies = (ArrayNode) mapper.readTree(file);
+			for (JsonNode node : companies) {
+				if (node.has("id") && generatedId.equals(node.get("id").asText())) {
+					return false;
+				}
+			}
+			return true;
+		} catch (IOException ex) {
+			return true;
+		}
 	}
 
 	public String getId() {
