@@ -14,6 +14,18 @@ public class BoatCabin extends Seat {
     }
 
     @Override
+    public float calculatePrice(float basePrice) {
+        switch (sectionType) {
+            case D: return basePrice * 1.00f;
+            case F: return basePrice * 0.90f;
+            case S: return basePrice * 0.90f;
+            case O: return basePrice * 0.75f;
+            case I: return basePrice * 0.50f;
+            default: return basePrice;
+        }
+    }
+
+    @Override
     public String getSeatID() {
         return sectionType.name() + "-C" + cabinNumber;
     }

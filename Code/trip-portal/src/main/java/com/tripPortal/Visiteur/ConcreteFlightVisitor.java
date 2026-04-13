@@ -1,9 +1,10 @@
 package com.tripPortal.Visiteur;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ConcreteFlightVisitor implements Visitor {
 
@@ -39,31 +40,30 @@ public class ConcreteFlightVisitor implements Visitor {
 
 					if (transport.has("sections")) {
 						for (JsonNode section : transport.get("sections")) {
-							String sectionType = section.has("sectionType")
-									? section.get("sectionType").asText()
-									: "?";
-							String layout = section.has("layout")
-									? section.get("layout").asText()
-									: "?";
+							String sectionType = section.has("sectionType") ? section.get("sectionType").asText() : "?";
+							String layout      = section.has("layout")      ? section.get("layout").asText()      : "?";
 
-							// Compter sièges occupés et total
-							int total = 0;
-							int occupied = 0;
+							int total = 0, occupied = 0;
 							if (section.has("seats")) {
 								for (JsonNode seat : section.get("seats")) {
 									total++;
-									if (seat.has("occupied") && seat.get("occupied").asBoolean()) {
-										occupied++;
-									}
+									if (seat.has("occupied") && seat.get("occupied").asBoolean()) occupied++;
 								}
 							}
 
-							// Format : PS(0/12)474.00
-							// sectionType + layout + (occupés/total) + prix
+							// calculate section price based on section type
+							float sectionPrice = price;
+							switch (sectionType) {
+								case "F": sectionPrice = price * 1.00f; break;
+								case "A": sectionPrice = price * 0.75f; break;
+								case "P": sectionPrice = price * 0.60f; break;
+								case "E": sectionPrice = price * 0.50f; break;
+							}
+
 							sb.append(" | ")
-									.append(sectionType).append(layout)
-									.append(" (").append(occupied).append("/").append(total).append(") ")
-									.append(price);
+							.append(sectionType).append(layout)
+							.append(" (").append(occupied).append("/").append(total).append(") ")
+							.append(String.format("%.2f", sectionPrice));
 						}
 					}
 					break;

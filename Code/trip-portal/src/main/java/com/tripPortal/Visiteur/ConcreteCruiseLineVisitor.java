@@ -1,9 +1,10 @@
 package com.tripPortal.Visiteur;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ConcreteCruiseLineVisitor implements Visitor {
 
@@ -35,22 +36,29 @@ public class ConcreteCruiseLineVisitor implements Visitor {
 
                     if (transport.has("sections")) {
                         for (JsonNode section : transport.get("sections")) {
-                            String sectionType = section.has("sectionType") 
-                                ? section.get("sectionType").asText() : "?";
+                            String sectionType = section.has("sectionType") ? section.get("sectionType").asText() : "?";
 
                             int total = 0, occupied = 0;
                             if (section.has("cabins")) {
                                 for (JsonNode cabin : section.get("cabins")) {
                                     total++;
-                                    if (cabin.has("occupied") && cabin.get("occupied").asBoolean())
-                                        occupied++;
+                                    if (cabin.has("occupied") && cabin.get("occupied").asBoolean()) occupied++;
                                 }
                             }
-                            // Format : I(0/10)cap4
+
+                            float sectionPrice = price;
+                            switch (sectionType) {
+                                case "D": sectionPrice = price * 1.00f; break;
+                                case "F": sectionPrice = price * 0.90f; break;
+                                case "S": sectionPrice = price * 0.90f; break;
+                                case "O": sectionPrice = price * 0.75f; break;
+                                case "I": sectionPrice = price * 0.50f; break;
+                            }
+
                             sb.append(" | ")
-                              .append(sectionType)
-                              .append(" (").append(occupied).append("/").append(total).append(") ")
-                              .append(price);
+                            .append(sectionType)
+                            .append(" (").append(occupied).append("/").append(total).append(") ")
+                            .append(String.format("%.2f", sectionPrice));
                         }
                     }
                     break;

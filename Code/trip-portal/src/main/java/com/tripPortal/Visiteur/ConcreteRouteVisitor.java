@@ -1,9 +1,10 @@
 package com.tripPortal.Visiteur;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ConcreteRouteVisitor implements Visitor {
 
@@ -35,22 +36,26 @@ public class ConcreteRouteVisitor implements Visitor {
 
                     if (transport.has("sections")) {
                         for (JsonNode section : transport.get("sections")) {
-                            String sectionType = section.has("sectionType") 
-                                ? section.get("sectionType").asText() : "?";
+                            String sectionType = section.has("sectionType") ? section.get("sectionType").asText() : "?";
 
                             int total = 0, occupied = 0;
                             if (section.has("seats")) {
                                 for (JsonNode seat : section.get("seats")) {
                                     total++;
-                                    if (seat.has("occupied") && seat.get("occupied").asBoolean())
-                                        occupied++;
+                                    if (seat.has("occupied") && seat.get("occupied").asBoolean()) occupied++;
                                 }
                             }
-                            // Format : PS(0/30)15.0  — layout toujours S pour train
+
+                            float sectionPrice = price;
+                            switch (sectionType) {
+                                case "P": sectionPrice = price * 0.60f; break;
+                                case "E": sectionPrice = price * 0.50f; break;
+                            }
+
                             sb.append(" | ")
-                              .append(sectionType).append("S")
-                              .append(" (").append(occupied).append("/").append(total).append(") ")
-                              .append(price);
+                            .append(sectionType).append("S")
+                            .append(" (").append(occupied).append("/").append(total).append(") ")
+                            .append(String.format("%.2f", sectionPrice));
                         }
                     }
                     break;

@@ -265,7 +265,7 @@
   "available" : true,
   "sections" : [ ]
 }, {
-  "transportID" : "802678",
+  "transportID" : "386626",
   "type" : "Train",
   "name" : "REM",
   "company" : "CN",
@@ -273,373 +273,166 @@
   "sections" : [ {
     "sectionType" : "P",
     "layout" : "S",
-    "numberOfRows" : 8,
+    "numberOfRows" : 7,
     "numberOfColumns" : 3,
     "seats" : [ {
-      "seatID" : "T1A",
+      "seatID" : "P1A",
       "occupied" : false
     }, {
-      "seatID" : "T1B",
+      "seatID" : "P1B",
       "occupied" : false
     }, {
-      "seatID" : "T1C",
+      "seatID" : "P1C",
       "occupied" : false
     }, {
-      "seatID" : "T2A",
+      "seatID" : "P2A",
       "occupied" : false
     }, {
-      "seatID" : "T2B",
+      "seatID" : "P2B",
       "occupied" : false
     }, {
-      "seatID" : "T2C",
-      "occupied" : true
-    }, {
-      "seatID" : "T3A",
+      "seatID" : "P2C",
       "occupied" : false
     }, {
-      "seatID" : "T3B",
+      "seatID" : "P3A",
       "occupied" : false
     }, {
-      "seatID" : "T3C",
+      "seatID" : "P3B",
       "occupied" : false
     }, {
-      "seatID" : "T4A",
+      "seatID" : "P3C",
       "occupied" : false
     }, {
-      "seatID" : "T4B",
+      "seatID" : "P4A",
       "occupied" : false
     }, {
-      "seatID" : "T4C",
+      "seatID" : "P4B",
       "occupied" : false
     }, {
-      "seatID" : "T5A",
+      "seatID" : "P4C",
       "occupied" : false
     }, {
-      "seatID" : "T5B",
+      "seatID" : "P5A",
       "occupied" : false
     }, {
-      "seatID" : "T5C",
+      "seatID" : "P5B",
       "occupied" : false
     }, {
-      "seatID" : "T6A",
+      "seatID" : "P5C",
       "occupied" : false
     }, {
-      "seatID" : "T6B",
+      "seatID" : "P6A",
       "occupied" : false
     }, {
-      "seatID" : "T6C",
+      "seatID" : "P6B",
       "occupied" : false
     }, {
-      "seatID" : "T7A",
+      "seatID" : "P6C",
       "occupied" : false
     }, {
-      "seatID" : "T7B",
+      "seatID" : "P7A",
       "occupied" : false
     }, {
-      "seatID" : "T7C",
+      "seatID" : "P7B",
       "occupied" : false
     }, {
-      "seatID" : "T8A",
-      "occupied" : false
-    }, {
-      "seatID" : "T8B",
-      "occupied" : false
-    }, {
-      "seatID" : "T8C",
+      "seatID" : "P7C",
       "occupied" : false
     } ]
   }, {
     "sectionType" : "E",
     "layout" : "S",
-    "numberOfRows" : 32,
+    "numberOfRows" : 10,
     "numberOfColumns" : 3,
     "seats" : [ {
-      "seatID" : "T1A",
+      "seatID" : "E1A",
       "occupied" : false
     }, {
-      "seatID" : "T1B",
+      "seatID" : "E1B",
       "occupied" : false
     }, {
-      "seatID" : "T1C",
+      "seatID" : "E1C",
       "occupied" : false
     }, {
-      "seatID" : "T2A",
+      "seatID" : "E2A",
       "occupied" : false
     }, {
-      "seatID" : "T2B",
+      "seatID" : "E2B",
       "occupied" : false
     }, {
-      "seatID" : "T2C",
+      "seatID" : "E2C",
       "occupied" : false
     }, {
-      "seatID" : "T3A",
+      "seatID" : "E3A",
       "occupied" : false
     }, {
-      "seatID" : "T3B",
+      "seatID" : "E3B",
       "occupied" : false
     }, {
-      "seatID" : "T3C",
+      "seatID" : "E3C",
       "occupied" : false
     }, {
-      "seatID" : "T4A",
+      "seatID" : "E4A",
       "occupied" : false
     }, {
-      "seatID" : "T4B",
+      "seatID" : "E4B",
       "occupied" : false
     }, {
-      "seatID" : "T4C",
+      "seatID" : "E4C",
       "occupied" : false
     }, {
-      "seatID" : "T5A",
+      "seatID" : "E5A",
       "occupied" : false
     }, {
-      "seatID" : "T5B",
+      "seatID" : "E5B",
       "occupied" : false
     }, {
-      "seatID" : "T5C",
+      "seatID" : "E5C",
       "occupied" : false
     }, {
-      "seatID" : "T6A",
+      "seatID" : "E6A",
       "occupied" : false
     }, {
-      "seatID" : "T6B",
+      "seatID" : "E6B",
       "occupied" : false
     }, {
-      "seatID" : "T6C",
+      "seatID" : "E6C",
       "occupied" : false
     }, {
-      "seatID" : "T7A",
+      "seatID" : "E7A",
       "occupied" : false
     }, {
-      "seatID" : "T7B",
+      "seatID" : "E7B",
       "occupied" : false
     }, {
-      "seatID" : "T7C",
+      "seatID" : "E7C",
       "occupied" : false
     }, {
-      "seatID" : "T8A",
+      "seatID" : "E8A",
       "occupied" : false
     }, {
-      "seatID" : "T8B",
+      "seatID" : "E8B",
       "occupied" : false
     }, {
-      "seatID" : "T8C",
+      "seatID" : "E8C",
       "occupied" : false
     }, {
-      "seatID" : "T9A",
+      "seatID" : "E9A",
       "occupied" : false
     }, {
-      "seatID" : "T9B",
+      "seatID" : "E9B",
       "occupied" : false
     }, {
-      "seatID" : "T9C",
+      "seatID" : "E9C",
       "occupied" : false
     }, {
-      "seatID" : "T10A",
+      "seatID" : "E10A",
       "occupied" : false
     }, {
-      "seatID" : "T10B",
+      "seatID" : "E10B",
       "occupied" : false
     }, {
-      "seatID" : "T10C",
-      "occupied" : false
-    }, {
-      "seatID" : "T11A",
-      "occupied" : false
-    }, {
-      "seatID" : "T11B",
-      "occupied" : false
-    }, {
-      "seatID" : "T11C",
-      "occupied" : false
-    }, {
-      "seatID" : "T12A",
-      "occupied" : false
-    }, {
-      "seatID" : "T12B",
-      "occupied" : false
-    }, {
-      "seatID" : "T12C",
-      "occupied" : false
-    }, {
-      "seatID" : "T13A",
-      "occupied" : false
-    }, {
-      "seatID" : "T13B",
-      "occupied" : false
-    }, {
-      "seatID" : "T13C",
-      "occupied" : false
-    }, {
-      "seatID" : "T14A",
-      "occupied" : false
-    }, {
-      "seatID" : "T14B",
-      "occupied" : false
-    }, {
-      "seatID" : "T14C",
-      "occupied" : false
-    }, {
-      "seatID" : "T15A",
-      "occupied" : false
-    }, {
-      "seatID" : "T15B",
-      "occupied" : false
-    }, {
-      "seatID" : "T15C",
-      "occupied" : false
-    }, {
-      "seatID" : "T16A",
-      "occupied" : false
-    }, {
-      "seatID" : "T16B",
-      "occupied" : false
-    }, {
-      "seatID" : "T16C",
-      "occupied" : false
-    }, {
-      "seatID" : "T17A",
-      "occupied" : false
-    }, {
-      "seatID" : "T17B",
-      "occupied" : false
-    }, {
-      "seatID" : "T17C",
-      "occupied" : false
-    }, {
-      "seatID" : "T18A",
-      "occupied" : false
-    }, {
-      "seatID" : "T18B",
-      "occupied" : false
-    }, {
-      "seatID" : "T18C",
-      "occupied" : false
-    }, {
-      "seatID" : "T19A",
-      "occupied" : false
-    }, {
-      "seatID" : "T19B",
-      "occupied" : false
-    }, {
-      "seatID" : "T19C",
-      "occupied" : false
-    }, {
-      "seatID" : "T20A",
-      "occupied" : false
-    }, {
-      "seatID" : "T20B",
-      "occupied" : false
-    }, {
-      "seatID" : "T20C",
-      "occupied" : false
-    }, {
-      "seatID" : "T21A",
-      "occupied" : false
-    }, {
-      "seatID" : "T21B",
-      "occupied" : false
-    }, {
-      "seatID" : "T21C",
-      "occupied" : false
-    }, {
-      "seatID" : "T22A",
-      "occupied" : false
-    }, {
-      "seatID" : "T22B",
-      "occupied" : false
-    }, {
-      "seatID" : "T22C",
-      "occupied" : false
-    }, {
-      "seatID" : "T23A",
-      "occupied" : false
-    }, {
-      "seatID" : "T23B",
-      "occupied" : false
-    }, {
-      "seatID" : "T23C",
-      "occupied" : false
-    }, {
-      "seatID" : "T24A",
-      "occupied" : false
-    }, {
-      "seatID" : "T24B",
-      "occupied" : false
-    }, {
-      "seatID" : "T24C",
-      "occupied" : false
-    }, {
-      "seatID" : "T25A",
-      "occupied" : false
-    }, {
-      "seatID" : "T25B",
-      "occupied" : false
-    }, {
-      "seatID" : "T25C",
-      "occupied" : false
-    }, {
-      "seatID" : "T26A",
-      "occupied" : false
-    }, {
-      "seatID" : "T26B",
-      "occupied" : false
-    }, {
-      "seatID" : "T26C",
-      "occupied" : false
-    }, {
-      "seatID" : "T27A",
-      "occupied" : false
-    }, {
-      "seatID" : "T27B",
-      "occupied" : false
-    }, {
-      "seatID" : "T27C",
-      "occupied" : false
-    }, {
-      "seatID" : "T28A",
-      "occupied" : false
-    }, {
-      "seatID" : "T28B",
-      "occupied" : false
-    }, {
-      "seatID" : "T28C",
-      "occupied" : false
-    }, {
-      "seatID" : "T29A",
-      "occupied" : false
-    }, {
-      "seatID" : "T29B",
-      "occupied" : false
-    }, {
-      "seatID" : "T29C",
-      "occupied" : false
-    }, {
-      "seatID" : "T30A",
-      "occupied" : false
-    }, {
-      "seatID" : "T30B",
-      "occupied" : false
-    }, {
-      "seatID" : "T30C",
-      "occupied" : false
-    }, {
-      "seatID" : "T31A",
-      "occupied" : false
-    }, {
-      "seatID" : "T31B",
-      "occupied" : false
-    }, {
-      "seatID" : "T31C",
-      "occupied" : false
-    }, {
-      "seatID" : "T32A",
-      "occupied" : false
-    }, {
-      "seatID" : "T32B",
-      "occupied" : false
-    }, {
-      "seatID" : "T32C",
+      "seatID" : "E10C",
       "occupied" : false
     } ]
   } ]

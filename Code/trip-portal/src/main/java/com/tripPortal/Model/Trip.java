@@ -95,7 +95,6 @@ public abstract class Trip {
 			}
 			cm.writerWithDefaultPrettyPrinter().writeValue(cf, ca);
 		} catch (IOException ex) { ex.printStackTrace(); }
-		System.out.println("hello");
 	}
 
 
