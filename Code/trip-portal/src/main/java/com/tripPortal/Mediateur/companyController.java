@@ -62,14 +62,14 @@ public class companyController {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * 
-	 * @param company
-	 */
-	public void deleteCompany(Company company) {
-		// TODO - implement companyController.deleteCompany
-		throw new UnsupportedOperationException();
-	}
+	// /**
+	//  * 
+	//  * @param company
+	//  */
+	// public void deleteCompany(Company company) {
+	// 	// TODO - implement companyController.deleteCompany
+	// 	throw new UnsupportedOperationException();
+	// }
 
 	/**
 	 * 
@@ -87,6 +87,10 @@ public class companyController {
 	public void deleteCompanyTrips(Company company) {
 		// TODO - implement companyController.deleteCompanyTrips
 		throw new UnsupportedOperationException();
+	}
+
+	public void deleteCompany(){
+		command.execute();
 	}
 
 }

@@ -8,9 +8,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tripPortal.Commande.deleteCompanyCommand;
 import com.tripPortal.Commande.deleteTripCommand;
+import com.tripPortal.Commande.editPriceCommand;
 import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Mediateur.locationController;
 import com.tripPortal.Mediateur.transportController;
@@ -830,18 +833,20 @@ public class AdminMenu {
         Button confirmBtn = actionBtn("  Save Changes  ");
         confirmBtn.setOnAction(e -> {
 
+            Trip tripToModify = null;
+            if (trip.get("type").asText().equals("Flight")){
+                tripToModify = new Flight(trip.get("id").asText());
+            }
+            if (trip.get("type").asText().equals("CruiseLine")){
+                tripToModify = new CruiseLine(trip.get("id").asText());
+            }
+            if (trip.get("type").asText().equals("Route")){
+                tripToModify = new Route(trip.get("id").asText());
+            }
+            editPriceCommand editPriceCommand = new editPriceCommand(tripToModify, priceField.getText());
+            tripControllerForAdminMenu.setCommand(editPriceCommand);
+            tripControllerForAdminMenu.updatePrice();
             
-            try {
-                ObjectMapper m = new ObjectMapper();
-                File f = new File("src/Database/Trip.json");
-                ArrayNode arr = (ArrayNode) m.readTree(f);
-                for (int i = 0; i < arr.size(); i++) {
-                    if (arr.get(i).get("id").asText().equals(trip.get("id").asText())) {
-                        ((ObjectNode) arr.get(i)).put("price", priceField.getText()); break;
-                    }
-                }
-                m.writerWithDefaultPrettyPrinter().writeValue(f, arr);
-            } catch (IOException ex) { ex.printStackTrace(); }
             displayTrips(scene);
         });
 
@@ -955,32 +960,9 @@ public class AdminMenu {
                 return;
             }
 
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-
-                File companyFile = new File("src/Database/Company.json");
-                ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
-                for (int i = 0; i < companies.size(); i++) {
-                    if (companies.get(i).path("id").asText().equals(company.getId())) {
-                        companies.remove(i);
-                        break;
-                    }
-                }
-                mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
-
-                File tripFile = new File("src/Database/Trip.json");
-                ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
-                for (int i = trips.size() - 1; i >= 0; i--) {
-                    if (trips.get(i).path("company").asText().equals(company.getName())) {
-                        trips.remove(i);
-                    }
-                }
-                mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                showError("Unable to delete the company.");
-                return;
-            }
+            deleteCompanyCommand deleteCompanyCommand = new deleteCompanyCommand(company);
+            CompanyControllerForAdminMenu.setCommand(deleteCompanyCommand);
+            CompanyControllerForAdminMenu.deleteCompany();
 
             displayCompanies(scene);
         });

@@ -1,1 +1,13 @@
-[ ]
+[ {
+  "type" : "Flight",
+  "id" : "LGWKJV",
+  "company" : "Air Canada",
+  "startDate" : "2026-04-01",
+  "endDate" : "2026-04-02",
+  "price" : "321.12",
+  "duration" : 1,
+  "origin" : "BTA",
+  "destination" : "ZBY",
+  "transport" : "252415",
+  "active" : 1
+} ]

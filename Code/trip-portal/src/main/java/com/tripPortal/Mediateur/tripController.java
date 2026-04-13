@@ -194,4 +194,8 @@ public class tripController {
 		command.execute();
 	}
 
+	public void updatePrice(){
+		command.execute();
+	}
+
 }

@@ -9,6 +9,7 @@ import java.util.Random;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tripPortal.Factory.TripFactory;
 
 public abstract class Trip {
@@ -94,7 +95,20 @@ public abstract class Trip {
 			}
 			cm.writerWithDefaultPrettyPrinter().writeValue(cf, ca);
 		} catch (IOException ex) { ex.printStackTrace(); }
-}
+	}
 
 
+	public void updatePrice(String newPrice){
+		try {
+			ObjectMapper m = new ObjectMapper();
+			File f = new File("src/Database/Trip.json");
+			ArrayNode arr = (ArrayNode) m.readTree(f);
+			for (int i = 0; i < arr.size(); i++) {
+				if (arr.get(i).get("id").asText().equals(this.id)) {
+					((ObjectNode) arr.get(i)).put("price", newPrice); break;
+				}
+			}
+			m.writerWithDefaultPrettyPrinter().writeValue(f, arr);
+		} catch (IOException ex) { ex.printStackTrace(); }
+	}
 }

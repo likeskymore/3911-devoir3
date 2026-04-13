@@ -1,11 +1,15 @@
 package com.tripPortal.Model;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 public abstract class Company {
 
@@ -92,6 +96,31 @@ public abstract class Company {
 	}
 
 	public void deleteCompany(){
-		
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+
+			File companyFile = new File("src/Database/Company.json");
+			ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
+			for (int i = 0; i < companies.size(); i++) {
+				if (companies.get(i).path("id").asText().equals(this.id)) {
+					companies.remove(i);
+					break;
+				}
+			}
+			mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
+
+			File tripFile = new File("src/Database/Trip.json");
+			ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
+			for (int i = trips.size() - 1; i >= 0; i--) {
+				if (trips.get(i).path("company").asText().equals(this.name)) {
+					trips.remove(i);
+				}
+			}
+			mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			System.err.println("Unable to delete the company.");
+			return;
+		}
 	}
 }
