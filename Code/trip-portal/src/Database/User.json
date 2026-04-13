@@ -4,4 +4,10 @@
   "transportID" : "252415",
   "seatID" : "A3A",
   "confirmed" : false
+}, {
+  "reservationNumber" : "260301",
+  "tripId" : "PHKXMA",
+  "transportID" : "802678",
+  "seatID" : "T2C",
+  "confirmed" : false
 } ]

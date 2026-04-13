@@ -11,7 +11,6 @@ public class editCompanyCommand implements Command {
 	String newName;
 	String oldName;
 
-	// code fait avec l'aide de Claudeadf
 	public editCompanyCommand(Company company, String newName, String oldName){
 		this.company = company;
 		this.newName = newName;

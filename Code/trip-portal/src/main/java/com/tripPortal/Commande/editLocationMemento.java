@@ -2,7 +2,7 @@ package com.tripPortal.Commande;
 
 import com.tripPortal.Model.Location;
 
-public class updateLocationMemento {
+public class editLocationMemento {
 
 	private Location state;
 
