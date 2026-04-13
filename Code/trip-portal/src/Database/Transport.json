@@ -258,13 +258,6 @@
     } ]
   } ]
 }, {
-  "transportID" : "344700",
-  "type" : "Boat",
-  "name" : "Cruise",
-  "company" : "hello",
-  "available" : true,
-  "sections" : [ ]
-}, {
   "transportID" : "571308",
   "type" : "Plane",
   "name" : "Boeing",

@@ -16,6 +16,10 @@ public class Boat extends Transport {
         this.sections = new ArrayList<>();
     }
 
+    public Boat(String id, String placeholder){
+        super(id, placeholder);
+    }
+
     /**
      * Un paquebot peut avoir les 5 sections — on vérifie les doublons via sectionName.
      * Le nombre de cabines varie par paquebot, donc passé en paramètre.

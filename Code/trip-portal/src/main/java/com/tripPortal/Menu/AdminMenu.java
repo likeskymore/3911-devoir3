@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tripPortal.Commande.deleteCompanyCommand;
+import com.tripPortal.Commande.deleteLocationCommand;
+import com.tripPortal.Commande.deleteTransportCommand;
 import com.tripPortal.Commande.deleteTripCommand;
 import com.tripPortal.Commande.editCompanyCommand;
 import com.tripPortal.Commande.editPriceCommand;
@@ -1278,12 +1280,10 @@ public class AdminMenu {
             if (result != ButtonType.YES) {
                 return;
             }
-
-            if (LocationControllerForAdminMenu == null || !LocationControllerForAdminMenu.deleteLocation(location)) {
-                showError("Unable to delete the location.");
-                return;
-            }
-
+            
+            deleteLocationCommand deleteLocationCommand = new deleteLocationCommand(location);
+            LocationControllerForAdminMenu.setCommand(deleteLocationCommand);
+            LocationControllerForAdminMenu.deleteLocation();
             displayLocations(scene);
         });
     }
@@ -1461,56 +1461,85 @@ public class AdminMenu {
             if (result != ButtonType.YES) {
                 return;
             }
-
+            ObjectMapper transportMapper = new ObjectMapper();
+            File File = new File("src/Database/Transport.json");
+            ArrayNode transportsList = null;
             try {
-                ObjectMapper mapper = new ObjectMapper();
-
-                File transportFile = new File("src/Database/Transport.json");
-                ArrayNode transports = (ArrayNode) mapper.readTree(transportFile);
-                for (int i = 0; i < transports.size(); i++) {
-                    if (transportId.equals(transports.get(i).path("transportID").asText())) {
-                        transports.remove(i);
-                        break;
-                    }
-                }
-                mapper.writerWithDefaultPrettyPrinter().writeValue(transportFile, transports);
-
-                File tripFile = new File("src/Database/Trip.json");
-                ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
-                ArrayNode removedTripIds = mapper.createArrayNode();
-                for (int i = trips.size() - 1; i >= 0; i--) {
-                    if (transportId.equals(trips.get(i).path("transport").asText())) {
-                        removedTripIds.add(trips.get(i).path("id").asText());
-                        trips.remove(i);
-                    }
-                }
-                mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
-
-                if (removedTripIds.size() > 0) {
-                    File companyFile = new File("src/Database/Company.json");
-                    ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
-                    for (JsonNode company : companies) {
-                        if (!company.has("Trips")) {
-                            continue;
-                        }
-                        ArrayNode companyTrips = (ArrayNode) company.get("Trips");
-                        for (int i = companyTrips.size() - 1; i >= 0; i--) {
-                            String tripId = companyTrips.get(i).asText();
-                            for (JsonNode removedId : removedTripIds) {
-                                if (removedId.asText().equals(tripId)) {
-                                    companyTrips.remove(i);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                showError("Unable to delete transport.");
-                return;
+                transportsList = (ArrayNode) transportMapper.readTree(File);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
+            Transport transportToRemove = null;
+
+            for (JsonNode transport : transportsList){
+                if (transport.get("transportID").asText().equals(transportId)){
+                    if (transport.get("type").asText().equals("Plane")){
+                        transportToRemove = new Plane(transportId, "placeholder");
+                    }
+                    else if (transport.get("type").asText().equals("Boat")){
+                        transportToRemove = new Boat(transportId, "placeholder");
+                    }
+                    else{
+                        transportToRemove = new Train(transportId, "placeholder");
+                    }
+                }
+            }
+
+
+           
+            deleteTransportCommand deleteTransportCommand = new deleteTransportCommand(transportToRemove);
+            TransportControllerForAdminMenu.setCommand(deleteTransportCommand);
+            TransportControllerForAdminMenu.deleteTransport();
+            // try {
+            //     ObjectMapper mapper = new ObjectMapper();
+
+            //     File transportFile = new File("src/Database/Transport.json");
+            //     ArrayNode transports = (ArrayNode) mapper.readTree(transportFile);
+            //     for (int i = 0; i < transports.size(); i++) {
+            //         if (transportId.equals(transports.get(i).path("transportID").asText())) {
+            //             transports.remove(i);
+            //             break;
+            //         }
+            //     }
+            //     mapper.writerWithDefaultPrettyPrinter().writeValue(transportFile, transports);
+
+            //     File tripFile = new File("src/Database/Trip.json");
+            //     ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
+            //     ArrayNode removedTripIds = mapper.createArrayNode();
+            //     for (int i = trips.size() - 1; i >= 0; i--) {
+            //         if (transportId.equals(trips.get(i).path("transport").asText())) {
+            //             removedTripIds.add(trips.get(i).path("id").asText());
+            //             trips.remove(i);
+            //         }
+            //     }
+            //     mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
+
+            //     if (removedTripIds.size() > 0) {
+            //         File companyFile = new File("src/Database/Company.json");
+            //         ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
+            //         for (JsonNode company : companies) {
+            //             if (!company.has("Trips")) {
+            //                 continue;
+            //             }
+            //             ArrayNode companyTrips = (ArrayNode) company.get("Trips");
+            //             for (int i = companyTrips.size() - 1; i >= 0; i--) {
+            //                 String tripId = companyTrips.get(i).asText();
+            //                 for (JsonNode removedId : removedTripIds) {
+            //                     if (removedId.asText().equals(tripId)) {
+            //                         companyTrips.remove(i);
+            //                         break;
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //         mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
+            //     }
+            // } catch (IOException ex) {
+            //     ex.printStackTrace();
+            //     showError("Unable to delete transport.");
+            //     return;
+            // }
 
             displayTransports(scene);
         });
