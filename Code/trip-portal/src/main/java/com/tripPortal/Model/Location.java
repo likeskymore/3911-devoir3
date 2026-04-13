@@ -1,7 +1,12 @@
 package com.tripPortal.Model;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 public abstract class Location {
 	private String id;
 	private String city;
@@ -76,6 +81,34 @@ public abstract class Location {
 	}
 
 	public void update(String newName, String newCity){
+		 if (newCity == null || newCity.isBlank()) {
+			System.err.println("City cannot be empty.");
+			return;
+		}
+		if (newName == null || newName.isBlank()) {
+			System.err.println("Location name cannot be empty.");
+			return;
+		}
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			File file = new File("src/Database/Location.json");
+			ArrayNode locations = (ArrayNode) mapper.readTree(file);
 
+			for (int i = 0; i < locations.size(); i++) {
+				JsonNode node = locations.get(i);
+				if (node.path("id").asText().equals(this.getId())) {
+					((ObjectNode) node).put("city", newCity);
+					((ObjectNode) node).put("name", newName);
+					this.setCity(newCity);
+					this.setName(newName);
+					mapper.writerWithDefaultPrettyPrinter().writeValue(file, locations);
+					return;
+				}
+			}
+			System.err.println("Location not found: " + this.getId());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		return;
 	}
 }

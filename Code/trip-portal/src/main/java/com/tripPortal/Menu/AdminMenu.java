@@ -13,7 +13,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tripPortal.Commande.deleteCompanyCommand;
 import com.tripPortal.Commande.deleteTripCommand;
+import com.tripPortal.Commande.editCompanyCommand;
 import com.tripPortal.Commande.editPriceCommand;
+import com.tripPortal.Commande.updateLocationCommand;
 import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Mediateur.locationController;
 import com.tripPortal.Mediateur.transportController;
@@ -996,26 +998,10 @@ public class AdminMenu {
             String newName = nameField.getText();
             if (newName.isBlank()) { showError("Name cannot be empty."); return; }
             String oldName = company.getName();
-            try {
-                ObjectMapper m = new ObjectMapper();
-                File f = new File("src/Database/Company.json");
-                ArrayNode arr = (ArrayNode) m.readTree(f);
-                for (int i = 0; i < arr.size(); i++) {
-                    if (arr.get(i).get("id").asText().equals(company.getId())) {
-                        ((ObjectNode) arr.get(i)).put("name", newName);
-                        company.setName(newName); break;
-                    }
-                }
-                m.writerWithDefaultPrettyPrinter().writeValue(f, arr);
-                // Update trips
-                File tf = new File("src/Database/Trip.json");
-                ArrayNode ta = (ArrayNode) m.readTree(tf);
-                for (int i = 0; i < ta.size(); i++) {
-                    if (ta.get(i).get("company").asText().equals(oldName))
-                        ((ObjectNode) ta.get(i)).put("company", newName);
-                }
-                m.writerWithDefaultPrettyPrinter().writeValue(tf, ta);
-            } catch (IOException ex) { ex.printStackTrace(); }
+
+            editCompanyCommand editCompanyCommand = new editCompanyCommand(company, newName, oldName);
+            CompanyControllerForAdminMenu.setCommand(editCompanyCommand);
+            CompanyControllerForAdminMenu.updateCompanyName();
             displayCompanyUpdate(scene, company);
         });
         renameCard.getChildren().addAll(renameHdr, formField("New Name", nameField), confirmBtn);
@@ -1033,6 +1019,7 @@ public class AdminMenu {
                 for (JsonNode tripNode : node.get("Trips")) {
                     String tripId = tripNode.asText();
                     HBox row = new HBox(10);
+                    String type = node.get("type").asText();
                     row.setAlignment(Pos.CENTER_LEFT);
                     row.setPadding(new Insets(6, 10, 6, 10));
                     row.setStyle("-fx-background-color: " + C_BG_DARK + "; -fx-background-radius: 5;");
@@ -1043,27 +1030,21 @@ public class AdminMenu {
 
                     Button delBtn = dangerBtn("🗑");
                     delBtn.setOnAction(ev -> {
-                        try {
-                            ObjectMapper dm = new ObjectMapper();
-                            File df = new File("src/Database/Company.json");
-                            JsonNode dr = dm.readTree(df);
-                            for (JsonNode c : dr) {
-                                if (c.get("id").asText().equals(company.getId())) {
-                                    ArrayNode ct = (ArrayNode) c.get("Trips");
-                                    for (int i = 0; i < ct.size(); i++) {
-                                        if (ct.get(i).asText().equals(tripId)) { ct.remove(i); break; }
-                                    }
-                                    break;
-                                }
-                            }
-                            dm.writerWithDefaultPrettyPrinter().writeValue(df, dr);
-                            File tf = new File("src/Database/Trip.json");
-                            ArrayNode ta = (ArrayNode) dm.readTree(tf);
-                            for (int i = 0; i < ta.size(); i++) {
-                                if (ta.get(i).get("id").asText().equals(tripId)) { ta.remove(i); break; }
-                            }
-                            dm.writerWithDefaultPrettyPrinter().writeValue(tf, ta);
-                        } catch (IOException ex) { ex.printStackTrace(); }
+
+                        Trip tripToRemove = null;
+                        if (type.equals("FlightCompany")){
+                            tripToRemove = new Flight(tripId);
+                        }
+                        if (type.equals("BoatCompany")){
+                            tripToRemove = new CruiseLine(tripId);
+                        }
+                        if (type.equals("TrainCompany")){
+                            tripToRemove = new Route(tripId);
+                        }
+
+                        deleteTripCommand deleteTripCommand = new deleteTripCommand(tripToRemove);
+                        tripControllerForAdminMenu.setCommand(deleteTripCommand);
+                        tripControllerForAdminMenu.deleteTrip();
                         displayCompanyUpdate(scene, company);
                     });
                     row.getChildren().addAll(idLbl, sp, delBtn);
@@ -1270,18 +1251,10 @@ public class AdminMenu {
         saveBtn.setOnAction(e -> {
             String newCity = cityField.getText();
             String newName = nameField.getText();
-            if (newCity == null || newCity.isBlank()) {
-                showError("City cannot be empty.");
-                return;
-            }
-            if (newName == null || newName.isBlank()) {
-                showError("Location name cannot be empty.");
-                return;
-            }
-            if (LocationControllerForAdminMenu == null || !LocationControllerForAdminMenu.editLocation(location, newCity.trim(), newName.trim())) {
-                showError("Unable to update the location.");
-                return;
-            }
+
+            updateLocationCommand updateLocationCommand = new updateLocationCommand(location, newName, newCity);
+            LocationControllerForAdminMenu.setCommand(updateLocationCommand);
+            LocationControllerForAdminMenu.updateLocation();
             displayLocations(scene);
         });
 

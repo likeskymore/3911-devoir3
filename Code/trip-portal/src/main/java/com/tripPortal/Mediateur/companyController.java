@@ -35,14 +35,14 @@ public class companyController {
 	}
 
 
-	/**
-	 * 
-	 * @param name
-	 */
-	public void updateCompanyName(String name) {
-		// TODO - implement companyController.updateCompanyName
-		throw new UnsupportedOperationException();
-	}
+	// /**
+	//  * 
+	//  * @param name
+	//  */
+	// public void updateCompanyName(String name) {
+	// 	// TODO - implement companyController.updateCompanyName
+	// 	throw new UnsupportedOperationException();
+	// }
 
 	/**
 	 * 
@@ -90,6 +90,10 @@ public class companyController {
 	}
 
 	public void deleteCompany(){
+		command.execute();
+	}
+
+	public void updateCompanyName(){
 		command.execute();
 	}
 

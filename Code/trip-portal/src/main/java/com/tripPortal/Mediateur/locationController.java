@@ -44,33 +44,33 @@ public class locationController {
 	 * @param location
 	 * @param city
 	 */
-	public boolean editCity(Location location, String city) {
-		return editLocation(location, city, location.getName());
-	}
+	// public boolean editCity(Location location, String city) {
+	// 	return editLocation(location, city, location.getName());
+	// }
 
-	public boolean editLocation(Location location, String city, String name) {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			File file = new File("src/Database/Location.json");
-			ArrayNode locations = (ArrayNode) mapper.readTree(file);
+	// public boolean editLocation(Location location, String city, String name) {
+	// 	try {
+	// 		ObjectMapper mapper = new ObjectMapper();
+	// 		File file = new File("src/Database/Location.json");
+	// 		ArrayNode locations = (ArrayNode) mapper.readTree(file);
 
-			for (int i = 0; i < locations.size(); i++) {
-				JsonNode node = locations.get(i);
-				if (node.path("id").asText().equals(location.getId())) {
-					((ObjectNode) node).put("city", city);
-					((ObjectNode) node).put("name", name);
-					location.setCity(city);
-					location.setName(name);
-					mapper.writerWithDefaultPrettyPrinter().writeValue(file, locations);
-					return true;
-				}
-			}
-			System.err.println("Location not found: " + location.getId());
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		return false;
-	}
+	// 		for (int i = 0; i < locations.size(); i++) {
+	// 			JsonNode node = locations.get(i);
+	// 			if (node.path("id").asText().equals(location.getId())) {
+	// 				((ObjectNode) node).put("city", city);
+	// 				((ObjectNode) node).put("name", name);
+	// 				location.setCity(city);
+	// 				location.setName(name);
+	// 				mapper.writerWithDefaultPrettyPrinter().writeValue(file, locations);
+	// 				return true;
+	// 			}
+	// 		}
+	// 		System.err.println("Location not found: " + location.getId());
+	// 	} catch (IOException ex) {
+	// 		ex.printStackTrace();
+	// 	}
+	// 	return false;
+	// }
 
 	/**
 	 * 
@@ -140,6 +140,10 @@ public class locationController {
 			ex.printStackTrace();
 		}
 		return false;
+	}
+
+	public void updateLocation(){
+		command.execute();
 	}
 
 }

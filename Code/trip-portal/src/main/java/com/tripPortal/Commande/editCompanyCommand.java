@@ -8,18 +8,18 @@ import com.tripPortal.Model.Company;
 public class editCompanyCommand implements Command {
 
 	Company company;
+	String newName;
+	String oldName;
 
 	// code fait avec l'aide de Claudeadf
-	public editCompanyCommand(Company company){
+	public editCompanyCommand(Company company, String newName, String oldName){
 		this.company = company;
+		this.newName = newName;
+		this.oldName = oldName;
 	}
 
 	public void execute() {
-		// TODO - implement editCompanyCommand.execute
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("New name for Company: ");
-		String input = scanner.nextLine();
-		company.setName(input);
+		company.updateName(newName, oldName);
 	}
 
 	public void undo() {

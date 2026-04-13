@@ -1,8 +1,8 @@
 [ {
   "type" : "Port",
   "id" : "EOJ",
-  "city" : "Montreal",
-  "name" : "Vieux Port"
+  "city" : "Laval",
+  "name" : "Lachine"
 }, {
   "type" : "Port",
   "id" : "EXN",

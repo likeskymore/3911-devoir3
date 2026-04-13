@@ -1,6 +1,6 @@
 package com.tripPortal.Commande;
 
-public class locationHistory {
+public class deleteLocationHistory {
 
 	/**
 	 * 
