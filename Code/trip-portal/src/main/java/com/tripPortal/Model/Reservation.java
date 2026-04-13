@@ -12,7 +12,8 @@ public class Reservation {
 	private String tripId;
 	private boolean isPaid;
 
-	public Reservation(String reservationNumber, String transportID, String reservedSeat, String tripId, boolean isPaid) {
+	public Reservation(String reservationNumber, String transportID, String reservedSeat, String tripId,
+			boolean isPaid) {
 		if (reservationNumber == null || reservationNumber.isEmpty()) {
 			this.reservationNumber = generateReservationNumber();
 		} else {
@@ -26,14 +27,14 @@ public class Reservation {
 	}
 
 	public String generateReservationNumber() {
-        String id = "";
-        Random rand = new Random();
-        for (int i = 0; i < 6; i++) {
-            int number = (rand.nextInt(9));
-            id += number;
-        }
-        return id;
-    }
+		String id = "";
+		Random rand = new Random();
+		for (int i = 0; i < 6; i++) {
+			int number = (rand.nextInt(9));
+			id += number;
+		}
+		return id;
+	}
 
 	public String getReservationNumber() {
 		return reservationNumber;
@@ -61,6 +62,6 @@ public class Reservation {
 
 	public void setPaid(boolean isPaid) {
 		this.isPaid = isPaid;
-	}	
+	}
 
 }

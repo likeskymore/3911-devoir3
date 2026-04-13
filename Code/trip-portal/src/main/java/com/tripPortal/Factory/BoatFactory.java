@@ -52,13 +52,13 @@ public class BoatFactory extends PlaneTripFactory {
 	}
     public Transport createTransport(String name, String companyName, List<SectionBoat> sections) {
 
-        // ── 1. Créer l'objet Java ──────────────────────────────────────
+        // Créer l'objet Java
         Boat boat = new Boat(name);
         for (SectionBoat section : sections) {
             boat.addSection(section);
         }
 
-        // ── 2. Sauvegarder en JSON ─────────────────────────────────────
+        // Sauvegarder en JSON 
         try {
             ObjectMapper mapper = new ObjectMapper();
             File file = new File("src/Database/Transport.json");

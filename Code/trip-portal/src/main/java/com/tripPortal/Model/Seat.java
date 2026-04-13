@@ -15,10 +15,8 @@ public abstract class Seat {
 
     // ── Méthode abstraite ─────────────────────────────────────────
 
-    /**
-     * Retourne l'identifiant lisible du siège — chaque sous-classe définit son
-     * format
-     */
+    // Retourne l'identifiant lisible du siège — chaque sous-classe définit son
+    // format
     public abstract String getSeatID();
 
     // ── Méthodes communes ─────────────────────────────────────────
@@ -26,14 +24,6 @@ public abstract class Seat {
     public void setState(SeatState s) {
         this.currentState = s;
     }
-
-    // public void event(String e) {
-    // if (currentState != null) {
-    // currentState.handle(e, this); // délègue à l'état courant
-    // }
-    // }
-
-    // ── Getters / Setters ─────────────────────────────────────────
 
     public String getId() {
         return id;

@@ -42,6 +42,7 @@ public abstract class Company {
 		return id;
 
 	}
+
 	public String getId() {
 		return id;
 	}
@@ -53,6 +54,7 @@ public abstract class Company {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -68,7 +70,7 @@ public abstract class Company {
 	public ArrayList<Transport> getTransports() {
 		return transports;
 	}
-	
+
 	public void setTransports(ArrayList<Transport> transports) {
 		this.transports = transports;
 	}
@@ -82,13 +84,13 @@ public abstract class Company {
 	}
 
 	public static Company fromJson(String name, JsonNode root) {
-		for (JsonNode node : root) { // root is a flat array, just iterate directly
+		for (JsonNode node : root) {
 			if (node.get("name").asText().equals(name)) {
 				String type = node.get("type").asText();
 				return switch (type) {
 					case "FlightCompany" -> new FlightCompany(node);
-					case "BoatCompany"   -> new BoatCompany(node);
-					case "TrainCompany"  -> new TrainCompany(node);
+					case "BoatCompany" -> new BoatCompany(node);
+					case "TrainCompany" -> new TrainCompany(node);
 					default -> throw new IllegalArgumentException("Unknown company type: " + type);
 				};
 			}
@@ -96,7 +98,7 @@ public abstract class Company {
 		throw new IllegalArgumentException("Company not found: " + name);
 	}
 
-	public void deleteCompany(){
+	public void deleteCompany() {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 
@@ -125,7 +127,7 @@ public abstract class Company {
 		}
 	}
 
-	public void updateName(String newName, String oldName){
+	public void updateName(String newName, String oldName) {
 		try {
 			ObjectMapper m = new ObjectMapper();
 			File f = new File("src/Database/Company.json");
@@ -133,7 +135,8 @@ public abstract class Company {
 			for (int i = 0; i < arr.size(); i++) {
 				if (arr.get(i).get("id").asText().equals(this.getId())) {
 					((ObjectNode) arr.get(i)).put("name", newName);
-					this.setName(newName); break;
+					this.setName(newName);
+					break;
 				}
 			}
 			m.writerWithDefaultPrettyPrinter().writeValue(f, arr);
@@ -145,6 +148,8 @@ public abstract class Company {
 					((ObjectNode) ta.get(i)).put("company", newName);
 			}
 			m.writerWithDefaultPrettyPrinter().writeValue(tf, ta);
-		} catch (IOException ex) { ex.printStackTrace(); }
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 }

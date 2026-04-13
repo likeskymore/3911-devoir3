@@ -34,7 +34,7 @@ public abstract class Trip {
 		this.active = true;
 	}
 
-	public Trip(String id){
+	public Trip(String id) {
 		this.id = id;
 	}
 
@@ -47,11 +47,12 @@ public abstract class Trip {
 			id += letter;
 		}
 
-		// complete verification ...
+		// a complete
 
 		return id;
 
 	}
+
 	public String getId() {
 		return id;
 	}
@@ -76,41 +77,55 @@ public abstract class Trip {
 		return tripDuration;
 	}
 
-	public void delete() throws IOException{
+	public void delete() throws IOException {
 		ObjectMapper displayMapper = new ObjectMapper();
 		File tripFile = new File("src/Database/Trip.json");
 		ArrayNode tripArray = (ArrayNode) displayMapper.readTree(tripFile);
 		for (int i = 0; i < tripArray.size(); i++) {
-			if (tripArray.get(i).get("id").asText().equals(this.id)) { 
-				tripArray.remove(i); break; 
+			if (tripArray.get(i).get("id").asText().equals(this.id)) {
+				tripArray.remove(i);
+				break;
 			}
 		}
-		try { displayMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray); } catch (IOException ex) { ex.printStackTrace(); }
+		try {
+			displayMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		try {
 			ObjectMapper cm = new ObjectMapper();
 			File cf = new File("src/Database/Company.json");
 			ArrayNode ca = (ArrayNode) cm.readTree(cf);
 			for (JsonNode cn : ca) {
 				ArrayNode tn = (ArrayNode) cn.get("Trips");
-				for (int i = 0; i < tn.size(); i++) { if (tn.get(i).asText().equals(this.id)) { tn.remove(i); break; } }
+				for (int i = 0; i < tn.size(); i++) {
+					if (tn.get(i).asText().equals(this.id)) {
+						tn.remove(i);
+						break;
+					}
+				}
 			}
 			cm.writerWithDefaultPrettyPrinter().writeValue(cf, ca);
-		} catch (IOException ex) { ex.printStackTrace(); }
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
-
-	public void updatePrice(String newPrice){
+	public void updatePrice(String newPrice) {
 		try {
 			ObjectMapper m = new ObjectMapper();
 			File f = new File("src/Database/Trip.json");
 			ArrayNode arr = (ArrayNode) m.readTree(f);
 			for (int i = 0; i < arr.size(); i++) {
 				if (arr.get(i).get("id").asText().equals(this.id)) {
-					((ObjectNode) arr.get(i)).put("price", newPrice); break;
+					((ObjectNode) arr.get(i)).put("price", newPrice);
+					break;
 				}
 			}
 			m.writerWithDefaultPrettyPrinter().writeValue(f, arr);
-		} catch (IOException ex) { ex.printStackTrace(); }
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public void updateTrip(String newCompany, LocalDate newDepartureTime, LocalDate newArrivalTime,
@@ -160,7 +175,8 @@ public abstract class Trip {
 				throw new IllegalArgumentException("Transport not found: " + newTransportId);
 			}
 			String expectedTransportType = expectedTransportType(tripType);
-			if (expectedTransportType != null && !expectedTransportType.equals(newTransportNode.path("type").asText(""))) {
+			if (expectedTransportType != null
+					&& !expectedTransportType.equals(newTransportNode.path("type").asText(""))) {
 				throw new IllegalArgumentException("Transport type does not match this trip type.");
 			}
 			if (!newCompany.equals(newTransportNode.path("company").asText(""))) {
@@ -189,10 +205,12 @@ public abstract class Trip {
 					}
 					ObjectNode seatNode = findSeatNode(newTransportNode, seatsKey, seatId);
 					if (seatNode == null) {
-						throw new IllegalArgumentException("Seat " + seatId + " is not available on the selected transport.");
+						throw new IllegalArgumentException(
+								"Seat " + seatId + " is not available on the selected transport.");
 					}
 					if (seatNode.path("occupied").asBoolean(false)) {
-						throw new IllegalArgumentException("Seat " + seatId + " is already occupied on the selected transport.");
+						throw new IllegalArgumentException(
+								"Seat " + seatId + " is already occupied on the selected transport.");
 					}
 				}
 			}
@@ -337,8 +355,8 @@ public abstract class Trip {
 			}
 			if (newCompany.equals(companyName)) {
 				ArrayNode trips = companyNode.has("Trips") && companyNode.get("Trips").isArray()
-					? (ArrayNode) companyNode.get("Trips")
-					: new ObjectMapper().createArrayNode();
+						? (ArrayNode) companyNode.get("Trips")
+						: new ObjectMapper().createArrayNode();
 				if (!companyNode.has("Trips")) {
 					((ObjectNode) companyNode).set("Trips", trips);
 				}

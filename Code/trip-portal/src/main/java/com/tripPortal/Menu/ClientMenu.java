@@ -312,10 +312,8 @@ public class ClientMenu {
 			// load trip and transport data once for all reservations
 			ObjectMapper mapper = new ObjectMapper();
 			ArrayNode trips      = mapper.createArrayNode();
-			ArrayNode transports = mapper.createArrayNode();
 			try {
 				trips      = (ArrayNode) mapper.readTree(new File("src/Database/Trip.json"));
-				transports = (ArrayNode) mapper.readTree(new File("src/Database/Transport.json"));
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -377,25 +375,9 @@ public class ClientMenu {
 						else if (section.equals("I")) computed = base * 0.50f;
 
 					} else if (ttype.equals("Route")) {
-						// find the seat's section by scanning the transport
-						String tid = trip.get("transport").asText();
-						boolean found = false;
-						for (JsonNode transport : transports) {
-							if (!transport.get("transportID").asText().equals(tid)) continue;
-							for (JsonNode section : transport.get("sections")) {
-								String stype = section.get("sectionType").asText();
-								if (!section.has("seats")) continue;
-								for (JsonNode seat : section.get("seats")) {
-									if (!seat.get("seatID").asText().equals(seatId)) continue;
-									if (stype.equals("P"))      computed = base * 0.60f;
-									else if (stype.equals("E")) computed = base * 0.50f;
-									found = true;
-									break;
-								}
-								if (found) break;
-							}
-							break;
-						}
+						char section = seatId.charAt(0);
+						if (section == 'P')      computed = base * 0.60f;
+						else if (section == 'E') computed = base * 0.50f;
 					}
 
 					priceText = String.format("Price:      $%.2f", computed);

@@ -10,13 +10,13 @@ public class CruiseLine extends Trip {
 	private Boat boat;
 
 	public CruiseLine(Company servicedBy, LocalDate departureTime, LocalDate arrivalTime,
-				 float price, int tripDuration, ArrayList<Port> path, Boat boat) {
-		super(servicedBy,departureTime,arrivalTime,price,tripDuration);
+			float price, int tripDuration, ArrayList<Port> path, Boat boat) {
+		super(servicedBy, departureTime, arrivalTime, price, tripDuration);
 		this.path = path;
 		this.boat = boat;
 	}
 
-	public CruiseLine(String id){
+	public CruiseLine(String id) {
 		super(id);
 	}
 

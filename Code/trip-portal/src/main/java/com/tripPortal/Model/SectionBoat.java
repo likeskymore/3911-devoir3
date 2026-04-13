@@ -5,11 +5,11 @@ import java.util.ArrayList;
 public class SectionBoat extends Section {
 
     public enum SectionBoatType {
-        I(4),  // Intérieure       : jusqu'à 4 personnes
-        O(2),  // Vue sur l'Océan  : jusqu'à 2 personnes
-        S(5),  // Suite            : jusqu'à 5 personnes
-        F(6),  // Famille          : jusqu'à 6 personnes
-        D(6);  // Famille Deluxe   : jusqu'à 6 personnes
+        I(4),
+        O(2),
+        S(5),
+        F(6),
+        D(6);
 
         private final int maxCapacity;
 

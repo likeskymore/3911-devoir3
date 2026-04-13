@@ -18,20 +18,21 @@ import com.tripPortal.Model.Location;
 
 public class BoatCompanyFactory extends BoatTripFactory {
 
-    // Singleton
-    private static BoatCompanyFactory instance;
+	// Singleton
+	private static BoatCompanyFactory instance;
 
-    private BoatCompanyFactory() {}
+	private BoatCompanyFactory() {
+	}
 
-    public static BoatCompanyFactory getInstance() {
-        if (instance == null) {
-            instance = new BoatCompanyFactory();
-        }
-        return instance;
-    }
+	public static BoatCompanyFactory getInstance() {
+		if (instance == null) {
+			instance = new BoatCompanyFactory();
+		}
+		return instance;
+	}
 
-    // Patron de fabrique
-	public Location createLocation(String city){
+	// Patron de fabrique
+	public Location createLocation(String city) {
 		return null;
 	}
 
@@ -42,7 +43,6 @@ public class BoatCompanyFactory extends BoatTripFactory {
 			ObjectMapper mapper = new ObjectMapper();
 			File file = new File("src/Database/Company.json");
 
-			// Read existing array
 			JsonNode root = mapper.readTree(file);
 			ArrayNode array;
 
@@ -60,12 +60,11 @@ public class BoatCompanyFactory extends BoatTripFactory {
 			newCompany.put("name", name);
 			newCompany.put("tripId", company.getTripID());
 			ArrayNode tripsArray = mapper.createArrayNode();
-			for (Trip trip : company.getTrips()){
+			for (Trip trip : company.getTrips()) {
 				tripsArray.add(mapper.valueToTree(trip));
 			}
 			newCompany.set("Trips", tripsArray);
 
-			// Append and write back
 			array.add(newCompany);
 			mapper.writerWithDefaultPrettyPrinter().writeValue(file, array);
 
@@ -76,17 +75,16 @@ public class BoatCompanyFactory extends BoatTripFactory {
 
 		return company;
 	}
-    public Trip createTrajectory(
-        Company company,
-        LocalDate startDate,
-        LocalDate endDate,
-        float price,
-        int duration,
-        ArrayList<Location> locations,
-        Transport transport
-    ){
+
+	public Trip createTrajectory(
+			Company company,
+			LocalDate startDate,
+			LocalDate endDate,
+			float price,
+			int duration,
+			ArrayList<Location> locations,
+			Transport transport) {
 		return null;
 	}
-
 
 }

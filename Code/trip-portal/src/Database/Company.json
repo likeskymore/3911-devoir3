@@ -9,5 +9,11 @@
   "id" : "KGSTY",
   "name" : "CN",
   "tripId" : "PH",
+  "Trips" : [ "PHRWVS" ]
+}, {
+  "type" : "BoatCompany",
+  "id" : "NMBIU",
+  "name" : "Bui",
+  "tripId" : "NX",
   "Trips" : [ ]
 } ]

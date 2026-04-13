@@ -24,9 +24,10 @@ public abstract class Transport {
         this.sections = new ArrayList<>();
     }
 
-    public Transport(String id, String placeholder){
+    public Transport(String id, String placeholder) {
         this.TransportID = id;
     }
+
     private String randomGenerateID() {
         String id = "";
         Random rand = new Random();
@@ -71,7 +72,7 @@ public abstract class Transport {
                 String type = node.get("type").asText();
                 return switch (type) {
                     case "Plane" -> new Plane(node);
-                    case "Boat"  -> new Boat(node);
+                    case "Boat" -> new Boat(node);
                     case "Train" -> new Train(node);
                     default -> throw new IllegalArgumentException("Unknown transport type: " + type);
                 };
@@ -79,7 +80,8 @@ public abstract class Transport {
         }
         throw new IllegalArgumentException("Transport not found: " + transportID);
     }
-    public void delete(String transportId){
+
+    public void delete(String transportId) {
         try {
             ObjectMapper mapper = new ObjectMapper();
 

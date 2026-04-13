@@ -7,7 +7,7 @@ public class TrainSeat extends Seat {
     private char column;
 
     public TrainSeat(SectionTrain.SectionTrainType sectionType, int row, char column) {
-        super(sectionType.name() + row + column); // e.g. "P5B", "E12A"
+        super(sectionType.name() + row + column);
         this.sectionType = sectionType;
         this.row = row;
         this.column = column;
@@ -15,7 +15,7 @@ public class TrainSeat extends Seat {
 
     @Override
     public String getSeatID() {
-        return sectionType.name() + row + column; // "P5B", "E12A"
+        return sectionType.name() + row + column;
     }
 
     @Override

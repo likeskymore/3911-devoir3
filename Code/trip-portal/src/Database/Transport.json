@@ -421,7 +421,7 @@
       "occupied" : false
     }, {
       "seatID" : "E9B",
-      "occupied" : false
+      "occupied" : true
     }, {
       "seatID" : "E9C",
       "occupied" : false
@@ -1245,6 +1245,74 @@
       "occupied" : true
     }, {
       "seatID" : "A10J",
+      "occupied" : false
+    } ]
+  } ]
+}, {
+  "transportID" : "125042",
+  "type" : "Boat",
+  "name" : "Norwegian Cruise",
+  "company" : "Bui",
+  "available" : true,
+  "sections" : [ {
+    "sectionType" : "F",
+    "maxCapacity" : 6,
+    "numberOfCabins" : 7,
+    "cabins" : [ {
+      "seatID" : "F-C1",
+      "occupied" : false
+    }, {
+      "seatID" : "F-C2",
+      "occupied" : false
+    }, {
+      "seatID" : "F-C3",
+      "occupied" : false
+    }, {
+      "seatID" : "F-C4",
+      "occupied" : false
+    }, {
+      "seatID" : "F-C5",
+      "occupied" : false
+    }, {
+      "seatID" : "F-C6",
+      "occupied" : false
+    }, {
+      "seatID" : "F-C7",
+      "occupied" : false
+    } ]
+  }, {
+    "sectionType" : "O",
+    "maxCapacity" : 2,
+    "numberOfCabins" : 10,
+    "cabins" : [ {
+      "seatID" : "O-C1",
+      "occupied" : false
+    }, {
+      "seatID" : "O-C2",
+      "occupied" : false
+    }, {
+      "seatID" : "O-C3",
+      "occupied" : false
+    }, {
+      "seatID" : "O-C4",
+      "occupied" : false
+    }, {
+      "seatID" : "O-C5",
+      "occupied" : false
+    }, {
+      "seatID" : "O-C6",
+      "occupied" : false
+    }, {
+      "seatID" : "O-C7",
+      "occupied" : false
+    }, {
+      "seatID" : "O-C8",
+      "occupied" : false
+    }, {
+      "seatID" : "O-C9",
+      "occupied" : false
+    }, {
+      "seatID" : "O-C10",
       "occupied" : false
     } ]
   } ]

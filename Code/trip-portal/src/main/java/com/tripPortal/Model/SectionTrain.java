@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 public class SectionTrain extends Section {
 
-    public enum SectionTrainType {
-        P, E
-    }
+    public enum SectionTrainType {P, E}
 
     private static final int COLUMNS = 3;
 

@@ -20,7 +20,8 @@ public class TrainCompanyFactory extends TrainTripFactory {
 	// Singleton
 	private static TrainCompanyFactory instance;
 
-	private TrainCompanyFactory() {}
+	private TrainCompanyFactory() {
+	}
 
 	public static TrainCompanyFactory getInstance() {
 		if (instance == null) {
@@ -31,10 +32,8 @@ public class TrainCompanyFactory extends TrainTripFactory {
 
 	// Patron de fabrique
 	public Location createLocation(String city) {
-		// TODO - implement TrainCompanyFactory.createLocation
 		return null;
 	}
-
 
 	public Company createCompany(String name) {
 		TrainCompany company = new TrainCompany(name);
@@ -43,7 +42,6 @@ public class TrainCompanyFactory extends TrainTripFactory {
 			ObjectMapper mapper = new ObjectMapper();
 			File file = new File("src/Database/Company.json");
 
-			// Read existing array
 			JsonNode root = mapper.readTree(file);
 			ArrayNode array;
 
@@ -54,19 +52,17 @@ public class TrainCompanyFactory extends TrainTripFactory {
 			} else {
 				throw new IOException("Company.json doit contenir un tableau JSON []");
 			}
-			// Build new entry
 			ObjectNode newCompany = mapper.createObjectNode();
 			newCompany.put("type", "TrainCompany");
 			newCompany.put("id", company.getId());
 			newCompany.put("name", name);
 			newCompany.put("tripId", company.getTripID());
 			ArrayNode tripsArray = mapper.createArrayNode();
-			for (Trip trip : company.getTrips()){
+			for (Trip trip : company.getTrips()) {
 				tripsArray.add(mapper.valueToTree(trip));
 			}
 			newCompany.set("Trips", tripsArray);
 
-			// Append and write back
 			array.add(newCompany);
 			mapper.writerWithDefaultPrettyPrinter().writeValue(file, array);
 
@@ -78,15 +74,14 @@ public class TrainCompanyFactory extends TrainTripFactory {
 		return company;
 	}
 
-    public Trip createTrajectory(
-        Company company,
-        LocalDate startDate,
-        LocalDate endDate,
-        float price,
-        int duration,
-        ArrayList<Location> locations,
-        Transport transport
-    ){
+	public Trip createTrajectory(
+			Company company,
+			LocalDate startDate,
+			LocalDate endDate,
+			float price,
+			int duration,
+			ArrayList<Location> locations,
+			Transport transport) {
 		return null;
 	}
 

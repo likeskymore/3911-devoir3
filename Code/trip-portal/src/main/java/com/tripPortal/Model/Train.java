@@ -8,18 +8,16 @@ public class Train extends Transport {
     private static final int DEFAULT_ROWS_PREMIERE = 10;
     private static final int DEFAULT_ROWS_ECONOMIE = 30;
 
-    // ── Constructeur normal ───────────────────────────────────────
     public Train(String name) {
         super(name);
         this.sections = new ArrayList<>();
         initSections();
     }
 
-    public Train(String id, String placeholder){
+    public Train(String id, String placeholder) {
         super(id, placeholder);
     }
 
-    // ── Constructeur Jackson ──────────────────────────────────────
     public Train(JsonNode node) {
         super(node.get("name").asText());
         this.TransportID = node.get("transportID").asText();

@@ -20,10 +20,11 @@ import com.tripPortal.Model.Trip;
 
 public class TrainFactory extends PlaneTripFactory {
 
-	// Singleton
+    // Singleton
     private static TrainFactory instance;
 
-    private TrainFactory() {}
+    private TrainFactory() {
+    }
 
     public static TrainFactory getInstance() {
         if (instance == null) {
@@ -32,36 +33,38 @@ public class TrainFactory extends PlaneTripFactory {
         return instance;
     }
 
-	// Patron de fabrique
-	public Location createLocation(String city) {
-		return null;
-	}
-	public Company createCompany(String name){
-		return null;
-	}
+    // Patron de fabrique
+    public Location createLocation(String city) {
+        return null;
+    }
+
+    public Company createCompany(String name) {
+        return null;
+    }
+
     public Trip createTrajectory(
-        Company company,
-        LocalDate startDate,
-        LocalDate endDate,
-        float price,
-        int duration,
-        ArrayList<Location> locations,
-        Transport transport
-    ){
-		return null;
-	}
+            Company company,
+            LocalDate startDate,
+            LocalDate endDate,
+            float price,
+            int duration,
+            ArrayList<Location> locations,
+            Transport transport) {
+        return null;
+    }
+
     public Transport createTransport(String name, String companyName, List<SectionTrain> sections) {
 
-        // ── 1. Créer l'objet Java ──────────────────────────────────────
+        // Créer l'objet Java
         Train train = new Train(name);
         for (SectionTrain section : sections) {
-            train.getSections().clear(); // remplace les sections par défaut
+            train.getSections().clear();
         }
         for (SectionTrain section : sections) {
             train.getSections().add(section);
         }
 
-        // ── 2. Sauvegarder en JSON ─────────────────────────────────────
+        //Sauvegarder en JSON
         try {
             ObjectMapper mapper = new ObjectMapper();
             File file = new File("src/Database/Transport.json");
@@ -89,7 +92,7 @@ public class TrainFactory extends PlaneTripFactory {
             for (SectionTrain st : sections) {
                 ObjectNode secNode = mapper.createObjectNode();
                 secNode.put("sectionType", st.getSectionType().name());
-                secNode.put("layout", "S");       // toujours Étroit
+                secNode.put("layout", "S"); // toujours Étroit
                 secNode.put("numberOfRows", st.getNumberOfRows());
                 secNode.put("numberOfColumns", 3); // toujours 3
 
@@ -114,7 +117,7 @@ public class TrainFactory extends PlaneTripFactory {
             e.printStackTrace();
         }
 
-    return train;
-}
+        return train;
+    }
 
 }

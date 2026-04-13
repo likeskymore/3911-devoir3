@@ -62,7 +62,7 @@ public class FlightFactory extends PlaneTripFactory {
 
     Flight flight = new Flight(company, startDate, endDate, price, duration, origin, destination, plane);
 
-    // ── Sauvegarder en JSON ────────────────────────────────────────
+    //Sauvegarder en JSON
     try {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("src/Database/Trip.json");
@@ -72,7 +72,7 @@ public class FlightFactory extends PlaneTripFactory {
         ArrayNode array;
 
         if (root == null || root.isMissingNode() || root.isNull()) {
-            array = mapper.createArrayNode(); // fichier vide ou null
+            array = mapper.createArrayNode();
         } else if (root.isArray()) {
             array = (ArrayNode) root;
         } else {
