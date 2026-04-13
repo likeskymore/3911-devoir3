@@ -97,4 +97,12 @@ public class companyController {
 		command.execute();
 	}
 
+	public void undoDeleteCompany(){
+		command.undo();
+	}
+
+	public void undoUpdateCompanyName(){
+		command.undo();
+	}
+
 }

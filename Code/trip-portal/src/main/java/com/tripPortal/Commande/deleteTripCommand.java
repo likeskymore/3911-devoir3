@@ -73,6 +73,6 @@ public class deleteTripCommand implements Command{
             historyMapper.writerWithDefaultPrettyPrinter().writeValue(historyFile, historyMapper.createObjectNode());
         } catch (IOException e) {
             e.printStackTrace();
-}
+        }
     }
 }

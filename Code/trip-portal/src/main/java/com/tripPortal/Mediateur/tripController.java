@@ -206,4 +206,8 @@ public class tripController {
 		command.execute();
 	}
 
+	public void undoUpdateTrip(){
+		command.undo();
+	}
+
 }

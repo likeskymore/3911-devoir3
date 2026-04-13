@@ -5,9 +5,9 @@
   "tripId" : "LG",
   "Trips" : [ "LGZJKV", "LGAUYT" ]
 }, {
-  "type" : "TrainCompany",
-  "id" : "KGSTY",
-  "name" : "CN",
-  "tripId" : "PH",
+  "type" : "FlightCompany",
+  "id" : "VKKRR",
+  "name" : "Hello",
+  "tripId" : "GW",
   "Trips" : [ ]
 } ]

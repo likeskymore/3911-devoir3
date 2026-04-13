@@ -29,6 +29,10 @@ public abstract class Company {
 
 	}
 
+	public Company(){
+		//this is for undo
+	}
+
 	private String randomGenerateID(int n) {
 		String id = "";
 		Random rand = new Random();
@@ -99,11 +103,14 @@ public abstract class Company {
 	public void deleteCompany(){
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-
 			File companyFile = new File("src/Database/Company.json");
 			ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
+
+			ObjectNode snapShot = mapper.createObjectNode();
+
 			for (int i = 0; i < companies.size(); i++) {
 				if (companies.get(i).path("id").asText().equals(this.id)) {
+					snapShot.set("company", companies.get(i));
 					companies.remove(i);
 					break;
 				}
@@ -112,12 +119,16 @@ public abstract class Company {
 
 			File tripFile = new File("src/Database/Trip.json");
 			ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
+			ArrayNode deletedTrips = mapper.createArrayNode();
 			for (int i = trips.size() - 1; i >= 0; i--) {
 				if (trips.get(i).path("company").asText().equals(this.name)) {
+					deletedTrips.add(trips.get(i));
 					trips.remove(i);
 				}
 			}
+			snapShot.set("trips", deletedTrips);
 			mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
+			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/Database/companyDeleteHistory.json"), snapShot);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			System.err.println("Unable to delete the company.");
@@ -130,21 +141,29 @@ public abstract class Company {
 			ObjectMapper m = new ObjectMapper();
 			File f = new File("src/Database/Company.json");
 			ArrayNode arr = (ArrayNode) m.readTree(f);
+			ObjectNode snapShot = m.createObjectNode();
 			for (int i = 0; i < arr.size(); i++) {
 				if (arr.get(i).get("id").asText().equals(this.getId())) {
+					snapShot.set("oldCompanyName", arr.get(i).get("name"));
+					snapShot.put("newCompanyName", newName);
 					((ObjectNode) arr.get(i)).put("name", newName);
 					this.setName(newName); break;
 				}
 			}
 			m.writerWithDefaultPrettyPrinter().writeValue(f, arr);
+			ArrayNode tripsToUpdate = m.createArrayNode();
 			// Update trips
 			File tf = new File("src/Database/Trip.json");
 			ArrayNode ta = (ArrayNode) m.readTree(tf);
 			for (int i = 0; i < ta.size(); i++) {
-				if (ta.get(i).get("company").asText().equals(oldName))
+				if (ta.get(i).get("company").asText().equals(oldName)){
+					tripsToUpdate.add(ta.get(i).get("id"));
 					((ObjectNode) ta.get(i)).put("company", newName);
+				}
 			}
+			snapShot.set("tripsToUpdate", tripsToUpdate);
 			m.writerWithDefaultPrettyPrinter().writeValue(tf, ta);
+			m.writerWithDefaultPrettyPrinter().writeValue(new File("src/Database/companyUpdateNameHistory.json"), snapShot);
 		} catch (IOException ex) { ex.printStackTrace(); }
 	}
 }

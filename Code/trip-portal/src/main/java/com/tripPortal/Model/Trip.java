@@ -210,12 +210,17 @@ public abstract class Trip {
 				}
 			}
 
+			File historyFile = new File("src/Database/tripUpdateHistory.json");
+			mapper.writerWithDefaultPrettyPrinter().writeValue(historyFile, tripNode);
+
 			tripNode.put("company", newCompany);
 			tripNode.put("startDate", newDepartureTime.toString());
 			tripNode.put("endDate", newArrivalTime.toString());
 			tripNode.put("duration", (int) ChronoUnit.DAYS.between(newDepartureTime, newArrivalTime));
 			tripNode.put("price", newPrice);
 			tripNode.put("transport", newTransportId);
+
+			
 
 			if (!oldCompany.equals(newCompany)) {
 				updateCompanyTrips(companies, oldCompany, newCompany, this.id);

@@ -751,6 +751,22 @@ public class AdminMenu {
         undoDeleteBtn.setVisible(history);
 
 
+        Button undoUpdateBtn = new Button("↩  Undo Update");
+        undoUpdateBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+        + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        ObjectMapper updateHistoryMapper = new ObjectMapper();
+        File updateHistoryFile = new File("src/Database/tripUpdateHistory.json");
+        JsonNode updateHistoryRoot = null;
+        try {
+            updateHistoryRoot = updateHistoryMapper.readTree(updateHistoryFile);
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        Boolean updateHistory = updateHistoryRoot.size() > 0;
+        undoUpdateBtn.setVisible(updateHistory);
+
+
         FlowPane grid = new FlowPane(14, 14);
         grid.setPadding(new Insets(4));
 
@@ -824,6 +840,13 @@ public class AdminMenu {
                     displayTrips(scene);
                 });
 
+                undoUpdateBtn.setOnAction(undoUpdate ->{
+                    editTripCommand editTripCommand = new editTripCommand();
+                    tripControllerForAdminMenu.setCommand(editTripCommand);
+                    tripControllerForAdminMenu.undoUpdateTrip();
+                    displayTrips(scene);
+                });
+
                 updateBtn.setOnAction(upd -> displayingTripsToUpdate(scene, trip));
 
 
@@ -839,7 +862,7 @@ public class AdminMenu {
         scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        main.getChildren().addAll(title, scroll, undoDeleteBtn);
+        main.getChildren().addAll(title, scroll, undoDeleteBtn, undoUpdateBtn);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -1044,6 +1067,44 @@ public class AdminMenu {
 		 main.setPadding(new Insets(40));
 		 Label title = pageTitle("All Companies");
 
+        Button undoDeleteBtn = new Button("↩  Undo Delete");
+        undoDeleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+        + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        ObjectMapper deleteHistoryMapper = new ObjectMapper();
+        File deleteHistoryFile = new File("src/Database/companyDeleteHistory.json");
+        JsonNode deleteHistoryRoot = null;
+        try {
+            deleteHistoryRoot = deleteHistoryMapper.readTree(deleteHistoryFile);
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        Boolean deleteHistory = deleteHistoryRoot.size() > 0;
+        undoDeleteBtn.setVisible(deleteHistory);
+        undoDeleteBtn.setOnAction(undoDelete -> {
+            deleteCompanyCommand deleteCompanyCommand = new deleteCompanyCommand();
+            CompanyControllerForAdminMenu.setCommand(deleteCompanyCommand);
+            CompanyControllerForAdminMenu.undoDeleteCompany();
+            displayCompanies(scene);
+        });
+
+        
+
+        Button undoUpdateBtn = new Button("↩  Undo Update");
+        undoUpdateBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        File updateHistoryFile = new File("src/Database/companyUpdateNameHistory.json");
+        boolean updateHistory = updateHistoryFile.exists() && updateHistoryFile.length() > 0;
+        undoUpdateBtn.setVisible(updateHistory);
+        undoUpdateBtn.setOnAction(undoUpdate -> {
+            editCompanyCommand editCompanyCommand = new editCompanyCommand();
+            CompanyControllerForAdminMenu.setCommand(editCompanyCommand);
+            CompanyControllerForAdminMenu.undoUpdateCompanyName();
+            displayCompanies(scene);
+        });
+
+
+
 		 FlowPane grid = new FlowPane(14, 14);
 		 grid.setPadding(new Insets(4));
 
@@ -1067,6 +1128,7 @@ public class AdminMenu {
                 Label tripsLbl  = new Label("Trips: " + node.path("Trips").size());
                 tripsLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
 
+            
 				Button deleteBtn = dangerBtn("🗑  Delete");
                 deleteBtn.setOnAction(del -> deleteCompany(scene, company));
 
@@ -1084,7 +1146,7 @@ public class AdminMenu {
 		 scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
 		 VBox.setVgrow(scroll, Priority.ALWAYS);
 
-		 main.getChildren().addAll(title, scroll);
+		 main.getChildren().addAll(title, scroll, undoDeleteBtn, undoUpdateBtn);
 		 scene.setRoot(buildShell(nav, main));
     }
 
