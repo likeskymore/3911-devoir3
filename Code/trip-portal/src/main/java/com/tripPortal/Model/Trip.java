@@ -1,9 +1,14 @@
 package com.tripPortal.Model;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Random;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.tripPortal.Factory.TripFactory;
 
 public abstract class Trip {
@@ -25,6 +30,10 @@ public abstract class Trip {
 		this.price = price;
 		this.tripDuration = tripDuration;
 		this.active = true;
+	}
+
+	public Trip(String id){
+		this.id = id;
 	}
 
 	private String randomGenerateID(Company servicedBy) {
@@ -64,6 +73,28 @@ public abstract class Trip {
 	public int getTripDuration() {
 		return tripDuration;
 	}
+
+	public void delete() throws IOException{
+		ObjectMapper displayMapper = new ObjectMapper();
+		File tripFile = new File("src/Database/Trip.json");
+		ArrayNode tripArray = (ArrayNode) displayMapper.readTree(tripFile);
+		for (int i = 0; i < tripArray.size(); i++) {
+			if (tripArray.get(i).get("id").asText().equals(this.id)) { 
+				tripArray.remove(i); break; 
+			}
+		}
+		try { displayMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray); } catch (IOException ex) { ex.printStackTrace(); }
+		try {
+			ObjectMapper cm = new ObjectMapper();
+			File cf = new File("src/Database/Company.json");
+			ArrayNode ca = (ArrayNode) cm.readTree(cf);
+			for (JsonNode cn : ca) {
+				ArrayNode tn = (ArrayNode) cn.get("Trips");
+				for (int i = 0; i < tn.size(); i++) { if (tn.get(i).asText().equals(this.id)) { tn.remove(i); break; } }
+			}
+			cm.writerWithDefaultPrettyPrinter().writeValue(cf, ca);
+		} catch (IOException ex) { ex.printStackTrace(); }
+}
 
 
 }

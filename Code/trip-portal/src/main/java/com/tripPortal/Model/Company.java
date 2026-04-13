@@ -90,4 +90,8 @@ public abstract class Company {
 		}
 		throw new IllegalArgumentException("Company not found: " + name);
 	}
+
+	public void deleteCompany(){
+		
+	}
 }

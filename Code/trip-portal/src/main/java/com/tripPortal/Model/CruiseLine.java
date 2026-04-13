@@ -16,4 +16,8 @@ public class CruiseLine extends Trip {
 		this.boat = boat;
 	}
 
+	public CruiseLine(String id){
+		super(id);
+	}
+
 }

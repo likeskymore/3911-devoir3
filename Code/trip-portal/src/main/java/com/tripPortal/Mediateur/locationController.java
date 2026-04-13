@@ -7,12 +7,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tripPortal.Commande.Command;
 import com.tripPortal.Factory.AirportFactory;
 import com.tripPortal.Factory.PortFactory;
 import com.tripPortal.Factory.TrainStationFactory;
 import com.tripPortal.Model.Location;
 
 public class locationController {
+	
+	Command command;
+
+	public void setCommand(Command command){
+		this.command = command;
+	}
 
 	public void goCallCreateLocation(String city, String name, String type) {
 

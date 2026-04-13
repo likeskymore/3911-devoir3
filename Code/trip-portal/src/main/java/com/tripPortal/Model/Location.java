@@ -70,4 +70,12 @@ public abstract class Location {
 		}
 		throw new IllegalArgumentException("Location not found: " + city);
 	}
+
+	public void delete(){
+
+	}
+
+	public void update(String newName, String newCity){
+
+	}
 }

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tripPortal.Commande.deleteTripCommand;
 import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Mediateur.locationController;
 import com.tripPortal.Mediateur.transportController;
@@ -17,15 +18,19 @@ import com.tripPortal.Mediateur.tripController;
 import com.tripPortal.Model.Airport;
 import com.tripPortal.Model.Boat;
 import com.tripPortal.Model.Company;
+import com.tripPortal.Model.CruiseLine;
+import com.tripPortal.Model.Flight;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Plane;
 import com.tripPortal.Model.Port;
+import com.tripPortal.Model.Route;
 import com.tripPortal.Model.SectionBoat;
 import com.tripPortal.Model.SectionPlane;
 import com.tripPortal.Model.SectionTrain;
 import com.tripPortal.Model.Train;
 import com.tripPortal.Model.TrainStation;
 import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.Trip;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -764,20 +769,21 @@ public class AdminMenu {
                 Button updateBtn = ghostBtn("✏  Edit");
 
                 deleteBtn.setOnAction(del -> {
-                    for (int i = 0; i < tripArray.size(); i++) {
-                        if (tripArray.get(i).get("id").asText().equals(tripId)) { tripArray.remove(i); break; }
+
+                    Trip tripToRemove = null;
+                    if (type.equals("Flight")){
+                        tripToRemove = new Flight(tripId);
                     }
-                    try { displayMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray); } catch (IOException ex) { ex.printStackTrace(); }
-                    try {
-                        ObjectMapper cm = new ObjectMapper();
-                        File cf = new File("src/Database/Company.json");
-                        ArrayNode ca = (ArrayNode) cm.readTree(cf);
-                        for (JsonNode cn : ca) {
-                            ArrayNode tn = (ArrayNode) cn.get("Trips");
-                            for (int i = 0; i < tn.size(); i++) { if (tn.get(i).asText().equals(tripId)) { tn.remove(i); break; } }
-                        }
-                        cm.writerWithDefaultPrettyPrinter().writeValue(cf, ca);
-                    } catch (IOException ex) { ex.printStackTrace(); }
+                    if (type.equals("CruiseLine")){
+                        tripToRemove = new CruiseLine(tripId);
+                    }
+                    if (type.equals("Route")){
+                        tripToRemove = new Route(tripId);
+                    }
+
+                    deleteTripCommand deleteTripCommand = new deleteTripCommand(tripToRemove);
+                    tripControllerForAdminMenu.setCommand(deleteTripCommand);
+                    tripControllerForAdminMenu.deleteTrip();
                     displayTrips(scene);
                 });
                 updateBtn.setOnAction(upd -> displayingTripsToUpdate(scene, trip));
@@ -823,6 +829,8 @@ public class AdminMenu {
 
         Button confirmBtn = actionBtn("  Save Changes  ");
         confirmBtn.setOnAction(e -> {
+
+            
             try {
                 ObjectMapper m = new ObjectMapper();
                 File f = new File("src/Database/Trip.json");
