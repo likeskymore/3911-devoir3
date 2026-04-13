@@ -233,10 +233,19 @@ public class ClientMenu {
         subtitle.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 14px;");
 
         HBox cards = new HBox(20);
-        cards.getChildren().addAll(
-            quickCard("🗺", "Browse Trips",    "Explore all available trips",     () -> displayReserveMenu(scene, "")),
-            quickCard("👤", "My Reservations", "View and manage your bookings",   () -> displayProfileMenu(scene))
-        );
+        cards.setFillHeight(true);
+        VBox.setVgrow(cards, Priority.ALWAYS);
+
+        VBox browseCard = quickCard("🗺", "Browse Trips", "Explore all available trips", () -> displayReserveMenu(scene, ""));
+        VBox reservationsCard = quickCard("👤", "My Reservations", "View and manage your bookings", () -> displayProfileMenu(scene));
+
+        HBox.setHgrow(browseCard, Priority.ALWAYS);
+        HBox.setHgrow(reservationsCard, Priority.ALWAYS);
+
+        browseCard.prefWidthProperty().bind(cards.widthProperty().subtract(20).divide(2));
+        reservationsCard.prefWidthProperty().bind(cards.widthProperty().subtract(20).divide(2));
+
+        cards.getChildren().addAll( reservationsCard, browseCard );
 
         main.getChildren().addAll(title, subtitle, cards);
         scene.setRoot(buildShell(nav, main));
@@ -247,13 +256,17 @@ public class ClientMenu {
         ico.setStyle("-fx-font-size: 32px;");
         Label ttl = new Label(title);
         ttl.setStyle("-fx-text-fill: " + C_TEXT + "; -fx-font-size: 15px; -fx-font-weight: bold;");
+        ttl.setWrapText(true);
         Label sub = new Label(subtitle);
         sub.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
         sub.setWrapText(true);
 
         VBox card = new VBox(8, ico, ttl, sub);
         card.setPadding(new Insets(24));
-        card.setPrefWidth(200);
+        card.setMinSize(0, 0);
+        card.setMaxWidth(Double.MAX_VALUE);
+        card.setMaxHeight(Double.MAX_VALUE);
+        card.prefHeightProperty().bind(card.widthProperty());
         card.setStyle(quickCardStyle(false));
         card.setOnMouseEntered(e -> card.setStyle(quickCardStyle(true)));
         card.setOnMouseExited(e  -> card.setStyle(quickCardStyle(false)));
