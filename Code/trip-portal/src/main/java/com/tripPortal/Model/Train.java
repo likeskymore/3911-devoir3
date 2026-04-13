@@ -15,6 +15,10 @@ public class Train extends Transport {
         initSections();
     }
 
+    public Train(String id, String placeholder){
+        super(id, placeholder);
+    }
+
     // ── Constructeur Jackson ──────────────────────────────────────
     public Train(JsonNode node) {
         super(node.get("name").asText());

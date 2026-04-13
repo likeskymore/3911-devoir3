@@ -1,9 +1,19 @@
 package com.tripPortal.Commande;
 
-public class editPriceCommand {
+import com.tripPortal.Model.Trip;
+
+public class editPriceCommand implements Command{
+
+	String newPrice;
+	Trip trip;
+
+	public editPriceCommand(Trip trip, String newPrice){
+		this.trip = trip;
+		this.newPrice = newPrice;
+	}
+
 	public void execute() {
-		// TODO - implement editPriceCommand.execute
-		throw new UnsupportedOperationException();
+		trip.updatePrice(newPrice);
 	}
 
 	public void undo() {

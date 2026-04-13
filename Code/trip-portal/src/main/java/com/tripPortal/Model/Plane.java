@@ -11,6 +11,9 @@ public class Plane extends Transport {
         super(node.get("name").asText());
         this.TransportID = node.get("transportID").asText();
     }
+    public Plane(String id, String placeholder){
+        super(id, placeholder);
+    }
 
     public boolean addSection(Section section) {
     boolean alreadyExists = sections.stream()

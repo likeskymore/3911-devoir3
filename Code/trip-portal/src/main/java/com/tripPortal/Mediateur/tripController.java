@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tripPortal.Commande.Command;
 import com.tripPortal.Factory.CruiseLineFactory;
 import com.tripPortal.Factory.FlightFactory;
 import com.tripPortal.Factory.RouteFactory;
@@ -32,6 +33,12 @@ import com.tripPortal.Visiteur.ListTripsDataStructure;
 
 
 public class tripController {
+
+	Command command;
+
+	public void setCommand(Command command){
+		this.command = command;
+	}
 
 	public Trip goCallCreateTrip(
             Company company,
@@ -153,14 +160,14 @@ public class tripController {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * 
-	 * @param trip
-	 */
-	public void deleteTrip(Trip trip) {
-		// TODO - implement tripController.deleteTrip
-		throw new UnsupportedOperationException();
-	}
+	// /**
+	//  * 
+	//  * @param trip
+	//  */
+	// public void deleteTrip(Trip trip) {
+	// 	// TODO - implement tripController.deleteTrip
+	// 	throw new UnsupportedOperationException();
+	// }
 
 	/**
 	 * 
@@ -181,6 +188,14 @@ public class tripController {
 	public boolean checkReservation(Trip trip) {
 		// TODO - implement tripController.checkReservation
 		throw new UnsupportedOperationException();
+	}
+
+	public void deleteTrip(){
+		command.execute();
+	}
+
+	public void updatePrice(){
+		command.execute();
 	}
 
 }

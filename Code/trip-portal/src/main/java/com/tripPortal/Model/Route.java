@@ -15,4 +15,8 @@ public class Route extends Trip {
 		this.trainRoute = trainRoute;
 		this.train = train;
 	}
+
+	public Route(String id){
+		super(id);
+	}
 }

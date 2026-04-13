@@ -1,13 +1,13 @@
 [ {
   "type" : "Flight",
-  "id" : "LGKDAG",
-  "company" : "Air Canada",
+  "id" : "LGNFDO",
+  "company" : "Air Canada Test",
   "startDate" : "2026-04-01",
-  "endDate" : "2026-04-29",
-  "price" : 600.0,
-  "duration" : 28,
+  "endDate" : "2026-04-03",
+  "price" : 123.0,
+  "duration" : 2,
   "origin" : "BTA",
-  "destination" : "AJT",
-  "transport" : "252415",
+  "destination" : "ZBY",
+  "transport" : "571308",
   "active" : 1
 } ]

@@ -1,11 +1,16 @@
 package com.tripPortal.Model;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class Company {
 
@@ -89,5 +94,57 @@ public abstract class Company {
 			}
 		}
 		throw new IllegalArgumentException("Company not found: " + name);
+	}
+
+	public void deleteCompany(){
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+
+			File companyFile = new File("src/Database/Company.json");
+			ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
+			for (int i = 0; i < companies.size(); i++) {
+				if (companies.get(i).path("id").asText().equals(this.id)) {
+					companies.remove(i);
+					break;
+				}
+			}
+			mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
+
+			File tripFile = new File("src/Database/Trip.json");
+			ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
+			for (int i = trips.size() - 1; i >= 0; i--) {
+				if (trips.get(i).path("company").asText().equals(this.name)) {
+					trips.remove(i);
+				}
+			}
+			mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			System.err.println("Unable to delete the company.");
+			return;
+		}
+	}
+
+	public void updateName(String newName, String oldName){
+		try {
+			ObjectMapper m = new ObjectMapper();
+			File f = new File("src/Database/Company.json");
+			ArrayNode arr = (ArrayNode) m.readTree(f);
+			for (int i = 0; i < arr.size(); i++) {
+				if (arr.get(i).get("id").asText().equals(this.getId())) {
+					((ObjectNode) arr.get(i)).put("name", newName);
+					this.setName(newName); break;
+				}
+			}
+			m.writerWithDefaultPrettyPrinter().writeValue(f, arr);
+			// Update trips
+			File tf = new File("src/Database/Trip.json");
+			ArrayNode ta = (ArrayNode) m.readTree(tf);
+			for (int i = 0; i < ta.size(); i++) {
+				if (ta.get(i).get("company").asText().equals(oldName))
+					((ObjectNode) ta.get(i)).put("company", newName);
+			}
+			m.writerWithDefaultPrettyPrinter().writeValue(tf, ta);
+		} catch (IOException ex) { ex.printStackTrace(); }
 	}
 }

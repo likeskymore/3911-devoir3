@@ -257,4 +257,11 @@
       "occupied" : false
     } ]
   } ]
+}, {
+  "transportID" : "571308",
+  "type" : "Plane",
+  "name" : "Boeing",
+  "company" : "Air Canada Test",
+  "available" : true,
+  "sections" : [ ]
 } ]
