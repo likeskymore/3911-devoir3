@@ -1647,6 +1647,27 @@ public class AdminMenu {
         main.setPadding(new Insets(40));
         Label title = pageTitle("All Transports");
 
+        Button undoDeleteTransportsBtn = new Button("↩  Undo Delete");
+        undoDeleteTransportsBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        File transportDeleteHistoryFile = new File("src/Database/transportDeleteHistory.json");
+        boolean transportDeleteHistory = false;
+        if (transportDeleteHistoryFile.exists() && transportDeleteHistoryFile.length() > 0) {
+            try {
+                JsonNode root = new ObjectMapper().readTree(transportDeleteHistoryFile);
+                transportDeleteHistory = root.size() > 0;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        undoDeleteTransportsBtn.setVisible(transportDeleteHistory);
+        undoDeleteTransportsBtn.setOnAction(undoDeleteTransport -> {
+            deleteTransportCommand deleteTransportCommand = new deleteTransportCommand();
+            TransportControllerForAdminMenu.setCommand(deleteTransportCommand);
+            TransportControllerForAdminMenu.undoDeleteTransport();
+            displayTransports(scene);
+        });
+
         FlowPane grid = new FlowPane(14, 14);
         grid.setPadding(new Insets(4));
 
@@ -1712,7 +1733,7 @@ public class AdminMenu {
         scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        main.getChildren().addAll(title, scroll);
+        main.getChildren().addAll(title, scroll, undoDeleteTransportsBtn);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -1754,56 +1775,6 @@ public class AdminMenu {
             deleteTransportCommand deleteTransportCommand = new deleteTransportCommand(transportToRemove);
             TransportControllerForAdminMenu.setCommand(deleteTransportCommand);
             TransportControllerForAdminMenu.deleteTransport();
-            // try {
-            //     ObjectMapper mapper = new ObjectMapper();
-
-            //     File transportFile = new File("src/Database/Transport.json");
-            //     ArrayNode transports = (ArrayNode) mapper.readTree(transportFile);
-            //     for (int i = 0; i < transports.size(); i++) {
-            //         if (transportId.equals(transports.get(i).path("transportID").asText())) {
-            //             transports.remove(i);
-            //             break;
-            //         }
-            //     }
-            //     mapper.writerWithDefaultPrettyPrinter().writeValue(transportFile, transports);
-
-            //     File tripFile = new File("src/Database/Trip.json");
-            //     ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
-            //     ArrayNode removedTripIds = mapper.createArrayNode();
-            //     for (int i = trips.size() - 1; i >= 0; i--) {
-            //         if (transportId.equals(trips.get(i).path("transport").asText())) {
-            //             removedTripIds.add(trips.get(i).path("id").asText());
-            //             trips.remove(i);
-            //         }
-            //     }
-            //     mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
-
-            //     if (removedTripIds.size() > 0) {
-            //         File companyFile = new File("src/Database/Company.json");
-            //         ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
-            //         for (JsonNode company : companies) {
-            //             if (!company.has("Trips")) {
-            //                 continue;
-            //             }
-            //             ArrayNode companyTrips = (ArrayNode) company.get("Trips");
-            //             for (int i = companyTrips.size() - 1; i >= 0; i--) {
-            //                 String tripId = companyTrips.get(i).asText();
-            //                 for (JsonNode removedId : removedTripIds) {
-            //                     if (removedId.asText().equals(tripId)) {
-            //                         companyTrips.remove(i);
-            //                         break;
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //         mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
-            //     }
-            // } catch (IOException ex) {
-            //     ex.printStackTrace();
-            //     showError("Unable to delete transport.");
-            //     return;
-            // }
-
             displayTransports(scene);
         });
     }

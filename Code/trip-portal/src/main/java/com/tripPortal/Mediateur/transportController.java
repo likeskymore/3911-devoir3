@@ -43,4 +43,8 @@ public class transportController {
     public void deleteTransport(){
         command.execute();
     }
+
+    public void undoDeleteTransport(){
+        command.undo();
+    }
 }

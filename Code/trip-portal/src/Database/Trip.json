@@ -46,4 +46,16 @@
   "destination" : "ZBY",
   "transport" : "383386",
   "active" : 1
+}, {
+  "type" : "Flight",
+  "id" : "FBIWTV",
+  "company" : "Test Delete",
+  "startDate" : "2026-04-15",
+  "endDate" : "2026-04-30",
+  "price" : 111111.0,
+  "duration" : 15,
+  "origin" : "BTA",
+  "destination" : "ZBY",
+  "transport" : "657355",
+  "active" : 1
 } ]

@@ -1248,4 +1248,11 @@
       "occupied" : false
     } ]
   } ]
+}, {
+  "transportID" : "657355",
+  "type" : "Plane",
+  "name" : "Test Delete Transport",
+  "company" : "Test Delete",
+  "available" : true,
+  "sections" : [ ]
 } ]
