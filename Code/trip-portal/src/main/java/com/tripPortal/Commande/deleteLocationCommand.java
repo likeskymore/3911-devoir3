@@ -30,8 +30,6 @@ public class deleteLocationCommand implements Command {
             JsonNode locationToRestore = locationRestorerMapper.readTree(locationRestorerFile);
 
             JsonNode location = locationToRestore.get("location");
-            ArrayNode tripsRemoved = (ArrayNode) locationToRestore.get("tripsRemoved");
-            ArrayNode tripsFromCompany = (ArrayNode) locationToRestore.get("tripsFromCompany");
             
             ObjectMapper locationMapper = new ObjectMapper();
             File locationFile = new File("src/Database/Location.json");
@@ -41,7 +39,7 @@ public class deleteLocationCommand implements Command {
 
             locationMapper.writerWithDefaultPrettyPrinter().writeValue(locationFile, locations);
             locationRestorerMapper.writerWithDefaultPrettyPrinter().writeValue(locationRestorerFile,
-                locationRestorerMapper.createObjectNode());
+            locationRestorerMapper.createObjectNode());
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,0 +1,31 @@
+[ {
+  "type" : "FlightCompany",
+  "id" : "ULJHI",
+  "name" : "Air France",
+  "tripId" : "OK",
+  "Trips" : [ ]
+}, {
+  "type" : "TrainCompany",
+  "id" : "ELTMD",
+  "name" : "REM",
+  "tripId" : "GW",
+  "Trips" : [ ]
+}, {
+  "type" : "BoatCompany",
+  "id" : "KAIAC",
+  "name" : "Air china",
+  "tripId" : "IU",
+  "Trips" : [ ]
+}, {
+  "type" : "FlightCompany",
+  "id" : "VWFDY",
+  "name" : "United Airline",
+  "tripId" : "MB",
+  "Trips" : [ ]
+}, {
+  "type" : "FlightCompany",
+  "id" : "BVUSF",
+  "name" : "Air Belgium",
+  "tripId" : "IL",
+  "Trips" : [ "ILGYCB" ]
+} ]

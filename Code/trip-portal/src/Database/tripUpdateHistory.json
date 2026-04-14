@@ -1,1 +1,13 @@
-{ }
+{
+  "type" : "Flight",
+  "id" : "OKHRWY",
+  "company" : "Air France",
+  "startDate" : "2026-04-08",
+  "endDate" : "2026-04-30",
+  "price" : 350.0,
+  "duration" : 22,
+  "origin" : "ECS",
+  "destination" : "YSJ",
+  "transport" : "314852",
+  "active" : 1
+}

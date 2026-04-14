@@ -159,7 +159,7 @@ public abstract class Trip {
 		try {
 			ObjectMapper m = new ObjectMapper();
 			File f = new File("src/Database/Trip.json");
-			ArrayNode arr = (ArrayNode) m.readTree(f);
+			ArrayNode arr = readArray(m, f); // use your existing readArray helper
 			for (int i = 0; i < arr.size(); i++) {
 				if (arr.get(i).get("id").asText().equals(this.id)) {
 					((ObjectNode) arr.get(i)).put("price", newPrice);

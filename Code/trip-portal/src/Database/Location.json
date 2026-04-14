@@ -1,0 +1,16 @@
+[ {
+  "type" : "Airport",
+  "id" : "ECS",
+  "city" : "Paris",
+  "name" : "Air Paris"
+}, {
+  "type" : "Port",
+  "id" : "OFF",
+  "city" : "Norwgian Cruise",
+  "name" : "Europe"
+}, {
+  "type" : "Airport",
+  "id" : "YSJ",
+  "city" : "Montreal Airport",
+  "name" : "Montreal"
+} ]

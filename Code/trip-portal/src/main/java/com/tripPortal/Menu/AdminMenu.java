@@ -9,17 +9,14 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tripPortal.Commande.deleteCompanyCommand;
 import com.tripPortal.Commande.deleteLocationCommand;
 import com.tripPortal.Commande.deleteTransportCommand;
 import com.tripPortal.Commande.deleteTripCommand;
 import com.tripPortal.Commande.editCompanyCommand;
-import com.tripPortal.Commande.editPriceCommand;
-import com.tripPortal.Commande.editTripCommand;
 import com.tripPortal.Commande.editLocationCommand;
+import com.tripPortal.Commande.editTripCommand;
 import com.tripPortal.Mediateur.companyController;
 import com.tripPortal.Mediateur.locationController;
 import com.tripPortal.Mediateur.transportController;
@@ -759,8 +756,10 @@ public class AdminMenu {
         try {
             historyRoot = historyMapper.readTree(historyFile);
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            historyRoot = historyMapper.createArrayNode();
+        }
+        if (historyRoot == null) {
+            historyRoot = historyMapper.createArrayNode();
         }
         Boolean history = historyRoot.size() > 0;
         undoDeleteBtn.setVisible(history);
@@ -775,11 +774,29 @@ public class AdminMenu {
         try {
             updateHistoryRoot = updateHistoryMapper.readTree(updateHistoryFile);
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            updateHistoryRoot = updateHistoryMapper.createArrayNode();
+        }
+        if (updateHistoryRoot == null) {
+            updateHistoryRoot = updateHistoryMapper.createArrayNode();
         }
         Boolean updateHistory = updateHistoryRoot.size() > 0;
         undoUpdateBtn.setVisible(updateHistory);
+
+        undoDeleteBtn.setOnAction(undoDelete -> {
+            deleteTripCommand deleteTripCommand = new deleteTripCommand();
+            tripControllerForAdminMenu.setCommand(deleteTripCommand);
+            tripControllerForAdminMenu.undoDeleteTrip();
+            adminStation.notifyObservers("tripUndo");
+            displayTrips(scene, "Trip deletion undone.");
+        });
+
+        undoUpdateBtn.setOnAction(undoUpdate -> {
+            editTripCommand editTripCommand = new editTripCommand();
+            tripControllerForAdminMenu.setCommand(editTripCommand);
+            tripControllerForAdminMenu.undoUpdateTrip();
+            adminStation.notifyObservers("tripUndo");
+            displayTrips(scene, "Trip update undone.");
+        });
 
 
         FlowPane grid = new FlowPane(14, 14);
@@ -787,10 +804,12 @@ public class AdminMenu {
 
         try {
             ObjectMapper displayMapper = new ObjectMapper();
-            File tripFile = new File("src/Database/Trip.json");
-            File locationFile = new File("src/Database/Location.json");
-            ArrayNode tripArray = (ArrayNode) displayMapper.readTree(tripFile);
-            JsonNode locationRoot = displayMapper.readTree(locationFile);
+            ArrayNode tripArray = readArrayOrEmpty(displayMapper, "src/Database/Trip.json");
+            JsonNode locationRoot = readArrayOrEmpty(displayMapper, "src/Database/Location.json");
+
+            if (tripArray.isEmpty()) {
+                grid.getChildren().add(emptyDataCard("No trips available yet."));
+            }
 
             for (JsonNode trip : tripArray) {
                 String tripId   = trip.get("id").asText();
@@ -867,38 +886,34 @@ public class AdminMenu {
                 Button updateBtn = ghostBtn("✏  Edit");
 
                 deleteBtn.setOnAction(del -> {
+                    Alert confirmDelete = new Alert(
+                        Alert.AlertType.CONFIRMATION,
+                        "Delete this trip?",
+                        ButtonType.YES,
+                        ButtonType.NO
+                    );
+                    confirmDelete.showAndWait().ifPresent(result -> {
+                        if (result != ButtonType.YES) {
+                            return;
+                        }
 
-                    Trip tripToRemove = null;
-                    if (type.equals("Flight")){
-                        tripToRemove = new Flight(tripId);
-                    }
-                    if (type.equals("CruiseLine")){
-                        tripToRemove = new CruiseLine(tripId);
-                    }
-                    if (type.equals("Route")){
-                        tripToRemove = new Route(tripId);
-                    }
+                        Trip tripToRemove = null;
+                        if (type.equals("Flight")){
+                            tripToRemove = new Flight(tripId);
+                        }
+                        if (type.equals("CruiseLine")){
+                            tripToRemove = new CruiseLine(tripId);
+                        }
+                        if (type.equals("Route")){
+                            tripToRemove = new Route(tripId);
+                        }
 
-                    deleteTripCommand deleteTripCommand = new deleteTripCommand(tripToRemove);
-                    tripControllerForAdminMenu.setCommand(deleteTripCommand);
-                    tripControllerForAdminMenu.deleteTrip();
-                    adminStation.notifyObservers("tripDeleted");
-                    displayTrips(scene,"");
-                });
-                
-                undoDeleteBtn.setOnAction(undoDelete -> {
-                    
-                    deleteTripCommand deleteTripCommand = new deleteTripCommand();
-                    tripControllerForAdminMenu.setCommand(deleteTripCommand);
-                    tripControllerForAdminMenu.undoDeleteTrip();
-                    displayTrips(scene);
-                });
-
-                undoUpdateBtn.setOnAction(undoUpdate ->{
-                    editTripCommand editTripCommand = new editTripCommand();
-                    tripControllerForAdminMenu.setCommand(editTripCommand);
-                    tripControllerForAdminMenu.undoUpdateTrip();
-                    displayTrips(scene);
+                        deleteTripCommand deleteTripCommand = new deleteTripCommand(tripToRemove);
+                        tripControllerForAdminMenu.setCommand(deleteTripCommand);
+                        tripControllerForAdminMenu.deleteTrip();
+                        adminStation.notifyObservers("tripDeleted");
+                        displayTrips(scene,"");
+                    });
                 });
 
                 updateBtn.setOnAction(upd -> displayingTripsToUpdate(scene, trip));
@@ -910,7 +925,9 @@ public class AdminMenu {
                 
                 grid.getChildren().add(tc);
             }
-        } catch (IOException ex) { ex.printStackTrace(); }
+        } catch (IOException ex) {
+            grid.getChildren().add(emptyDataCard("Unable to load trips right now."));
+        }
 
         ScrollPane scroll = new ScrollPane(grid);
         scroll.setFitToWidth(true);
@@ -1104,7 +1121,7 @@ public class AdminMenu {
 		Button listBtn   = ghostBtn("☰  View All Companies");
 		listBtn.setPrefSize(200, 50);
         createBtn.setOnAction(e -> displayCompanyCreationForm(scene));
-		listBtn.setOnAction(e -> displayCompanies(scene));
+		listBtn.setOnAction(e -> displayCompanies(scene, null));
 
 		HBox btnRow = new HBox(10, createBtn, listBtn);
 
@@ -1116,7 +1133,7 @@ public class AdminMenu {
         scene.setRoot(buildShell(nav, main));
     }
 
-    private void displayCompanies(Scene scene) {
+    private void displayCompanies(Scene scene, String message) {
         this.currentPage = "companyList";
         this.currentScene = scene;
          VBox nav = new VBox(2);
@@ -1127,9 +1144,12 @@ public class AdminMenu {
 		 btnBack.setOnAction(e -> displayCompaniesMenu(scene, ""));
 		 nav.getChildren().addAll(btnBack, new Separator(), btnCompanies);
 		 
-		 VBox main = new VBox(20);
-		 main.setPadding(new Insets(40));
-		 Label title = pageTitle("All Companies");
+        VBox main = new VBox(20);
+        main.setPadding(new Insets(40));
+        Label title = pageTitle("All Companies");
+
+        Label messageLbl = new Label(message);
+        messageLbl.setStyle("-fx-text-fill: " + C_SUCCESS + "; -fx-font-size: 12px;");
 
         Button undoDeleteBtn = new Button("↩  Undo Delete");
         undoDeleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
@@ -1140,8 +1160,10 @@ public class AdminMenu {
         try {
             deleteHistoryRoot = deleteHistoryMapper.readTree(deleteHistoryFile);
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            deleteHistoryRoot = deleteHistoryMapper.createArrayNode();
+        }
+        if (deleteHistoryRoot == null) {
+            deleteHistoryRoot = deleteHistoryMapper.createArrayNode();
         }
         Boolean deleteHistory = deleteHistoryRoot.size() > 0;
         undoDeleteBtn.setVisible(deleteHistory);
@@ -1149,7 +1171,8 @@ public class AdminMenu {
             deleteCompanyCommand deleteCompanyCommand = new deleteCompanyCommand();
             CompanyControllerForAdminMenu.setCommand(deleteCompanyCommand);
             CompanyControllerForAdminMenu.undoDeleteCompany();
-            displayCompanies(scene);
+            adminStation.notifyObservers("tripUndo");
+            displayCompanies(scene, "Company deletion undone.");
         });
 
         
@@ -1172,7 +1195,8 @@ public class AdminMenu {
             editCompanyCommand editCompanyCommand = new editCompanyCommand();
             CompanyControllerForAdminMenu.setCommand(editCompanyCommand);
             CompanyControllerForAdminMenu.undoUpdateCompanyName();
-            displayCompanies(scene);
+            adminStation.notifyObservers("tripUndo");
+            displayCompanies(scene, "Company update undone.");
         });
 
 
@@ -1180,10 +1204,13 @@ public class AdminMenu {
 		 FlowPane grid = new FlowPane(14, 14);
 		 grid.setPadding(new Insets(4));
 
-		 try {
-			 ObjectMapper mapper = new ObjectMapper();
-			 File file = new File("src/Database/Company.json");
-			 ArrayNode arr = (ArrayNode) mapper.readTree(file);
+         try {
+             ObjectMapper mapper = new ObjectMapper();
+             ArrayNode arr = readArrayOrEmpty(mapper, "src/Database/Company.json");
+
+             if (arr.isEmpty()) {
+                 grid.getChildren().add(emptyDataCard("No companies available yet."));
+             }
 
 			 for (JsonNode node : arr) {
                 Company company = Company.fromJson(node.get("name").asText(), arr);
@@ -1211,14 +1238,20 @@ public class AdminMenu {
                 cc.getChildren().addAll(typeLbl, nameLbl, tripsLbl, btnRow);
 				grid.getChildren().add(cc);
 			 }
-		 } catch (IOException ex) { ex.printStackTrace(); }
+         } catch (IOException ex) {
+             grid.getChildren().add(emptyDataCard("Unable to load companies right now."));
+         }
 
 		 ScrollPane scroll = new ScrollPane(grid);
 		 scroll.setFitToWidth(true);
 		 scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
 		 VBox.setVgrow(scroll, Priority.ALWAYS);
 
-		 main.getChildren().addAll(title, scroll, undoDeleteBtn, undoUpdateBtn);
+        if (message != null && !message.isBlank())
+            main.getChildren().addAll(title, successBanner(message), scroll, undoDeleteBtn, undoUpdateBtn);
+        else {
+            main.getChildren().addAll(title, scroll, undoDeleteBtn, undoUpdateBtn);
+        }
 		 scene.setRoot(buildShell(nav, main));
     }
 
@@ -1237,7 +1270,7 @@ public class AdminMenu {
             CompanyControllerForAdminMenu.setCommand(deleteCompanyCommand);
             CompanyControllerForAdminMenu.deleteCompany();
 
-            displayCompanies(scene);
+            displayCompanies(scene, "Company deleted successfully!");
         });
     }
 
@@ -1252,27 +1285,12 @@ public class AdminMenu {
 		Button btnBack      = navBtn("←  Back");
 		Button btnCompanies = navBtn("🏢  Companies");
 		btnCompanies.setStyle(activeNavStyle());
-		btnBack.setOnAction(e -> displayCompaniesMenu(scene, ""));
+		btnBack.setOnAction(e -> displayCompanies(scene, ""));
 		nav.getChildren().addAll(btnBack, new Separator(), btnCompanies);
 
         VBox main = new VBox(20);
         main.setPadding(new Insets(40));
         Label title = pageTitle("Edit: " + company.getName());
-
-
-        Button undoDeleteBtn = new Button("↩  Undo Delete");
-        undoDeleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
-                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
-        File deleteHistoryFile = new File("src/Database/tripDeleteHistory.json");
-        boolean deleteHistory = deleteHistoryFile.exists() && deleteHistoryFile.length() > 0;
-        undoDeleteBtn.setVisible(deleteHistory);
-        undoDeleteBtn.setOnAction(undoDelete -> {
-            deleteTripCommand deleteTripCommand = new deleteTripCommand();
-            tripControllerForAdminMenu.setCommand(deleteTripCommand);
-            tripControllerForAdminMenu.undoDeleteTrip();
-            displayCompanies(scene);
-        });
-
 
         // Rename card
         VBox renameCard = card(12);
@@ -1290,7 +1308,7 @@ public class AdminMenu {
             editCompanyCommand editCompanyCommand = new editCompanyCommand(company, newName, oldName);
             CompanyControllerForAdminMenu.setCommand(editCompanyCommand);
             CompanyControllerForAdminMenu.updateCompanyName();
-            displayCompanyUpdate(scene, company);
+            displayCompanies(scene, "Company renamed successfully!");
         });
         renameCard.getChildren().addAll(renameHdr, formField("New Name", nameField), confirmBtn);
 
@@ -1426,7 +1444,7 @@ public class AdminMenu {
         Button listBtn   = ghostBtn("☰  View All Locations");
 		listBtn.setPrefSize(200, 50);
         createBtn.setOnAction(e -> displayLocationCreationForm(scene));
-        listBtn.setOnAction(e -> displayLocations(scene));
+        listBtn.setOnAction(e -> displayLocations(scene, ""));
 
         HBox btnRow = new HBox(10, createBtn, listBtn);
 
@@ -1438,7 +1456,7 @@ public class AdminMenu {
         scene.setRoot(buildShell(nav, main));
     }
 
-    private void displayLocations(Scene scene) {
+    private void displayLocations(Scene scene, String message) {
         this.currentPage = "locationList";
         this.currentScene = scene;
         VBox nav = new VBox(2);
@@ -1452,6 +1470,7 @@ public class AdminMenu {
         VBox main = new VBox(20);
         main.setPadding(new Insets(40));
         Label title = pageTitle("All Locations");
+
 
         Button undoDeleteBtn = new Button("↩  Undo Delete");
         undoDeleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
@@ -1467,21 +1486,46 @@ public class AdminMenu {
             }
         }
         undoDeleteBtn.setVisible(locationDeleteHistory);
-
         undoDeleteBtn.setOnAction(undoDelete -> {
 
             deleteLocationCommand deleteLocationCommand = new deleteLocationCommand();
             LocationControllerForAdminMenu.setCommand(deleteLocationCommand);
             LocationControllerForAdminMenu.undoDeleteLocation();
-            displayLocations(scene);
+            adminStation.notifyObservers("tripUndo");
+            displayLocations(scene, "Location deletion undone.");
+        });
+
+        Button undoUpdateBtn = new Button("↩  Undo Update");
+        undoUpdateBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: "
+                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        File locationUpdateHistoryFile = new File("src/Database/locationUpdateHistory.json");
+        boolean locationUpdateHistory = false;
+        if (locationUpdateHistoryFile.exists() && locationUpdateHistoryFile.length() > 0) {
+            try {
+                JsonNode root = new ObjectMapper().readTree(locationUpdateHistoryFile);
+                locationUpdateHistory = root.size() > 0;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        undoUpdateBtn.setVisible(locationUpdateHistory);
+        undoUpdateBtn.setOnAction(undoUpdate -> {
+            editLocationCommand editLocationCommand = new editLocationCommand();
+            LocationControllerForAdminMenu.setCommand(editLocationCommand);
+            LocationControllerForAdminMenu.undoUpdateLocation();
+            adminStation.notifyObservers("tripUndo");
+            displayLocations(scene, "Location update undone.");
         });
         FlowPane grid = new FlowPane(14, 14);
         grid.setPadding(new Insets(4));
 
         try {
             ObjectMapper mapper = new ObjectMapper();
-            File file = new File("src/Database/Location.json");
-            ArrayNode arr = (ArrayNode) mapper.readTree(file);
+            ArrayNode arr = readArrayOrEmpty(mapper, "src/Database/Location.json");
+
+            if (arr.isEmpty()) {
+                grid.getChildren().add(emptyDataCard("No locations available yet."));
+            }
 
             for (JsonNode node : arr) {
                 String id = node.path("id").asText();
@@ -1525,14 +1569,19 @@ public class AdminMenu {
                 cc.getChildren().addAll(typeLbl, cityLbl, nameLbl, idLbl, btnRow);
                 grid.getChildren().add(cc);
             }
-        } catch (IOException ex) { ex.printStackTrace(); }
+        } catch (IOException ex) {
+            grid.getChildren().add(emptyDataCard("Unable to load locations right now."));
+        }
 
         ScrollPane scroll = new ScrollPane(grid);
         scroll.setFitToWidth(true);
         scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        main.getChildren().addAll(title, scroll, undoDeleteBtn);
+        if (message != null && !message.isBlank())
+            main.getChildren().addAll(title, successBanner(message), scroll, undoDeleteBtn, undoUpdateBtn);
+        else
+            main.getChildren().addAll(title, scroll, undoDeleteBtn, undoUpdateBtn);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -1544,7 +1593,7 @@ public class AdminMenu {
 		Button btnBack      = navBtn("←  Back");
 		Button btnLocations = navBtn("📍  Locations");
 		btnLocations.setStyle(activeNavStyle());
-		btnBack.setOnAction(e -> displayLocations(scene));
+        btnBack.setOnAction(e -> displayLocations(scene, ""));
 		nav.getChildren().addAll(btnBack, new Separator(), btnLocations);
 
         VBox main = new VBox(20);
@@ -1565,28 +1614,6 @@ public class AdminMenu {
         cityField.setPromptText("New city name");
         styleInput(cityField);
 
-        Button undoLocationUpdateBtn = new Button("↩  Undo Update");
-        undoLocationUpdateBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
-                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
-        File locationUpdateHistoryFile = new File("src/Database/locationUpdateHistory.json");
-        boolean locationUpdateHistory = false;
-        if (locationUpdateHistoryFile.exists() && locationUpdateHistoryFile.length() > 0) {
-            try {
-                JsonNode root = new ObjectMapper().readTree(locationUpdateHistoryFile);
-                locationUpdateHistory = root.size() > 0;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        undoLocationUpdateBtn.setVisible(locationUpdateHistory);
-
-        undoLocationUpdateBtn.setOnAction(undoLocationUpdate -> {
-            editLocationCommand editLocationCommand = new editLocationCommand(location);
-            LocationControllerForAdminMenu.setCommand(editLocationCommand);
-            LocationControllerForAdminMenu.undoUpdateLocation();
-            displayLocations(scene);
-        });
 
         Button saveBtn = actionBtn("  Save Changes  ");
         saveBtn.setOnAction(e -> {
@@ -1596,7 +1623,7 @@ public class AdminMenu {
             editLocationCommand updateLocationCommand = new editLocationCommand(location, newName, newCity);
             LocationControllerForAdminMenu.setCommand(updateLocationCommand);
             LocationControllerForAdminMenu.updateLocation();
-            displayLocations(scene);
+            displayLocations(scene, "Location updated successfully!");
         });
 
         formCard.getChildren().addAll(
@@ -1607,7 +1634,7 @@ public class AdminMenu {
             saveBtn
         );
 
-        main.getChildren().addAll(title, formCard,undoLocationUpdateBtn);
+        main.getChildren().addAll(title, formCard);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -1625,7 +1652,7 @@ public class AdminMenu {
             deleteLocationCommand deleteLocationCommand = new deleteLocationCommand(location);
             LocationControllerForAdminMenu.setCommand(deleteLocationCommand);
             LocationControllerForAdminMenu.deleteLocation();
-            displayLocations(scene);
+            displayLocations(scene, "Location deleted successfully!");
         });
     }
 
@@ -1708,7 +1735,7 @@ public class AdminMenu {
         Button listBtn   = ghostBtn("☰  View All Transports");
 		listBtn.setPrefSize(200, 50);
         createBtn.setOnAction(e -> displayTransportCreationForm(scene));
-        listBtn.setOnAction(e -> displayTransports(scene));
+        listBtn.setOnAction(e -> displayTransports(scene, ""));
 
         HBox btnRow = new HBox(10, createBtn, listBtn);
 
@@ -1716,7 +1743,7 @@ public class AdminMenu {
         scene.setRoot(buildShell(nav, main));
     }
 
-    private void displayTransports(Scene scene) {
+    private void displayTransports(Scene scene, String message) {
         this.currentPage = "transportList";
         this.currentScene = scene;
         VBox nav = new VBox(2);
@@ -1730,6 +1757,9 @@ public class AdminMenu {
         VBox main = new VBox(20);
         main.setPadding(new Insets(40));
         Label title = pageTitle("All Transports");
+
+        Label messageLbl = new Label(message);
+        messageLbl.setStyle("-fx-text-fill: " + C_SUCCESS + "; -fx-font-size: 12px;");
 
         Button undoDeleteTransportsBtn = new Button("↩  Undo Delete");
         undoDeleteTransportsBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
@@ -1749,7 +1779,8 @@ public class AdminMenu {
             deleteTransportCommand deleteTransportCommand = new deleteTransportCommand();
             TransportControllerForAdminMenu.setCommand(deleteTransportCommand);
             TransportControllerForAdminMenu.undoDeleteTransport();
-            displayTransports(scene);
+            adminStation.notifyObservers("tripUndo");
+            displayTransports(scene, "Transport deletion undone.");
         });
 
         FlowPane grid = new FlowPane(14, 14);
@@ -1757,11 +1788,12 @@ public class AdminMenu {
 
         try {
             ObjectMapper mapper = new ObjectMapper();
-            File transportFile = new File("src/Database/Transport.json");
-            File tripFile = new File("src/Database/Trip.json");
+            ArrayNode transports = readArrayOrEmpty(mapper, "src/Database/Transport.json");
+            ArrayNode trips = readArrayOrEmpty(mapper, "src/Database/Trip.json");
 
-            ArrayNode transports = (ArrayNode) mapper.readTree(transportFile);
-            ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
+            if (transports.isEmpty()) {
+                grid.getChildren().add(emptyDataCard("No transports available yet."));
+            }
 
             for (JsonNode transport : transports) {
                 String transportId = transport.path("transportID").asText();
@@ -1809,7 +1841,7 @@ public class AdminMenu {
                 grid.getChildren().add(tc);
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            grid.getChildren().add(emptyDataCard("Unable to load transports right now."));
         }
 
         ScrollPane scroll = new ScrollPane(grid);
@@ -1817,7 +1849,11 @@ public class AdminMenu {
         scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        main.getChildren().addAll(title, scroll, undoDeleteTransportsBtn);
+        if (message != null && !message.isBlank())
+            main.getChildren().addAll(title, successBanner(message), scroll, undoDeleteTransportsBtn);
+        else{
+            main.getChildren().addAll(title, scroll, undoDeleteTransportsBtn);
+        }
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -1861,7 +1897,7 @@ public class AdminMenu {
             deleteTransportCommand deleteTransportCommand = new deleteTransportCommand(transportToRemove);
             TransportControllerForAdminMenu.setCommand(deleteTransportCommand);
             TransportControllerForAdminMenu.deleteTransport();
-            displayTransports(scene);
+            displayTransports(scene, "Transport deleted successfully!");
         });
     }
 
@@ -2034,7 +2070,6 @@ public class AdminMenu {
         return area;
     }
 
-    @SuppressWarnings("unchecked")
     private VBox buildTrainArea() {
         Spinner<Integer> rowsP = new Spinner<>(1, 100, 10);
         rowsP.setEditable(true); rowsP.setPrefWidth(80);
@@ -2095,6 +2130,31 @@ public class AdminMenu {
     // ═══════════════════════════════════════════════════════════════
     // JSON HELPERS
     // ═══════════════════════════════════════════════════════════════
+    private ArrayNode readArrayOrEmpty(ObjectMapper mapper, String path) throws IOException {
+        File file = new File(path);
+        if (!file.exists() || file.length() == 0) {
+            return mapper.createArrayNode();
+        }
+
+        JsonNode root = mapper.readTree(file);
+        if (root == null || !root.isArray()) {
+            return mapper.createArrayNode();
+        }
+        return (ArrayNode) root;
+    }
+
+    private VBox emptyDataCard(String message) {
+        VBox card = card(8);
+        card.setPrefWidth(320);
+
+        Label emptyLbl = new Label(message);
+        emptyLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 13px;");
+        emptyLbl.setWrapText(true);
+
+        card.getChildren().add(emptyLbl);
+        return card;
+    }
+
     private void updateCompanies(JsonNode root, ComboBox<String> combo, String type) {
         combo.getItems().clear();
         for (JsonNode n : root)

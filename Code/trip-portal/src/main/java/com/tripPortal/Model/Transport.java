@@ -3,8 +3,6 @@ package com.tripPortal.Model;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -122,15 +120,25 @@ public abstract class Transport {
         }
         throw new IllegalArgumentException("Transport not found: " + transportID);
     }
-
+    
     public void delete(String transportId) {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
+            // Handle Transport.json
             File transportFile = new File("src/Database/Transport.json");
-            ArrayNode transports = (ArrayNode) mapper.readTree(transportFile);
+            JsonNode transportRoot = mapper.readTree(transportFile);
+            ArrayNode transports;
+            if (transportRoot.isArray()) {
+                transports = (ArrayNode) transportRoot;
+            } else if (transportRoot.has("transports") && transportRoot.get("transports").isArray()) {
+                transports = (ArrayNode) transportRoot.get("transports");
+            } else {
+                System.err.println("Unable to delete transport.");
+                return;
+            }
+
             ObjectNode snapShot = mapper.createObjectNode();
-            
             for (int i = 0; i < transports.size(); i++) {
                 if (transportId.equals(transports.get(i).path("transportID").asText())) {
                     snapShot.set("transport", transports.get(i));
@@ -140,10 +148,20 @@ public abstract class Transport {
             }
             mapper.writerWithDefaultPrettyPrinter().writeValue(transportFile, transports);
 
+            // Handle Trip.json
             File tripFile = new File("src/Database/Trip.json");
-            ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
+            JsonNode tripRoot = mapper.readTree(tripFile);
+            ArrayNode trips;
+            if (tripRoot.isArray()) {
+                trips = (ArrayNode) tripRoot;
+            } else if (tripRoot.has("trips") && tripRoot.get("trips").isArray()) {
+                trips = (ArrayNode) tripRoot.get("trips");
+            } else {
+                trips = mapper.createArrayNode();
+            }
+
             ArrayNode removedTripIds = mapper.createArrayNode();
-            ArrayNode tripsRemoved = mapper.createArrayNode(); 
+            ArrayNode tripsRemoved = mapper.createArrayNode();
             for (int i = trips.size() - 1; i >= 0; i--) {
                 if (transportId.equals(trips.get(i).path("transport").asText())) {
                     tripsRemoved.add(trips.get(i));
@@ -154,15 +172,22 @@ public abstract class Transport {
             snapShot.set("tripsRemoved", tripsRemoved);
             mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
 
+            // Handle Company.json
             ArrayNode tripsFromCompany = mapper.createArrayNode();
             if (removedTripIds.size() > 0) {
                 File companyFile = new File("src/Database/Company.json");
-                ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
+                JsonNode companyRoot = mapper.readTree(companyFile);
+                ArrayNode companies;
+                if (companyRoot.isArray()) {
+                    companies = (ArrayNode) companyRoot;
+                } else if (companyRoot.has("companies") && companyRoot.get("companies").isArray()) {
+                    companies = (ArrayNode) companyRoot.get("companies");
+                } else {
+                    companies = mapper.createArrayNode();
+                }
 
                 for (JsonNode company : companies) {
-                    if (!company.has("Trips")) {
-                        continue;
-                    }
+                    if (!company.has("Trips")) continue;
                     ArrayNode companyTrips = (ArrayNode) company.get("Trips");
                     for (int i = companyTrips.size() - 1; i >= 0; i--) {
                         String tripId = companyTrips.get(i).asText();
@@ -175,15 +200,15 @@ public abstract class Transport {
                         }
                     }
                 }
-
-            mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
+                mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
             }
+
             snapShot.set("tripsFromCompany", tripsFromCompany);
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/Database/transportDeleteHistory.json"), snapShot);
+
         } catch (IOException ex) {
             ex.printStackTrace();
             System.err.println("Unable to delete transport.");
-            return;
         }
     }
 }

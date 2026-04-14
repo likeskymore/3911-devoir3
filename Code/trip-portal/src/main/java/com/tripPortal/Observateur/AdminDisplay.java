@@ -26,6 +26,8 @@ public class AdminDisplay implements Observer {
 			clientMenu.displayReserveMenu(currentScene, "A trip has been deleted");
 		} else if (event.equals("tripCreated") && "reserve".equals(currentPage)) {
 			clientMenu.displayReserveMenu(currentScene, "A new trip has been created");
+		} else if (event.equals("tripUndo") && "reserve".equals(currentPage)) {
+			clientMenu.displayReserveMenu(currentScene, "An admin undo operation changed trips");
 		}
 	}
 
