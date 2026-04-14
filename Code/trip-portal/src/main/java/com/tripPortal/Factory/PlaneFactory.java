@@ -15,7 +15,7 @@ import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Plane;
 import com.tripPortal.Model.Seat;
 import com.tripPortal.Model.SectionPlane;
-import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.TransportPrototype;
 import com.tripPortal.Model.Trip;
 
 public class PlaneFactory extends PlaneTripFactory {
@@ -46,7 +46,7 @@ public class PlaneFactory extends PlaneTripFactory {
         float price,
         int duration,
         ArrayList<Location> locations,
-        Transport transport
+        TransportPrototype transport
     ){
 		return null;
 	}

@@ -11,20 +11,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-public abstract class Transport {
+public abstract class TransportPrototype {
     String name;
     String TransportID;
     ArrayList<Section> sections;
     boolean available;
 
-    public Transport(String name) {
+    public TransportPrototype(String name) {
         this.name = name;
         this.TransportID = randomGenerateID();
         this.available = true;
         this.sections = new ArrayList<>();
     }
 
-    public Transport(String id, String placeholder) {
+    public TransportPrototype(String id, String placeholder) {
         this.TransportID = id;
     }
 
@@ -98,7 +98,7 @@ public abstract class Transport {
         this.available = available;
     }
 
-    public static Transport fromJson(String transportID, JsonNode root) {
+    public static TransportPrototype fromJson(String transportID, JsonNode root) {
         for (JsonNode node : root) {
             if (node.get("transportID").asText().equals(transportID)) {
                 String type = node.get("type").asText();

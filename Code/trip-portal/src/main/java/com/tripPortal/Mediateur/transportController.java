@@ -12,7 +12,7 @@ import com.tripPortal.Model.Section;
 import com.tripPortal.Model.SectionBoat;
 import com.tripPortal.Model.SectionPlane;
 import com.tripPortal.Model.SectionTrain;
-import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.TransportPrototype;
 
 public class transportController {
 
@@ -20,7 +20,7 @@ public class transportController {
     public void setCommand(Command command){
         this.command = command;
     }
-    public Transport goCallCreateTransport(String name, String type, String companyName, List<? extends Section> sections) {
+    public TransportPrototype goCallCreateTransport(String name, String type, String companyName, List<? extends Section> sections) {
         if (name == null || name.isEmpty()) {
             System.err.println("Transport name cannot be empty.");
             return null;

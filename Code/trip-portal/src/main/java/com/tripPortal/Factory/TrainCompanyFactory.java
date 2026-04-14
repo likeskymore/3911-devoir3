@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tripPortal.Model.Company;
 import com.tripPortal.Model.FlightCompany;
-import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.TransportPrototype;
 import com.tripPortal.Model.Trip;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.TrainCompany;
@@ -81,7 +81,7 @@ public class TrainCompanyFactory extends TrainTripFactory {
 			float price,
 			int duration,
 			ArrayList<Location> locations,
-			Transport transport) {
+			TransportPrototype transport) {
 		return null;
 	}
 

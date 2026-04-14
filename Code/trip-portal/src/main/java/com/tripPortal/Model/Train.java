@@ -3,7 +3,7 @@ package com.tripPortal.Model;
 import java.util.ArrayList;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class Train extends Transport {
+public class Train extends TransportPrototype {
 
     private static final int DEFAULT_ROWS_PREMIERE = 10;
     private static final int DEFAULT_ROWS_ECONOMIE = 30;

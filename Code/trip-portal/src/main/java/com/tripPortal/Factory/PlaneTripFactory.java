@@ -2,7 +2,7 @@ package com.tripPortal.Factory;
 
 import com.tripPortal.Model.Company;
 import com.tripPortal.Model.Location;
-import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.TransportPrototype;
 import com.tripPortal.Model.Trip;
 
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ public abstract class PlaneTripFactory extends TripFactory {
         float price,
         int duration,
         ArrayList<Location> locations,
-        Transport transport
+        TransportPrototype transport
     );
 
 }

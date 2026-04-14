@@ -17,7 +17,7 @@ public abstract class Company {
 	private String id;
 	private String name;
 	private String tripID;
-	private ArrayList<Transport> transports;
+	private ArrayList<TransportPrototype> transports;
 	private ArrayList<Trip> trips;
 
 	public Company(String name) {
@@ -25,7 +25,7 @@ public abstract class Company {
 		this.tripID = randomGenerateID(2);
 		this.name = name;
 		this.trips = new ArrayList<Trip>();
-		this.transports = new ArrayList<Transport>();
+		this.transports = new ArrayList<TransportPrototype>();
 
 	}
 
@@ -98,11 +98,11 @@ public abstract class Company {
 		this.tripID = tripID;
 	}
 
-	public ArrayList<Transport> getTransports() {
+	public ArrayList<TransportPrototype> getTransports() {
 		return transports;
 	}
 
-	public void setTransports(ArrayList<Transport> transports) {
+	public void setTransports(ArrayList<TransportPrototype> transports) {
 		this.transports = transports;
 	}
 

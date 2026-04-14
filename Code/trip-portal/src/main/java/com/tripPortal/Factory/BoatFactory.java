@@ -15,7 +15,7 @@ import com.tripPortal.Model.Company;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Seat;
 import com.tripPortal.Model.SectionBoat;
-import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.TransportPrototype;
 import com.tripPortal.Model.Trip;
 
 public class BoatFactory extends PlaneTripFactory {
@@ -46,11 +46,11 @@ public class BoatFactory extends PlaneTripFactory {
         float price,
         int duration,
         ArrayList<Location> locations,
-        Transport transport
+        TransportPrototype transport
     ){
 		return null;
 	}
-    public Transport createTransport(String name, String companyName, List<SectionBoat> sections) {
+    public TransportPrototype createTransport(String name, String companyName, List<SectionBoat> sections) {
 
         // Créer l'objet Java
         Boat boat = new Boat(name);

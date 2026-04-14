@@ -2,7 +2,7 @@ package com.tripPortal.Model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class Plane extends Transport {
+public class Plane extends TransportPrototype {
 
     public Plane(String name) {
         super(name);

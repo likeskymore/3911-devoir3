@@ -1,11 +1,11 @@
 package com.tripPortal.Commande;
 
-import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.TransportPrototype;
 
 public class deleteTransportCommand implements Command{
 
-    Transport transport;
-    public deleteTransportCommand(Transport transport){
+    TransportPrototype transport;
+    public deleteTransportCommand(TransportPrototype transport){
         this.transport = transport;
     }
     @Override

@@ -38,7 +38,7 @@ import com.tripPortal.Model.SectionPlane;
 import com.tripPortal.Model.SectionTrain;
 import com.tripPortal.Model.Train;
 import com.tripPortal.Model.TrainStation;
-import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.TransportPrototype;
 import com.tripPortal.Model.Trip;
 import com.tripPortal.Observateur.AdminStation;
 
@@ -301,7 +301,7 @@ public class AdminMenu {
         styleComboBox(comboBox, s -> s);
     }
 
-    private void styleTransportComboBox(ComboBox<Transport> comboBox) {
+    private void styleTransportComboBox(ComboBox<TransportPrototype> comboBox) {
         styleComboBox(comboBox, t -> t.getName());
     }
 
@@ -541,10 +541,10 @@ public class AdminMenu {
         selectedStopsLabel.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
 
         // Transport
-        ComboBox<Transport> transportCombo = new ComboBox<>();
-        transportCombo.setConverter(new StringConverter<Transport>() {
-            public String toString(Transport t)        { return t != null ? t.getName() : ""; }
-            public Transport fromString(String s)      { return null; }
+        ComboBox<TransportPrototype> transportCombo = new ComboBox<>();
+        transportCombo.setConverter(new StringConverter<TransportPrototype>() {
+            public String toString(TransportPrototype t)        { return t != null ? t.getName() : ""; }
+            public TransportPrototype fromString(String s)      { return null; }
         });
         styleInput(transportCombo);
         styleTransportComboBox(transportCombo);
@@ -923,7 +923,7 @@ public class AdminMenu {
         styleInput(startDate);
         styleInput(endDate);
 
-        ComboBox<Transport> transportCombo = new ComboBox<>();
+        ComboBox<TransportPrototype> transportCombo = new ComboBox<>();
         styleInput(transportCombo);
         styleTransportComboBox(transportCombo);
         transportCombo.setPrefWidth(280);
@@ -933,9 +933,9 @@ public class AdminMenu {
         try {
             JsonNode companyRoot = mapper.readTree(new File("src/Database/Company.json"));
             JsonNode transportRoot = mapper.readTree(new File("src/Database/Transport.json"));
-            Transport currentTransport = null;
+            TransportPrototype currentTransport = null;
             if (transportRoot != null && currentTransportId != null && !currentTransportId.isBlank()) {
-                currentTransport = Transport.fromJson(currentTransportId, transportRoot);
+                currentTransport = TransportPrototype.fromJson(currentTransportId, transportRoot);
                 currentTransportLabel.setText("Current transport: " + currentTransport.getName() + " (" + currentTransportId + ")");
             }
             if (companyType != null && companyRoot != null) {
@@ -955,7 +955,7 @@ public class AdminMenu {
             startDate.setValue(LocalDate.parse(trip.path("startDate").asText()));
             endDate.setValue(LocalDate.parse(trip.path("endDate").asText()));
             if (currentTransport != null) {
-                for (Transport transport : transportCombo.getItems()) {
+                for (TransportPrototype transport : transportCombo.getItems()) {
                     if (currentTransportId.equals(transport.getTransportID())) {
                         transportCombo.setValue(transport);
                         break;
@@ -1663,7 +1663,7 @@ public class AdminMenu {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            Transport transportToRemove = null;
+            TransportPrototype transportToRemove = null;
 
             for (JsonNode transport : transportsList){
                 if (transport.get("transportID").asText().equals(transportId)){
@@ -2015,13 +2015,13 @@ public class AdminMenu {
         });
     }
 
-    private void updateTransports(JsonNode root, ComboBox<Transport> combo, String type, String companyName) {
+    private void updateTransports(JsonNode root, ComboBox<TransportPrototype> combo, String type, String companyName) {
         combo.getItems().clear();
         combo.setValue(null);
         for (JsonNode n : root) {
             if (!n.has("type") || !n.get("type").asText().equals(type)) continue;
             if (!n.has("company") || !n.get("company").asText().equals(companyName)) continue;
-            Transport t = switch (n.get("type").asText()) {
+            TransportPrototype t = switch (n.get("type").asText()) {
                 case "Plane" -> new Plane(n);
                 case "Boat"  -> new Boat(n);
                 case "Train" -> new Train(n);

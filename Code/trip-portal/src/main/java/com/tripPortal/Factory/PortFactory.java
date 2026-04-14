@@ -13,7 +13,7 @@ import com.tripPortal.Model.Airport;
 import com.tripPortal.Model.Company;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Port;
-import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.TransportPrototype;
 import com.tripPortal.Model.Trip;
 
 public class PortFactory extends BoatTripFactory {
@@ -82,7 +82,7 @@ public class PortFactory extends BoatTripFactory {
         float price,
         int duration,
         ArrayList<Location> locations,
-        Transport transport
+        TransportPrototype transport
     ){
 		return null;
 	}

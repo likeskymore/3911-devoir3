@@ -14,7 +14,7 @@ import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Route;
 import com.tripPortal.Model.Train;
 import com.tripPortal.Model.TrainStation;
-import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.TransportPrototype;
 import com.tripPortal.Model.Trip;
 
 public class RouteFactory extends TrainTripFactory {
@@ -45,7 +45,7 @@ public class RouteFactory extends TrainTripFactory {
         float price,
         int duration,
         ArrayList<Location> locations,
-        Transport transport) {
+        TransportPrototype transport) {
 
     if (!(transport instanceof Train)) {
         throw new IllegalArgumentException("RouteFactory requires a Train transport");

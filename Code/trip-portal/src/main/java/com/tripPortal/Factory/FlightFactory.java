@@ -14,7 +14,7 @@ import com.tripPortal.Model.Company;
 import com.tripPortal.Model.Flight;
 import com.tripPortal.Model.Location;
 import com.tripPortal.Model.Plane;
-import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.TransportPrototype;
 import com.tripPortal.Model.Trip;
 
 public class FlightFactory extends PlaneTripFactory {
@@ -47,7 +47,7 @@ public class FlightFactory extends PlaneTripFactory {
         float price,
         int duration,
         ArrayList<Location> locations,
-        Transport transport) {
+        TransportPrototype transport) {
 
     if (!(locations.get(0) instanceof Airport) || !(locations.get(locations.size() - 1) instanceof Airport)) {
         throw new IllegalArgumentException("FlightFactory requires Airport locations");

@@ -3,7 +3,7 @@ package com.tripPortal.Model;
 import java.util.ArrayList;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class Boat extends Transport {
+public class Boat extends TransportPrototype {
 
     public Boat(String name) {
         super(name);

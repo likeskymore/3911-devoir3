@@ -24,7 +24,7 @@ import com.tripPortal.Model.Route;
 import com.tripPortal.Model.SectionPlane;
 import com.tripPortal.Model.Train;
 import com.tripPortal.Model.TrainStation;
-import com.tripPortal.Model.Transport;
+import com.tripPortal.Model.TransportPrototype;
 import com.tripPortal.Model.Trip;
 import com.tripPortal.Visiteur.AllCruiseLines;
 import com.tripPortal.Visiteur.AllFlights;
@@ -46,7 +46,7 @@ public class tripController {
 			float price,
 			int duration,
 			ArrayList<Location> locations,
-			Transport transport,
+			TransportPrototype transport,
 			String type) {
 
 		if (company == null || locations == null || locations.isEmpty() || transport == null) {
