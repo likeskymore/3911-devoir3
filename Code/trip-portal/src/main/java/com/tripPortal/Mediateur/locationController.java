@@ -150,4 +150,8 @@ public class locationController {
 		command.execute();
 	}
 
+	public void undoUpdateLocation(){
+		command.undo();
+	}
+
 }

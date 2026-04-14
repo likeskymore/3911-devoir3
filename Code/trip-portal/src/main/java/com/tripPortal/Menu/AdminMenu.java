@@ -1183,6 +1183,21 @@ public class AdminMenu {
         main.setPadding(new Insets(40));
         Label title = pageTitle("Edit: " + company.getName());
 
+
+        Button undoDeleteBtn = new Button("↩  Undo Delete");
+        undoDeleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        File deleteHistoryFile = new File("src/Database/tripDeleteHistory.json");
+        boolean deleteHistory = deleteHistoryFile.exists() && deleteHistoryFile.length() > 0;
+        undoDeleteBtn.setVisible(deleteHistory);
+        undoDeleteBtn.setOnAction(undoDelete -> {
+            deleteTripCommand deleteTripCommand = new deleteTripCommand();
+            tripControllerForAdminMenu.setCommand(deleteTripCommand);
+            tripControllerForAdminMenu.undoDeleteTrip();
+            displayCompanies(scene);
+        });
+
+
         // Rename card
         VBox renameCard = card(12);
         Label renameHdr = new Label("RENAME COMPANY");
@@ -1356,6 +1371,21 @@ public class AdminMenu {
         main.setPadding(new Insets(40));
         Label title = pageTitle("All Locations");
 
+        Button undoDeleteBtn = new Button("↩  Undo Delete");
+        undoDeleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        File locationDeleteHistoryFile = new File("src/Database/locationDeleteHistory.json");
+        boolean locationDeleteHistory = false;
+        if (locationDeleteHistoryFile.exists() && locationDeleteHistoryFile.length() > 0) {
+            try {
+                JsonNode root = new ObjectMapper().readTree(locationDeleteHistoryFile);
+                locationDeleteHistory = root.size() > 0;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        undoDeleteBtn.setVisible(locationDeleteHistory);
+
         FlowPane grid = new FlowPane(14, 14);
         grid.setPadding(new Insets(4));
 
@@ -1413,7 +1443,7 @@ public class AdminMenu {
         scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        main.getChildren().addAll(title, scroll);
+        main.getChildren().addAll(title, scroll, undoDeleteBtn);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -1444,6 +1474,29 @@ public class AdminMenu {
         cityField.setPromptText("New city name");
         styleInput(cityField);
 
+        Button undoLocationUpdateBtn = new Button("↩  Undo Update");
+        undoLocationUpdateBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        File locationUpdateHistoryFile = new File("src/Database/locationUpdateHistory.json");
+        boolean locationUpdateHistory = false;
+        if (locationUpdateHistoryFile.exists() && locationUpdateHistoryFile.length() > 0) {
+            try {
+                JsonNode root = new ObjectMapper().readTree(locationUpdateHistoryFile);
+                locationUpdateHistory = root.size() > 0;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        undoLocationUpdateBtn.setVisible(locationUpdateHistory);
+
+        undoLocationUpdateBtn.setOnAction(undoLocationUpdate -> {
+            editLocationCommand editLocationCommand = new editLocationCommand(location);
+            LocationControllerForAdminMenu.setCommand(editLocationCommand);
+            LocationControllerForAdminMenu.undoUpdateLocation();
+            displayLocations(scene);
+        });
+
         Button saveBtn = actionBtn("  Save Changes  ");
         saveBtn.setOnAction(e -> {
             String newCity = cityField.getText();
@@ -1463,7 +1516,7 @@ public class AdminMenu {
             saveBtn
         );
 
-        main.getChildren().addAll(title, formCard);
+        main.getChildren().addAll(title, formCard,undoLocationUpdateBtn);
         scene.setRoot(buildShell(nav, main));
     }
 

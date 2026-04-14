@@ -22,4 +22,16 @@
   "destination" : "ZBY",
   "transport" : "571308",
   "active" : 1
+}, {
+  "type" : "Flight",
+  "id" : "LGSCYG",
+  "company" : "Air Canada Test",
+  "startDate" : "2026-04-15",
+  "endDate" : "2026-04-16",
+  "price" : 123.0,
+  "duration" : 1,
+  "origin" : "BTA",
+  "destination" : "AJT",
+  "transport" : "571308",
+  "active" : 1
 } ]

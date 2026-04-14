@@ -3,7 +3,7 @@
   "id" : "JHLZM",
   "name" : "Air Canada Test",
   "tripId" : "LG",
-  "Trips" : [ "LGZJKV", "LGAUYT" ]
+  "Trips" : [ "LGZJKV", "LGAUYT", "LGSCYG" ]
 }, {
   "type" : "FlightCompany",
   "id" : "VKKRR",

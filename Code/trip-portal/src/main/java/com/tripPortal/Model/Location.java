@@ -89,14 +89,19 @@ public abstract class Location {
 			ObjectMapper mapper = new ObjectMapper();
 			File file = new File("src/Database/Location.json");
 			ArrayNode locations = (ArrayNode) mapper.readTree(file);
-
+			ObjectNode snapShot = mapper.createObjectNode();
+			File restoreFile = new File("src/Database/locationUpdateHistory.json");
 			for (int i = 0; i < locations.size(); i++) {
 				JsonNode node = locations.get(i);
 				if (node.path("id").asText().equals(this.getId())) {
+					snapShot.put("id",this.getId());
+					snapShot.set("name", node.get("name"));
+					snapShot.set("city", node.get("city"));
 					((ObjectNode) node).put("city", newCity);
 					((ObjectNode) node).put("name", newName);
 					this.setCity(newCity);
 					this.setName(newName);
+					mapper.writerWithDefaultPrettyPrinter().writeValue(restoreFile, snapShot);
 					mapper.writerWithDefaultPrettyPrinter().writeValue(file, locations);
 					return;
 				}
