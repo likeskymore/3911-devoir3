@@ -19,16 +19,17 @@ import com.tripPortal.Model.Trip;
 public class AirportFactory extends PlaneTripFactory {
 
 	// Singleton
-    private static AirportFactory instance;
+	private static AirportFactory instance;
 
-    private AirportFactory() {}
+	private AirportFactory() {
+	}
 
-    public static AirportFactory getInstance() {
-        if (instance == null) {
-            instance = new AirportFactory();
-        }
-        return instance;
-    }
+	public static AirportFactory getInstance() {
+		if (instance == null) {
+			instance = new AirportFactory();
+		}
+		return instance;
+	}
 
 	// Patron de fabrique
 	public Location createLocation(String city) {
@@ -42,7 +43,6 @@ public class AirportFactory extends PlaneTripFactory {
 			ObjectMapper mapper = new ObjectMapper();
 			File file = new File("src/Database/Location.json");
 
-			// Read existing array
 			JsonNode root = mapper.readTree(file);
 			ArrayNode array;
 
@@ -54,14 +54,12 @@ public class AirportFactory extends PlaneTripFactory {
 				throw new IOException("Location.json doit contenir un tableau JSON []");
 			}
 
-			// Build new entry
 			ObjectNode newAirport = mapper.createObjectNode();
 			newAirport.put("type", "Airport");
 			newAirport.put("id", airport.getId());
 			newAirport.put("city", city);
 			newAirport.put("name", name);
 
-			// Append and write back
 			array.add(newAirport);
 			mapper.writerWithDefaultPrettyPrinter().writeValue(file, array);
 
@@ -72,18 +70,19 @@ public class AirportFactory extends PlaneTripFactory {
 
 		return airport;
 	}
-	public Company createCompany(String name){
+
+	public Company createCompany(String name) {
 		return null;
 	}
-    public Trip createTrajectory(
-        Company company,
-        LocalDate startDate,
-        LocalDate endDate,
-        float price,
-        int duration,
-        ArrayList<Location> locations,
-        Transport transport
-    ){
+
+	public Trip createTrajectory(
+			Company company,
+			LocalDate startDate,
+			LocalDate endDate,
+			float price,
+			int duration,
+			ArrayList<Location> locations,
+			Transport transport) {
 		return null;
 	}
 

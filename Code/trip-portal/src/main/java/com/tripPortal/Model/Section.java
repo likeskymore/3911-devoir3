@@ -13,15 +13,15 @@ public abstract class Section {
 
     // ── Méthodes communes ─────────────────────────────────────────
 
-    /** Génère les sièges — chaque sous-classe définit sa propre logique */
+    // Génère les sièges — chaque sous-classe définit sa propre logique
     protected abstract void generateSeats();
 
-    /** Retourne le nombre total de sièges disponibles (non occupés) */
+    // Retourne le nombre total de sièges disponibles (non occupés)
     public long getAvailableSeatsCount() {
         return seats.stream().filter(s -> !s.isOccupied()).count();
     }
 
-    /** Retourne le nombre total de sièges */
+    // Retourne le nombre total de sièges
     public int getTotalSeatsCount() {
         return seats.size();
     }
@@ -35,23 +35,21 @@ public abstract class Section {
                 .orElse(null);
     }
 
-    /** Réserve un siège — retourne false si déjà occupé ou introuvable */
+    // Réserve un siège — retourne false si déjà occupé ou introuvable
     public boolean bookSeat(String seatId) {
         Seat seat = findSeatById(seatId);
         if (seat == null || seat.isOccupied()) return false;
-        seat.setOccupied(true);
+        seat.next();
         return true;
     }
 
-    /** Libère un siège */
+    //Libère un siège
     public boolean releaseSeat(String seatId) {
         Seat seat = findSeatById(seatId);
         if (seat == null || !seat.isOccupied()) return false;
-        seat.setOccupied(false);
+        seat.cancel();
         return true;
     }
-
-    // ── Getters / Setters ─────────────────────────────────────────
 
     public String getSectionName() { return sectionName; }
     public void setSectionName(String sectionName) { this.sectionName = sectionName; }

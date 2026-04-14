@@ -40,6 +40,7 @@ import com.tripPortal.Model.Train;
 import com.tripPortal.Model.TrainStation;
 import com.tripPortal.Model.Transport;
 import com.tripPortal.Model.Trip;
+import com.tripPortal.Observateur.AdminStation;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -90,6 +91,10 @@ public class AdminMenu {
     private companyController    CompanyControllerForAdminMenu;
     private locationController   LocationControllerForAdminMenu;
     private transportController  TransportControllerForAdminMenu;
+    private AdminStation         adminStation;
+    private String currentPage;
+    private Scene currentScene;
+    
 
     // ═══════════════════════════════════════════════════════════════
     // SHELL BUILDER  — persistent sidebar + swappable content
@@ -329,6 +334,7 @@ public class AdminMenu {
     public void start(Stage stage) {
         Stage newStage = new Stage();
         Scene scene = new Scene(new VBox(), 900, 600);
+        this.currentScene = scene;
         displayMenuAdmin(scene);
         newStage.setTitle("TripPortal — Admin");
         newStage.setScene(scene);
@@ -340,6 +346,8 @@ public class AdminMenu {
     // ═══════════════════════════════════════════════════════════════
     public void displayMenuAdmin(Scene scene) {
         // Sidebar nav
+        this.currentPage = "dashboard";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
         nav.setPadding(new Insets(12, 0, 0, 0));
 
@@ -451,6 +459,8 @@ public class AdminMenu {
     // TRIPS MENU
     // ═══════════════════════════════════════════════════════════════
     void displayTripsMenu(Scene scene, String message) {
+        this.currentPage = "tripDashboard";
+        this.currentScene = scene;
 		VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack  = navBtn("←  Back");
@@ -471,7 +481,7 @@ public class AdminMenu {
         Button listBtn   = ghostBtn("☰  View All Trips");
 		listBtn.setPrefSize(200, 50);
         createBtn.setOnAction(e -> displayTripCreationForm(scene));
-        listBtn.setOnAction(e   -> displayTrips(scene));
+        listBtn.setOnAction(e   -> displayTrips(scene, ""));
 
         HBox btnRow = new HBox(10, createBtn, listBtn);
 
@@ -487,6 +497,8 @@ public class AdminMenu {
     // TRIP CREATION FORM
     // ═══════════════════════════════════════════════════════════════
     public void displayTripCreationForm(Scene scene) {
+        this.currentPage = "tripCreation";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack  = navBtn("←  Back");
@@ -708,6 +720,7 @@ public class AdminMenu {
                     price,
                     (int) ChronoUnit.DAYS.between(startDate.getValue(), endDate.getValue()),
                     locations, transportCombo.getValue(), type);
+                adminStation.notifyObservers("tripCreated");
                 displayTripsMenu(scene, "Trip created successfully!");
             } catch (IOException ex) { 
 				showError("Filling all fields correctly is required to create a trip."); 
@@ -722,7 +735,9 @@ public class AdminMenu {
     // ═══════════════════════════════════════════════════════════════
     // DISPLAY TRIPS
     // ═══════════════════════════════════════════════════════════════
-    private void displayTrips(Scene scene) {
+    public void displayTrips(Scene scene, String message) {
+        this.currentPage = "tripList";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack  = navBtn("←  Back");
@@ -807,6 +822,44 @@ public class AdminMenu {
                 Label dateLbl   = new Label(dates);
                 dateLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
 
+                // ── reserved seats (look up transport and count occupied seats/cabins) ──
+                int reservedSeats = 0;
+                try {
+                    File transportFile = new File("src/Database/Transport.json");
+                    if (transportFile.exists()) {
+                        JsonNode transportRoot = displayMapper.readTree(transportFile);
+                        String transportId = trip.path("transport").asText("");
+                        if (transportRoot != null && transportRoot.isArray() && transportId != null && !transportId.isBlank()) {
+                            for (JsonNode tnode : transportRoot) {
+                                if (!tnode.has("transportID") || !tnode.get("transportID").asText().equals(transportId)) continue;
+                                JsonNode sections = tnode.get("sections");
+                                if (sections == null || !sections.isArray()) break;
+                                for (JsonNode section : sections) {
+                                    if (type.equals("CruiseLine")) {
+                                        JsonNode cabins = section.get("cabins");
+                                        if (cabins != null && cabins.isArray()) {
+                                            for (JsonNode cabin : cabins) {
+                                                if (!"Available".equals(cabin.path("state").asText("Available"))) reservedSeats++;
+                                            }
+                                        }
+                                    } else {
+                                        JsonNode seats = section.get("seats");
+                                        if (seats != null && seats.isArray()) {
+                                            for (JsonNode seat : seats) {
+                                                if (!"Available".equals(seat.path("state").asText("Available"))) reservedSeats++;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                } catch (IOException ioe) { /* ignore, reservedSeats stays 0 */ }
+
+                Label seatsLbl = new Label("Number of Reserved Seats: " + reservedSeats);
+                seatsLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+
                 Separator s = new Separator();
                 s.setStyle("-fx-background-color: " + C_BORDER + ";");
 
@@ -829,7 +882,8 @@ public class AdminMenu {
                     deleteTripCommand deleteTripCommand = new deleteTripCommand(tripToRemove);
                     tripControllerForAdminMenu.setCommand(deleteTripCommand);
                     tripControllerForAdminMenu.deleteTrip();
-                    displayTrips(scene);
+                    adminStation.notifyObservers("tripDeleted");
+                    displayTrips(scene,"");
                 });
                 
                 undoDeleteBtn.setOnAction(undoDelete -> {
@@ -852,7 +906,8 @@ public class AdminMenu {
 
 
                 HBox btnRow = new HBox(8, deleteBtn, updateBtn);
-                tc.getChildren().addAll(typeLbl, cityLbl, compLbl, dateLbl, s, btnRow);
+                tc.getChildren().addAll(typeLbl, cityLbl, compLbl, dateLbl, seatsLbl, s, btnRow);
+                
                 grid.getChildren().add(tc);
             }
         } catch (IOException ex) { ex.printStackTrace(); }
@@ -862,7 +917,10 @@ public class AdminMenu {
         scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        main.getChildren().addAll(title, scroll, undoDeleteBtn, undoUpdateBtn);
+        if (message != null && !message.isBlank())
+            main.getChildren().addAll(title, successBanner(message), scroll, undoDeleteBtn, undoUpdateBtn);
+        else
+            main.getChildren().addAll(title, scroll, undoDeleteBtn, undoUpdateBtn);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -870,12 +928,14 @@ public class AdminMenu {
     // TRIP UPDATE
     // ═══════════════════════════════════════════════════════════════
     private void displayingTripsToUpdate(Scene scene, JsonNode trip) {
+        this.currentPage = "tripUpdate";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack  = navBtn("←  Back");
 		Button btnTrips = navBtn("🗺  Trips");
 		btnTrips.setStyle(activeNavStyle());
-		btnBack.setOnAction(e -> displayTrips(scene));
+		btnBack.setOnAction(e -> displayTrips(scene,""));
 		nav.getChildren().addAll(btnBack, new Separator(), btnTrips);
 
         VBox main = new VBox(20);
@@ -998,7 +1058,8 @@ public class AdminMenu {
                 );
                 tripControllerForAdminMenu.setCommand(editTripCommand);
                 tripControllerForAdminMenu.updateTrip();
-                displayTrips(scene);
+                adminStation.notifyObservers("tripUpdated");
+                displayTrips(scene,"");
             } catch (RuntimeException runtimeException) {
                 showError(runtimeException.getMessage() != null ? runtimeException.getMessage() : "Unable to update trip.");
             }
@@ -1024,6 +1085,8 @@ public class AdminMenu {
     // COMPANIES MENU
     // ═══════════════════════════════════════════════════════════════
     private void displayCompaniesMenu(Scene scene, String message) {
+        this.currentPage = "companyDashboard";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack      = navBtn("←  Back");
@@ -1054,7 +1117,8 @@ public class AdminMenu {
     }
 
     private void displayCompanies(Scene scene) {
-
+        this.currentPage = "companyList";
+        this.currentScene = scene;
          VBox nav = new VBox(2);
 		 nav.setPadding(new Insets(12, 0, 0, 0));
 		 Button btnBack      = navBtn("←  Back");
@@ -1159,6 +1223,8 @@ public class AdminMenu {
     }
 
     private void deleteCompany(Scene scene, Company company) {
+        this.currentPage = "companyDelete";
+        this.currentScene = scene;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "Delete company \"" + company.getName() + "\" and all of its trips?",
                 ButtonType.YES, ButtonType.NO);
@@ -1179,6 +1245,8 @@ public class AdminMenu {
     // COMPANY UPDATE
     // ═══════════════════════════════════════════════════════════════
     private void displayCompanyUpdate(Scene scene, Company company) {
+        this.currentPage = "companyUpdate";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack      = navBtn("←  Back");
@@ -1285,6 +1353,8 @@ public class AdminMenu {
     // COMPANY CREATION FORM
     // ═══════════════════════════════════════════════════════════════
     private void displayCompanyCreationForm(Scene scene) {
+            this.currentPage = "companyCreate";
+            this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack      = navBtn("←  Back");
@@ -1337,6 +1407,8 @@ public class AdminMenu {
     // LOCATIONS MENU
     // ═══════════════════════════════════════════════════════════════
     private void displayLocationsMenu(Scene scene, String message) {
+        this.currentPage = "locationDashboard";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack      = navBtn("←  Back");
@@ -1367,6 +1439,8 @@ public class AdminMenu {
     }
 
     private void displayLocations(Scene scene) {
+        this.currentPage = "locationList";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack      = navBtn("←  Back");
@@ -1463,6 +1537,8 @@ public class AdminMenu {
     }
 
     private void displayLocationUpdate(Scene scene, Location location) {
+        this.currentPage = "locationUpdate";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack      = navBtn("←  Back");
@@ -1536,6 +1612,8 @@ public class AdminMenu {
     }
 
     private void deleteLocation(Scene scene, Location location) {
+        this.currentPage = "locationDelete";
+        this.currentScene = scene;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "Delete location \"" + location.getCity() + "\" and all trips that use it?",
                 ButtonType.YES, ButtonType.NO);
@@ -1552,6 +1630,8 @@ public class AdminMenu {
     }
 
     private void displayLocationCreationForm(Scene scene) {
+        this.currentPage = "locationCreate";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack      = navBtn("←  Back");
@@ -1609,6 +1689,8 @@ public class AdminMenu {
     // TRANSPORTS MENU
     // ═══════════════════════════════════════════════════════════════
     private void displayTransportsMenu(Scene scene) {
+        this.currentPage = "transportDashboard";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack       = navBtn("←  Back");
@@ -1635,6 +1717,8 @@ public class AdminMenu {
     }
 
     private void displayTransports(Scene scene) {
+        this.currentPage = "transportList";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack       = navBtn("←  Back");
@@ -1738,6 +1822,8 @@ public class AdminMenu {
     }
 
     private void deleteTransport(Scene scene, String transportId) {
+        this.currentPage = "transportDelete";
+        this.currentScene = scene;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "Delete this transport and all trips linked to it?",
                 ButtonType.YES, ButtonType.NO);
@@ -1783,6 +1869,8 @@ public class AdminMenu {
     // TRANSPORT CREATION FORM
     // ═══════════════════════════════════════════════════════════════
     private void displayTransportCreationForm(Scene scene) {
+        this.currentPage = "transportCreate";
+        this.currentScene = scene;
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 		Button btnBack       = navBtn("←  Back");
@@ -2161,4 +2249,7 @@ public class AdminMenu {
     public void setLocationControllerForAdminMenu(locationController c)  { this.LocationControllerForAdminMenu = c; }
     public void setTransportControllerForAdminMenu(transportController c){ this.TransportControllerForAdminMenu = c; }
     public void setTripControllerForAdminMenu(tripController c)          { this.tripControllerForAdminMenu = c; }
+    public void setAdminStation(AdminStation adminStation) { this.adminStation = adminStation; }
+    public Scene getCurrentScene() { return this.currentScene; }
+    public String getCurrentPage() { return this.currentPage; }
 }

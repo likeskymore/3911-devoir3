@@ -3,7 +3,6 @@ package com.tripPortal.Model;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
@@ -11,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tripPortal.Etat.SeatStateController;
 import com.tripPortal.Factory.TripFactory;
 
 public abstract class Trip {
@@ -34,7 +34,7 @@ public abstract class Trip {
 		this.active = true;
 	}
 
-	public Trip(String id){
+	public Trip(String id) {
 		this.id = id;
 		// this one is for delete
 	}
@@ -44,19 +44,53 @@ public abstract class Trip {
 	}
 
 	private String randomGenerateID(Company servicedBy) {
-		String id = servicedBy.getTripID();
+		String baseId = servicedBy.getTripID();
 		Random rand = new Random();
-
-		for (int i = 0; i < 4; i++) {
-			char letter = (char) (rand.nextInt(26) + 'A');
-			id += letter;
+		String id = "";
+		boolean isUnique = false;
+		
+		while (!isUnique) {
+			id = baseId;
+			for (int i = 0; i < 4; i++) {
+				char letter = (char) (rand.nextInt(26) + 'A');
+				id += letter;
+			}
+			
+			isUnique = isTripIDUnique(id);
 		}
-
-		// complete verification ...
 
 		return id;
 
 	}
+	
+	private boolean isTripIDUnique(String tripId) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			File file = new File("src/Database/Trip.json");
+			if (!file.exists()) return true;
+
+			JsonNode root = mapper.readTree(file);
+
+			ArrayNode trips;
+			if (root.isArray()) {
+				trips = (ArrayNode) root;
+			} else if (root.has("trips") && root.get("trips").isArray()) {
+				trips = (ArrayNode) root.get("trips");
+			} else {
+				return true;
+			}
+
+			for (JsonNode node : trips) {
+				if (node.has("id") && node.get("id").asText().equals(tripId)) {
+					return false;
+				}
+			}
+			return true;
+		} catch (IOException ex) {
+			return true;
+		}
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -77,6 +111,10 @@ public abstract class Trip {
 		return price;
 	}
 
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
 	public int getTripDuration() {
 		return tripDuration;
 	}
@@ -95,35 +133,43 @@ public abstract class Trip {
 				tripArray.remove(i); break; 
 			}
 		}
-		try { displayMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray); } catch (IOException ex) { ex.printStackTrace(); }
+		try {
+			displayMapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, tripArray);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		try {
 			ObjectMapper cm = new ObjectMapper();
 			File cf = new File("src/Database/Company.json");
 			ArrayNode ca = (ArrayNode) cm.readTree(cf);
 			for (JsonNode cn : ca) {
 				ArrayNode tn = (ArrayNode) cn.get("Trips");
-				for (int i = 0; i < tn.size(); i++) { if (tn.get(i).asText().equals(this.id)) { tn.remove(i); break; } }
+				for (int i = 0; i < tn.size(); i++) {
+					if (tn.get(i).asText().equals(this.id)) {
+						tn.remove(i);
+						break;
+					}
+				}
 			}
 			cm.writerWithDefaultPrettyPrinter().writeValue(cf, ca);
 		} catch (IOException ex) { ex.printStackTrace(); }
-
-		
-		
 	}
 
-
-	public void updatePrice(String newPrice){
+	public void updatePrice(String newPrice) {
 		try {
 			ObjectMapper m = new ObjectMapper();
 			File f = new File("src/Database/Trip.json");
 			ArrayNode arr = (ArrayNode) m.readTree(f);
 			for (int i = 0; i < arr.size(); i++) {
 				if (arr.get(i).get("id").asText().equals(this.id)) {
-					((ObjectNode) arr.get(i)).put("price", newPrice); break;
+					((ObjectNode) arr.get(i)).put("price", newPrice);
+					break;
 				}
 			}
 			m.writerWithDefaultPrettyPrinter().writeValue(f, arr);
-		} catch (IOException ex) { ex.printStackTrace(); }
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public void updateTrip(String newCompany, LocalDate newDepartureTime, LocalDate newArrivalTime,
@@ -173,7 +219,8 @@ public abstract class Trip {
 				throw new IllegalArgumentException("Transport not found: " + newTransportId);
 			}
 			String expectedTransportType = expectedTransportType(tripType);
-			if (expectedTransportType != null && !expectedTransportType.equals(newTransportNode.path("type").asText(""))) {
+			if (expectedTransportType != null
+					&& !expectedTransportType.equals(newTransportNode.path("type").asText(""))) {
 				throw new IllegalArgumentException("Transport type does not match this trip type.");
 			}
 			if (!newCompany.equals(newTransportNode.path("company").asText(""))) {
@@ -189,6 +236,8 @@ public abstract class Trip {
 					throw new IllegalStateException("Original transport not found: " + oldTransportId);
 				}
 
+				SeatStateController seatStateController = new SeatStateController();
+
 				File userFile = new File("src/Database/User.json");
 				userReservations = readArray(mapper, userFile);
 				String seatsKey = seatsKey(newTransportNode);
@@ -202,10 +251,12 @@ public abstract class Trip {
 					}
 					ObjectNode seatNode = findSeatNode(newTransportNode, seatsKey, seatId);
 					if (seatNode == null) {
-						throw new IllegalArgumentException("Seat " + seatId + " is not available on the selected transport.");
+						throw new IllegalArgumentException(
+								"Seat " + seatId + " is not available on the selected transport.");
 					}
-					if (seatNode.path("occupied").asBoolean(false)) {
-						throw new IllegalArgumentException("Seat " + seatId + " is already occupied on the selected transport.");
+					if (!"Available".equals(seatStateController.getSeatState(seatNode))) {
+						throw new IllegalArgumentException(
+								"Seat " + seatId + " is already occupied on the selected transport.");
 					}
 				}
 			}
@@ -228,6 +279,7 @@ public abstract class Trip {
 			}
 
 			if (transportChanged) {
+				SeatStateController seatStateController = new SeatStateController();
 				File userFile = new File("src/Database/User.json");
 				if (userReservations == null) {
 					userReservations = readArray(mapper, userFile);
@@ -249,13 +301,18 @@ public abstract class Trip {
 					if (oldSeat == null) {
 						throw new IllegalStateException("Seat " + seatId + " was not found on the original transport.");
 					}
-					oldSeat.put("occupied", false);
+					seatStateController.freeSeat(oldSeat);
 
 					ObjectNode newSeat = findSeatNode(newTransportNode, newSeatsKey, seatId);
 					if (newSeat == null) {
 						throw new IllegalStateException("Seat " + seatId + " was not found on the selected transport.");
 					}
-					newSeat.put("occupied", true);
+					if (reservation.path("confirmed").asBoolean(false)) {
+						seatStateController.reserveSeat(newSeat);
+						seatStateController.occupySeat(newSeat);
+					} else {
+						seatStateController.reserveSeat(newSeat);
+					}
 
 					((ObjectNode) reservation).put("transportID", newTransportId);
 				}
@@ -355,8 +412,8 @@ public abstract class Trip {
 			}
 			if (newCompany.equals(companyName)) {
 				ArrayNode trips = companyNode.has("Trips") && companyNode.get("Trips").isArray()
-					? (ArrayNode) companyNode.get("Trips")
-					: new ObjectMapper().createArrayNode();
+						? (ArrayNode) companyNode.get("Trips")
+						: new ObjectMapper().createArrayNode();
 				if (!companyNode.has("Trips")) {
 					((ObjectNode) companyNode).set("Trips", trips);
 				}

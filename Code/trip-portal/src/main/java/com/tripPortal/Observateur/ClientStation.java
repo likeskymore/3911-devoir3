@@ -2,17 +2,28 @@ package com.tripPortal.Observateur;
 
 import java.util.ArrayList;
 
-public class ClientStation {
+import com.tripPortal.Menu.AdminMenu;
+import com.tripPortal.Model.Trip;
 
-	private ArrayList<Observer> observers;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
+public class ClientStation implements Subject{
+
+	private ArrayList<Observer> observers = new ArrayList<>();
+	private final ObservableList<Trip> clientViewableTrips = FXCollections.observableArrayList();
+	private final AdminMenu adminMenu;
+	private String event;
+
+    public ClientStation(AdminMenu adminMenu) {
+		this.adminMenu = adminMenu;
+    }
 	/**
 	 * 
 	 * @param o
 	 */
 	public void addObserver(Observer o) {
-		// TODO - implement ClientStation.addObserver
-		throw new UnsupportedOperationException();
+		observers.add(o);	
 	}
 
 	/**
@@ -20,17 +31,23 @@ public class ClientStation {
 	 * @param o
 	 */
 	public void removeObserver(Observer o) {
-		// TODO - implement ClientStation.removeObserver
-		throw new UnsupportedOperationException();
+		observers.remove(o);
 	}
 
-	/**
-	 * 
-	 * @param oList
-	 */
-	public void notifyObservers(ArrayList<Observer> oList) {
-		// TODO - implement ClientStation.notifyObservers
-		throw new UnsupportedOperationException();
+    public void notifyObservers(String event) {
+        for (Observer o : observers) o.update(event);
+    }
+
+	public ObservableList<Trip> getClientViewableTrips() {
+		return clientViewableTrips;
 	}
 
+
+	public String getUpdate(Observer obj) {
+		return this.event;
+	}
+
+	public AdminMenu getAdminMenu() {
+		return adminMenu;
+	}
 }

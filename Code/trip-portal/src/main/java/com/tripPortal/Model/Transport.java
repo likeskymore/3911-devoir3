@@ -25,9 +25,10 @@ public abstract class Transport {
         this.sections = new ArrayList<>();
     }
 
-    public Transport(String id, String placeholder){
+    public Transport(String id, String placeholder) {
         this.TransportID = id;
     }
+
     private String randomGenerateID() {
         String id = "";
         Random rand = new Random();
@@ -35,7 +36,48 @@ public abstract class Transport {
             int number = (rand.nextInt(9));
             id += number;
         }
+
+        boolean isUnique = false;
+        
+        while (!isUnique) {
+            id = "";
+            for (int i = 0; i < 6; i++) {
+                int number = (rand.nextInt(9));
+                id += number;
+            }
+            
+            isUnique = isTransportIDUnique(id);
+        }
+
         return id;
+    }
+    
+    private boolean isTransportIDUnique(String transportId) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            File file = new File("src/Database/Transport.json");
+            if (!file.exists()) return true;
+
+            JsonNode root = mapper.readTree(file);
+
+            ArrayNode transports;
+            if (root.isArray()) {
+                transports = (ArrayNode) root;
+            } else if (root.has("transports") && root.get("transports").isArray()) {
+                transports = (ArrayNode) root.get("transports");
+            } else {
+                return true;
+            }
+
+            for (JsonNode node : transports) {
+                if (node.has("transportID") && node.get("transportID").asText().equals(transportId)) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (IOException ex) {
+            return true;
+        }
     }
 
     public String getName() {
@@ -72,7 +114,7 @@ public abstract class Transport {
                 String type = node.get("type").asText();
                 return switch (type) {
                     case "Plane" -> new Plane(node);
-                    case "Boat"  -> new Boat(node);
+                    case "Boat" -> new Boat(node);
                     case "Train" -> new Train(node);
                     default -> throw new IllegalArgumentException("Unknown transport type: " + type);
                 };
@@ -80,7 +122,8 @@ public abstract class Transport {
         }
         throw new IllegalArgumentException("Transport not found: " + transportID);
     }
-    public void delete(String transportId){
+
+    public void delete(String transportId) {
         try {
             ObjectMapper mapper = new ObjectMapper();
 

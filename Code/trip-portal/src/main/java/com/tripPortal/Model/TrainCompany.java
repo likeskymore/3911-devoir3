@@ -9,11 +9,12 @@ public class TrainCompany extends Company {
 	public TrainCompany(String name) {
 		super(name);
 	}
-    public TrainCompany(){
-        super();//this is for undo
+  
+  public TrainCompany(){
+        super();
 	}
 
-	public TrainCompany(JsonNode node) {
+    public TrainCompany(JsonNode node) {
         super(node.get("name").asText());
         setId(node.get("id").asText());
         setTripID(node.get("tripId").asText());

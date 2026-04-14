@@ -5,14 +5,9 @@ import java.util.List;
 
 public class SectionPlane extends Section {
 
-    public enum SectionPlaneType { F, A, P, E }
+    public enum SectionPlaneType {F, A, P, E}
 
-    public enum Layout {
-        S,  // Étroit   : 3 colonnes, aile entre 1 et 2
-        C,  // Confort  : 4 colonnes, aile entre 2 et 3
-        M,  // Moyen    : 6 colonnes, aile entre 3 et 4
-        L   // Large    : 10 colonnes, ailes entre 3-4 et 7-8
-    }
+    public enum Layout {S,C,M,L }
 
     private SectionPlaneType sectionType;
     private Layout layout;
@@ -50,14 +45,29 @@ public class SectionPlane extends Section {
         };
     }
 
-    public SectionPlaneType getSectionType() { return sectionType; }
-    public void setSectionType(SectionPlaneType sectionType) { this.sectionType = sectionType; }
+    public SectionPlaneType getSectionType() {
+        return sectionType;
+    }
 
-    public Layout getLayout() { return layout; }
-    public void setLayout(Layout layout) { this.layout = layout; }
+    public void setSectionType(SectionPlaneType sectionType) {
+        this.sectionType = sectionType;
+    }
 
-    public int getNumberOfRows() { return numberOfRows; }
-    public void setNumberOfRows(int numberOfRows) { this.numberOfRows = numberOfRows; }
+    public Layout getLayout() {
+        return layout;
+    }
+
+    public void setLayout(Layout layout) {
+        this.layout = layout;
+    }
+
+    public int getNumberOfRows() {
+        return numberOfRows;
+    }
+
+    public void setNumberOfRows(int numberOfRows) {
+        this.numberOfRows = numberOfRows;
+    }
 
     @Override
     public String toString() {

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.tripPortal.Mediateur.reservationController;
 import com.tripPortal.Mediateur.tripController;
 import com.tripPortal.Model.Reservation;
+import com.tripPortal.Observateur.ClientStation;
 import com.tripPortal.Visiteur.ConcreteCruiseLineVisitor;
 import com.tripPortal.Visiteur.ConcreteFlightVisitor;
 import com.tripPortal.Visiteur.ConcreteRouteVisitor;
@@ -49,6 +50,9 @@ public class ClientMenu {
 
     private tripController        tripControllerForClientMenu;
     private reservationController reservationControllerForClientMenu;
+    private ClientStation clientStation;
+    private String currentPage;
+    private Scene currentScene;
 
     // ═══════════════════════════════════════════════════════════════
     // ENTRY POINT
@@ -56,6 +60,7 @@ public class ClientMenu {
     public void start(Stage stage) {
         Stage newStage = new Stage();
         Scene scene = new Scene(new VBox(), 900, 600);
+        this.currentScene = scene;
         displayMenuClient(scene);
         newStage.setTitle("TripPortal — Client");
         newStage.setScene(scene);
@@ -207,6 +212,8 @@ public class ClientMenu {
     // MAIN MENU  — dashboard with quick-action cards
     // ═══════════════════════════════════════════════════════════════
     public void displayMenuClient(Scene scene) {
+        this.currentScene = scene;
+        this.currentPage = "dashboard";
 		 VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 
@@ -287,6 +294,8 @@ public class ClientMenu {
     // PROFILE / RESERVATIONS
     // ═══════════════════════════════════════════════════════════════
 	public void displayProfileMenu(Scene scene) {
+		this.currentScene = scene;
+        this.currentPage = "profile";
 		VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 
@@ -312,10 +321,8 @@ public class ClientMenu {
 			// load trip and transport data once for all reservations
 			ObjectMapper mapper = new ObjectMapper();
 			ArrayNode trips      = mapper.createArrayNode();
-			ArrayNode transports = mapper.createArrayNode();
 			try {
 				trips      = (ArrayNode) mapper.readTree(new File("src/Database/Trip.json"));
-				transports = (ArrayNode) mapper.readTree(new File("src/Database/Transport.json"));
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -377,25 +384,9 @@ public class ClientMenu {
 						else if (section.equals("I")) computed = base * 0.50f;
 
 					} else if (ttype.equals("Route")) {
-						// find the seat's section by scanning the transport
-						String tid = trip.get("transport").asText();
-						boolean found = false;
-						for (JsonNode transport : transports) {
-							if (!transport.get("transportID").asText().equals(tid)) continue;
-							for (JsonNode section : transport.get("sections")) {
-								String stype = section.get("sectionType").asText();
-								if (!section.has("seats")) continue;
-								for (JsonNode seat : section.get("seats")) {
-									if (!seat.get("seatID").asText().equals(seatId)) continue;
-									if (stype.equals("P"))      computed = base * 0.60f;
-									else if (stype.equals("E")) computed = base * 0.50f;
-									found = true;
-									break;
-								}
-								if (found) break;
-							}
-							break;
-						}
+						char section = seatId.charAt(0);
+						if (section == 'P')      computed = base * 0.60f;
+						else if (section == 'E') computed = base * 0.50f;
 					}
 
 					priceText = String.format("Price:      $%.2f", computed);
@@ -420,6 +411,7 @@ public class ClientMenu {
 				Button cancelBtn = dangerBtn("🗑  Cancel");
 				cancelBtn.setOnAction(e -> {
 					reservationControllerForClientMenu.cancelReservation(res);
+                    clientStation.notifyObservers("reservationCancelled");
 					displayProfileMenu(scene);
 				});
 
@@ -441,6 +433,8 @@ public class ClientMenu {
     // BROWSE / RESERVE TRIPS
     // ═══════════════════════════════════════════════════════════════
     public void displayReserveMenu(Scene scene, String message) {
+		this.currentScene = scene;
+        this.currentPage = "reserve";
 		VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 
@@ -524,6 +518,8 @@ public class ClientMenu {
     // SEAT SELECTION
     // ═══════════════════════════════════════════════════════════════
     public void displayAvailableSeats(Scene scene, JsonNode tripNode) {
+        this.currentScene = scene;
+        this.currentPage = "seats";
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 
@@ -564,7 +560,7 @@ public class ClientMenu {
                     if (node.has("transportID") && node.get("transportID").asText().equals(transport.asText())) {
                         for (JsonNode section : node.get("sections")) {
                             for (JsonNode cabin : section.get("cabins")) {
-                                if (!cabin.get("occupied").asBoolean()) {
+                                if ("Available".equals(cabin.path("state").asText("Available"))) {
                                     listView.getItems().add("Cabin ID: " + cabin.get("seatID").asText());
                                 }
                             }
@@ -576,7 +572,7 @@ public class ClientMenu {
                     if (node.has("transportID") && node.get("transportID").asText().equals(transport.asText())) {
                         for (JsonNode section : node.get("sections")) {
                             for (JsonNode seat : section.get("seats")) {
-                                if (!seat.get("occupied").asBoolean()) {
+                                if ("Available".equals(seat.path("state").asText("Available"))) {
                                     listView.getItems().add("Seat ID: " + seat.get("seatID").asText());
                                 }
                             }
@@ -605,6 +601,7 @@ public class ClientMenu {
                 }
                 String seatID = selected.split(": ")[1];
                 reservationControllerForClientMenu.reserveTrip(tripNode, seatID);
+                clientStation.notifyObservers("seatReserved");
                 displayReserveMenu(scene, "✔  Reservation confirmed for seat: " + seatID);
             });
 
@@ -626,8 +623,11 @@ public class ClientMenu {
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // SETTERS
+    // SETTERS / GETTERS
     // ═══════════════════════════════════════════════════════════════
     public void setTripControllerForClientMenu(tripController t)               { this.tripControllerForClientMenu = t; }
     public void setReservationControllerForClientMenu(reservationController r) { this.reservationControllerForClientMenu = r; }
+    public void setClientStation(ClientStation s) { this.clientStation = s; }
+    public String getCurrentPage() { return currentPage; }
+    public Scene getCurrentScene() { return currentScene; }
 }

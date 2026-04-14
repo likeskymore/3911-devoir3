@@ -3,8 +3,6 @@ package com.tripPortal.Model;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -36,16 +34,58 @@ public abstract class Company {
 	private String randomGenerateID(int n) {
 		String id = "";
 		Random rand = new Random();
-		for (int i = 0; i < n; i++) {
-			char letter = (char) (rand.nextInt(26) + 'A');
-			id += letter;
-		}
+		if (n == 5) {
+			boolean isUnique = false;
+			while (!isUnique) {
+				id = "";
+				for (int i = 0; i < n; i++) {
+					char letter = (char) (rand.nextInt(26) + 'A');
+					id += letter;
+				}
 
-		// complete verification ...
+				isUnique = isCompanyIdentifierUnique(id);
+			}
+		} else {
+			for (int i = 0; i < n; i++) {
+				char letter = (char) (rand.nextInt(26) + 'A');
+				id += letter;
+			}
+		}
 
 		return id;
 
 	}
+
+	private boolean isCompanyIdentifierUnique(String generatedId) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			File file = new File("src/Database/Company.json");
+			if (!file.exists()) {
+				return true;
+			}
+
+			JsonNode root = mapper.readTree(file);
+
+			ArrayNode companies;
+			if (root.isArray()) {
+				companies = (ArrayNode) root;
+			} else if (root.has("companies") && root.get("companies").isArray()) {
+				companies = (ArrayNode) root.get("companies");
+			} else {
+				return true;
+			}
+
+			for (JsonNode node : companies) {
+				if (node.has("id") && generatedId.equals(node.get("id").asText())) {
+					return false;
+				}
+			}
+			return true;
+		} catch (IOException ex) {
+			return true;
+		}
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -57,6 +97,7 @@ public abstract class Company {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -72,7 +113,7 @@ public abstract class Company {
 	public ArrayList<Transport> getTransports() {
 		return transports;
 	}
-	
+
 	public void setTransports(ArrayList<Transport> transports) {
 		this.transports = transports;
 	}
@@ -86,13 +127,13 @@ public abstract class Company {
 	}
 
 	public static Company fromJson(String name, JsonNode root) {
-		for (JsonNode node : root) { // root is a flat array, just iterate directly
+		for (JsonNode node : root) {
 			if (node.get("name").asText().equals(name)) {
 				String type = node.get("type").asText();
 				return switch (type) {
 					case "FlightCompany" -> new FlightCompany(node);
-					case "BoatCompany"   -> new BoatCompany(node);
-					case "TrainCompany"  -> new TrainCompany(node);
+					case "BoatCompany" -> new BoatCompany(node);
+					case "TrainCompany" -> new TrainCompany(node);
 					default -> throw new IllegalArgumentException("Unknown company type: " + type);
 				};
 			}
@@ -100,7 +141,7 @@ public abstract class Company {
 		throw new IllegalArgumentException("Company not found: " + name);
 	}
 
-	public void deleteCompany(){
+	public void deleteCompany() {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			File companyFile = new File("src/Database/Company.json");
@@ -136,7 +177,7 @@ public abstract class Company {
 		}
 	}
 
-	public void updateName(String newName, String oldName){
+	public void updateName(String newName, String oldName) {
 		try {
 			ObjectMapper m = new ObjectMapper();
 			File f = new File("src/Database/Company.json");
@@ -147,7 +188,8 @@ public abstract class Company {
 					snapShot.set("oldCompanyName", arr.get(i).get("name"));
 					snapShot.put("newCompanyName", newName);
 					((ObjectNode) arr.get(i)).put("name", newName);
-					this.setName(newName); break;
+					this.setName(newName);
+					break;
 				}
 			}
 			m.writerWithDefaultPrettyPrinter().writeValue(f, arr);

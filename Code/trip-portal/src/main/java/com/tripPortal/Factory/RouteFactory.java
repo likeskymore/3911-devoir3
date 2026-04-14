@@ -61,7 +61,7 @@ public class RouteFactory extends TrainTripFactory {
     Train train = (Train) transport;
     Route route = new Route(company, startDate, endDate, price, duration, stations, train);
 
-    // ── Sauvegarder en JSON ────────────────────────────────────────
+    //Sauvegarder en JSON
     try {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("src/Database/Trip.json");
@@ -72,7 +72,7 @@ public class RouteFactory extends TrainTripFactory {
         ArrayNode array;
 
         if (root == null || root.isMissingNode() || root.isNull()) {
-            array = mapper.createArrayNode(); // fichier vide ou null
+            array = mapper.createArrayNode();
         } else if (root.isArray()) {
             array = (ArrayNode) root;
         } else {

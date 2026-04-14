@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ConcreteFlightVisitor implements Visitor {
 
-	// YUL-YYZ:[AIRCAN]AC481(2014.11.28:06.00-2014.11.28:07:24)|PS(0/12)474.00|AM(5/16)355.50
 	@Override
 	public String visit(JsonNode node) {
 		String origin = node.has("origin") ? node.get("origin").asText() : "?";
@@ -26,7 +25,6 @@ public class ConcreteFlightVisitor implements Visitor {
 				.append(id)
 				.append(" (").append(start).append("-").append(end).append(") ");
 
-		// ── Lire les sections depuis Transport.json ────────────────
 		if (transportID != null) {
 			try {
 				ObjectMapper mapper = new ObjectMapper();
@@ -41,29 +39,38 @@ public class ConcreteFlightVisitor implements Visitor {
 					if (transport.has("sections")) {
 						for (JsonNode section : transport.get("sections")) {
 							String sectionType = section.has("sectionType") ? section.get("sectionType").asText() : "?";
-							String layout      = section.has("layout")      ? section.get("layout").asText()      : "?";
+							String layout = section.has("layout") ? section.get("layout").asText() : "?";
 
 							int total = 0, occupied = 0;
 							if (section.has("seats")) {
 								for (JsonNode seat : section.get("seats")) {
 									total++;
-									if (seat.has("occupied") && seat.get("occupied").asBoolean()) occupied++;
+									if (!"Available".equals(seat.path("state").asText("Available")))
+										occupied++;
 								}
 							}
 
 							// calculate section price based on section type
 							float sectionPrice = price;
 							switch (sectionType) {
-								case "F": sectionPrice = price * 1.00f; break;
-								case "A": sectionPrice = price * 0.75f; break;
-								case "P": sectionPrice = price * 0.60f; break;
-								case "E": sectionPrice = price * 0.50f; break;
+								case "F":
+									sectionPrice = price * 1.00f;
+									break;
+								case "A":
+									sectionPrice = price * 0.75f;
+									break;
+								case "P":
+									sectionPrice = price * 0.60f;
+									break;
+								case "E":
+									sectionPrice = price * 0.50f;
+									break;
 							}
 
 							sb.append(" | ")
-							.append(sectionType).append(layout)
-							.append(" (").append(occupied).append("/").append(total).append(") ")
-							.append(String.format("%.2f", sectionPrice));
+									.append(sectionType).append(layout)
+									.append(" (").append(occupied).append("/").append(total).append(") ")
+									.append(String.format("%.2f", sectionPrice));
 						}
 					}
 					break;

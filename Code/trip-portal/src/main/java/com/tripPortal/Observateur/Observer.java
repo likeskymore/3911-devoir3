@@ -2,6 +2,7 @@ package com.tripPortal.Observateur;
 
 public interface Observer {
 
-	void update();
+	void update(String event);
 
+	void setSubject(Subject sub);
 }
