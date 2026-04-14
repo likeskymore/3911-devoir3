@@ -12,18 +12,22 @@ public class AdminDisplay implements Observer {
 		this.subject = (AdminStation) sub;
     }
 
-    @Override
-    public void update(String event) {
+	@Override
+	public void update(String event) {
 		ClientMenu clientMenu = subject.getClientMenu();
+		if (clientMenu == null) return;
+
 		Scene currentScene = clientMenu.getCurrentScene();
-		if (event.equals("tripUpdated") && clientMenu.getCurrentPage().equals("reserve")) {
+		String currentPage = clientMenu.getCurrentPage();
+
+		if (event.equals("tripUpdated") && "reserve".equals(currentPage)) {
 			clientMenu.displayReserveMenu(currentScene, "An existing trip has been updated");
-		} else if (event.equals("tripDeleted") && clientMenu.getCurrentPage().equals("reserve")) {
+		} else if (event.equals("tripDeleted") && "reserve".equals(currentPage)) {
 			clientMenu.displayReserveMenu(currentScene, "A trip has been deleted");
-		} else if (event.equals("tripCreated") && clientMenu.getCurrentPage().equals("reserve")) {
+		} else if (event.equals("tripCreated") && "reserve".equals(currentPage)) {
 			clientMenu.displayReserveMenu(currentScene, "A new trip has been created");
 		}
-    }
+	}
 
 	public void setSubject(Subject sub) {
 		this.subject = (AdminStation) sub;

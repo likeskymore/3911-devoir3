@@ -7,7 +7,7 @@ import com.tripPortal.Etat.SeatState;
 
 public abstract class Seat {
 
-    protected String id; // identifiant unique du siège (ex: "F12A", "Cabin-3", "2A")
+    protected String id;
     protected SeatState currentState;
 
 
@@ -23,6 +23,10 @@ public abstract class Seat {
     public abstract String getSeatID();
 
     // ── Méthodes communes ─────────────────────────────────────────
+
+    public SeatState getCurrentState() {
+        return currentState;
+    }
 
     public void setState(SeatState s) {
         this.currentState = s;
@@ -40,6 +44,10 @@ public abstract class Seat {
         return currentState instanceof Occupied || currentState instanceof Reserved; 
     }
 
+    public String getStateName() {
+        return currentState == null ? "Available" : currentState.getClass().getSimpleName();
+    }
+
     public void next(){
         if (currentState != null) {
             currentState.next(this); 
@@ -52,9 +60,6 @@ public abstract class Seat {
         }
     }
 
-    public SeatState getCurrentState() {
-        return currentState;
-    }
 
     public abstract float calculatePrice(float basePrice);
 

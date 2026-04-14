@@ -807,14 +807,14 @@ public class AdminMenu {
                                         JsonNode cabins = section.get("cabins");
                                         if (cabins != null && cabins.isArray()) {
                                             for (JsonNode cabin : cabins) {
-                                                if (cabin.path("occupied").asBoolean(false)) reservedSeats++;
+                                                if (!"Available".equals(cabin.path("state").asText("Available"))) reservedSeats++;
                                             }
                                         }
                                     } else {
                                         JsonNode seats = section.get("seats");
                                         if (seats != null && seats.isArray()) {
                                             for (JsonNode seat : seats) {
-                                                if (seat.path("occupied").asBoolean(false)) reservedSeats++;
+                                                if (!"Available".equals(seat.path("state").asText("Available"))) reservedSeats++;
                                             }
                                         }
                                     }

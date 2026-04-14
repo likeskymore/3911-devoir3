@@ -1,33 +1,46 @@
 package com.tripPortal.Etat;
 
-import com.tripPortal.Model.Seat;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class SeatStateController {
 
-    public void reserveSeat(Seat s) {
-        if (!(s.getCurrentState() instanceof Available)) {
-            System.out.println("Seat " + s.getSeatID() + " cannot be reserved — currently " 
-                + s.getCurrentState().getClass().getSimpleName());
-            return;
+    private static final String STATE_FIELD = "state";
+    private static final String AVAILABLE = "Available";
+    private static final String RESERVED = "Reserved";
+    private static final String OCCUPIED = "Occupied";
+
+
+    public boolean reserveSeat(ObjectNode seatNode) {
+        String currentState = getSeatState(seatNode);
+        if (!AVAILABLE.equals(currentState)) {
+            return false;
         }
-        s.next(); 
+        seatNode.put(STATE_FIELD, RESERVED);
+        return true;
     }
 
-    public void freeSeat(Seat s) {
-        if (s.getCurrentState() instanceof Available) {
-            System.out.println("Seat " + s.getSeatID() + " is already free.");
-            return;
+    public boolean freeSeat(ObjectNode seatNode) {
+        String currentState = getSeatState(seatNode);
+        if (AVAILABLE.equals(currentState)) {
+            return false;
         }
-        s.cancel(); 
+        seatNode.put(STATE_FIELD, AVAILABLE);
+        return true;
     }
 
-    public void occupySeat(Seat s) {
-        if (!(s.getCurrentState() instanceof Reserved)) {
-            System.out.println("Seat " + s.getSeatID() + " cannot be occupied — currently "
-                + s.getCurrentState().getClass().getSimpleName());
-            return;
+    public boolean occupySeat(ObjectNode seatNode) {
+        String currentState = getSeatState(seatNode);
+        if (!RESERVED.equals(currentState)) {
+            return false;
         }
-        s.next(); 
+        seatNode.put(STATE_FIELD, OCCUPIED);
+        return true;
     }
 
+    public String getSeatState(ObjectNode seatNode) {
+        if (seatNode == null) {
+            return AVAILABLE;
+        }
+        return seatNode.path(STATE_FIELD).asText(AVAILABLE);
+    }
 }

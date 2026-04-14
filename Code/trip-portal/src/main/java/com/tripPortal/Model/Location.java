@@ -74,7 +74,15 @@ public abstract class Location {
 			if (!file.exists()) {
 				return true;
 			}
-			ArrayNode locations = (ArrayNode) mapper.readTree(file);
+			JsonNode root = mapper.readTree(file);
+			ArrayNode locations;
+			if (root.isArray()) {
+				locations = (ArrayNode) root;
+			} else if (root.has("locations") && root.get("locations").isArray()) {
+				locations = (ArrayNode) root.get("locations");
+			} else {
+				return true;
+			}
 			for (JsonNode node : locations) {
 				if (node.has("id") && node.get("id").asText().equals(id)) {
 					return false;

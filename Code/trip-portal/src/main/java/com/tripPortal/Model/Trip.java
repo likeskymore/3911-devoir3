@@ -3,7 +3,6 @@ package com.tripPortal.Model;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
@@ -11,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tripPortal.Etat.SeatStateController;
 import com.tripPortal.Factory.TripFactory;
 
 public abstract class Trip {
@@ -62,10 +62,19 @@ public abstract class Trip {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			File file = new File("src/Database/Trip.json");
-			if (!file.exists()) {
+			if (!file.exists()) return true;
+
+			JsonNode root = mapper.readTree(file);
+
+			ArrayNode trips;
+			if (root.isArray()) {
+				trips = (ArrayNode) root;
+			} else if (root.has("trips") && root.get("trips").isArray()) {
+				trips = (ArrayNode) root.get("trips");
+			} else {
 				return true;
 			}
-			ArrayNode trips = (ArrayNode) mapper.readTree(file);
+
 			for (JsonNode node : trips) {
 				if (node.has("id") && node.get("id").asText().equals(tripId)) {
 					return false;
@@ -220,6 +229,8 @@ public abstract class Trip {
 					throw new IllegalStateException("Original transport not found: " + oldTransportId);
 				}
 
+				SeatStateController seatStateController = new SeatStateController();
+
 				File userFile = new File("src/Database/User.json");
 				userReservations = readArray(mapper, userFile);
 				String seatsKey = seatsKey(newTransportNode);
@@ -236,7 +247,7 @@ public abstract class Trip {
 						throw new IllegalArgumentException(
 								"Seat " + seatId + " is not available on the selected transport.");
 					}
-					if (seatNode.path("occupied").asBoolean(false)) {
+					if (!"Available".equals(seatStateController.getSeatState(seatNode))) {
 						throw new IllegalArgumentException(
 								"Seat " + seatId + " is already occupied on the selected transport.");
 					}
@@ -256,6 +267,7 @@ public abstract class Trip {
 			}
 
 			if (transportChanged) {
+				SeatStateController seatStateController = new SeatStateController();
 				File userFile = new File("src/Database/User.json");
 				if (userReservations == null) {
 					userReservations = readArray(mapper, userFile);
@@ -277,13 +289,18 @@ public abstract class Trip {
 					if (oldSeat == null) {
 						throw new IllegalStateException("Seat " + seatId + " was not found on the original transport.");
 					}
-					oldSeat.put("occupied", false);
+					seatStateController.freeSeat(oldSeat);
 
 					ObjectNode newSeat = findSeatNode(newTransportNode, newSeatsKey, seatId);
 					if (newSeat == null) {
 						throw new IllegalStateException("Seat " + seatId + " was not found on the selected transport.");
 					}
-					newSeat.put("occupied", true);
+					if (reservation.path("confirmed").asBoolean(false)) {
+						seatStateController.reserveSeat(newSeat);
+						seatStateController.occupySeat(newSeat);
+					} else {
+						seatStateController.reserveSeat(newSeat);
+					}
 
 					((ObjectNode) reservation).put("transportID", newTransportId);
 				}

@@ -43,7 +43,7 @@ public class ConcreteRouteVisitor implements Visitor {
                             if (section.has("seats")) {
                                 for (JsonNode seat : section.get("seats")) {
                                     total++;
-                                    if (seat.has("occupied") && seat.get("occupied").asBoolean())
+                                    if (!"Available".equals(seat.path("state").asText("Available")))
                                         occupied++;
                                 }
                             }

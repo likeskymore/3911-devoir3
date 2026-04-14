@@ -3,8 +3,6 @@ package com.tripPortal.Model;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -62,7 +60,17 @@ public abstract class Company {
 				return true;
 			}
 
-			ArrayNode companies = (ArrayNode) mapper.readTree(file);
+			JsonNode root = mapper.readTree(file);
+
+			ArrayNode companies;
+			if (root.isArray()) {
+				companies = (ArrayNode) root;
+			} else if (root.has("companies") && root.get("companies").isArray()) {
+				companies = (ArrayNode) root.get("companies");
+			} else {
+				return true;
+			}
+
 			for (JsonNode node : companies) {
 				if (node.has("id") && generatedId.equals(node.get("id").asText())) {
 					return false;

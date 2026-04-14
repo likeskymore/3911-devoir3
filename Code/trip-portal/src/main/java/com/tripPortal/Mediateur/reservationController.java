@@ -8,12 +8,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tripPortal.Etat.SeatStateController;
 import com.tripPortal.Model.Reservation;
-//import com.sun.jdi.connect.Transport;
-import com.tripPortal.Model.Seat;
-import com.tripPortal.Model.Section;
 
 public class reservationController {
+
+	private final SeatStateController seatStateController = new SeatStateController();
 
 	/**
 	 * 
@@ -62,7 +62,7 @@ public class reservationController {
 				System.err.println("Seat not found: " + seatID);
 				return -2;
 			}
-			if (seatNode.has("occupied") && seatNode.get("occupied").asBoolean()) {
+			if (!seatStateController.reserveSeat((ObjectNode) seatNode)) {
 				System.err.println("Seat already occupied: " + seatID);
 				return -3;
 			}
@@ -75,7 +75,6 @@ public class reservationController {
 			saveReservation(reservation, mapper);
 
 			// ── Mettre à jour le siège dans Transport.json ─────────────
-			((ObjectNode) seatNode).put("occupied", true);
 			mapper.writerWithDefaultPrettyPrinter()
 				.writeValue(new File("src/Database/Transport.json"), transportRoot);
 
@@ -135,6 +134,7 @@ public class reservationController {
 					if (node.get("reservationNumber").asText().equals(reservation.getReservationNumber())) {
 						((ObjectNode) node).put("confirmed", true);
 						mapper.writerWithDefaultPrettyPrinter().writeValue(file, root);
+						setSeatState(mapper, reservation.getTransportID(), reservation.getReservedSeat(), true);
 						return;
 					}
 				}
@@ -170,7 +170,7 @@ public class reservationController {
 							if (!section.has(seatsKey)) continue;
 							for (JsonNode seat : section.get(seatsKey)) {
 								if (seat.has("seatID") && seat.get("seatID").asText().equals(reservation.getReservedSeat())) {
-									((ObjectNode) seat).put("occupied", false);
+									seatStateController.freeSeat((ObjectNode) seat);
 									mapper.writerWithDefaultPrettyPrinter()
 										.writeValue(new File("src/Database/Transport.json"), transportRoot);
 									return;
@@ -183,6 +183,38 @@ public class reservationController {
 
 		} catch (IOException e) {
 			System.err.println("Failed to cancel reservation: " + e.getMessage());
+		}
+	}
+
+	private void setSeatState(ObjectMapper mapper, String transportID, String seatID, boolean occupied) throws IOException {
+		JsonNode transportRoot = mapper.readTree(new File("src/Database/Transport.json"));
+		for (JsonNode node : transportRoot) {
+			if (!node.has("transportID") || !node.get("transportID").asText().equals(transportID)) {
+				continue;
+			}
+			if (!node.has("sections")) {
+				break;
+			}
+			for (JsonNode section : node.get("sections")) {
+				String seatsKey = section.has("cabins") ? "cabins" : "seats";
+				if (!section.has(seatsKey)) {
+					continue;
+				}
+				for (JsonNode seat : section.get(seatsKey)) {
+					if (seat.has("seatID") && seat.get("seatID").asText().equals(seatID)) {
+						ObjectNode seatObject = (ObjectNode) seat;
+						if (occupied) {
+							seatStateController.reserveSeat(seatObject);
+							seatStateController.occupySeat(seatObject);
+						} else {
+							seatStateController.freeSeat(seatObject);
+						}
+						mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/Database/Transport.json"), transportRoot);
+						return;
+					}
+				}
+			}
+			break;
 		}
 	}
 }

@@ -55,10 +55,19 @@ public abstract class Transport {
         try {
             ObjectMapper mapper = new ObjectMapper();
             File file = new File("src/Database/Transport.json");
-            if (!file.exists()) {
+            if (!file.exists()) return true;
+
+            JsonNode root = mapper.readTree(file);
+
+            ArrayNode transports;
+            if (root.isArray()) {
+                transports = (ArrayNode) root;
+            } else if (root.has("transports") && root.get("transports").isArray()) {
+                transports = (ArrayNode) root.get("transports");
+            } else {
                 return true;
             }
-            ArrayNode transports = (ArrayNode) mapper.readTree(file);
+
             for (JsonNode node : transports) {
                 if (node.has("transportID") && node.get("transportID").asText().equals(transportId)) {
                     return false;
