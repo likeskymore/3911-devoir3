@@ -1,7 +1,12 @@
 package com.tripPortal.Model;
-
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.Random;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 public class Reservation {
 
@@ -44,29 +49,37 @@ public class Reservation {
 	}
 	
 	private boolean isReservationNumberUnique(String reservationNumber) {
-		try {
-			var mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-			var file = new java.io.File("src/Database/User.json");
-			if (!file.exists()) {
-				return true;
-			}
-			var users = (com.fasterxml.jackson.databind.node.ArrayNode) mapper.readTree(file);
-			for (var user : users) {
-				if (user.has("reservations")) {
-					var reservations = user.get("reservations");
-					for (var reservation : reservations) {
-						if (reservation.has("reservationNumber") && 
-							reservation.get("reservationNumber").asText().equals(reservationNumber)) {
-							return false;
-						}
-					}
-				}
-			}
-			return true;
-		} catch (java.io.IOException ex) {
-			return true;
-		}
-	}
+    try {
+        var mapper = new ObjectMapper();
+        var file = new File("src/Database/User.json");
+        if (!file.exists()) return true;
+
+        JsonNode root = mapper.readTree(file);
+
+        ArrayNode users;
+        if (root.isArray()) {
+            users = (ArrayNode) root;
+        } else if (root.has("users") && root.get("users").isArray()) {
+            users = (ArrayNode) root.get("users");
+        } else {
+            return true;
+        }
+
+        for (var user : users) {
+            if (user.has("reservations") && user.get("reservations").isArray()) {
+                for (var reservation : user.get("reservations")) {
+                    if (reservation.has("reservationNumber") &&
+                        reservation.get("reservationNumber").asText().equals(reservationNumber)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    } catch (IOException ex) {
+        return true;
+    }
+}
 
 	public String getReservationNumber() {
 		return reservationNumber;
@@ -90,10 +103,6 @@ public class Reservation {
 
 	public boolean isPaid() {
 		return isPaid;
-	}
-
-	public void setPaid(boolean isPaid) {
-		this.isPaid = isPaid;
 	}
 
 }

@@ -1,25 +1,37 @@
 [ {
   "type" : "FlightCompany",
-  "id" : "JHLZM",
-  "name" : "Air Canada Test",
-  "tripId" : "LG",
-  "Trips" : [ "LGAZUA", "LGZJKV", "LGIRPS" ]
+  "id" : "VWFDY",
+  "name" : "United Airline",
+  "tripId" : "MB",
+  "Trips" : [ ]
 }, {
-  "type" : "TrainCompany",
-  "id" : "KGSTY",
-  "name" : "CN",
-  "tripId" : "PH",
-  "Trips" : [ "PHRWVS" ]
+  "type" : "FlightCompany",
+  "id" : "BVUSF",
+  "name" : "Air Belgium",
+  "tripId" : "IL",
+  "Trips" : [ ]
 }, {
   "type" : "BoatCompany",
-  "id" : "NMBIU",
-  "name" : "Bui",
-  "tripId" : "NX",
+  "id" : "KAIAC",
+  "name" : "Air China",
+  "tripId" : "IU",
   "Trips" : [ ]
 }, {
   "type" : "TrainCompany",
-  "id" : "TEYHL",
-  "name" : "STM",
-  "tripId" : "JJ",
-  "Trips" : [ "JJWFDF" ]
+  "id" : "ELTMD",
+  "name" : "REM",
+  "tripId" : "GW",
+  "Trips" : [ ]
+}, {
+  "type" : "FlightCompany",
+  "id" : "ULJHI",
+  "name" : "Air France",
+  "tripId" : "OK",
+  "Trips" : [ ]
+}, {
+  "type" : "FlightCompany",
+  "id" : "BMLEX",
+  "name" : "Air Finland",
+  "tripId" : "WZ",
+  "Trips" : [ "WZOSJU" ]
 } ]

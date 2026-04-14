@@ -101,7 +101,7 @@ public class TrainFactory extends PlaneTripFactory {
                 for (Seat seat : st.getSeats()) {
                     ObjectNode seatNode = mapper.createObjectNode();
                     seatNode.put("seatID", seat.getSeatID());
-                    seatNode.put("occupied", seat.isOccupied());
+                    seatNode.put("state", seat.getStateName());
                     seatsArray.add(seatNode);
                 }
                 secNode.set("seats", seatsArray);

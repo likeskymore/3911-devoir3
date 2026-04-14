@@ -1,7 +1,6 @@
 package com.tripPortal.Model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class CruiseLine extends Trip {
@@ -18,6 +17,10 @@ public class CruiseLine extends Trip {
 
 	public CruiseLine(String id) {
 		super(id);
+	}
+
+	public CruiseLine(){
+		super();
 	}
 
 }

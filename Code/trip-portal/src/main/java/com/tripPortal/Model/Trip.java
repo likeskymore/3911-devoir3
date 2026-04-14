@@ -3,7 +3,6 @@ package com.tripPortal.Model;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
@@ -11,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tripPortal.Etat.SeatStateController;
 import com.tripPortal.Factory.TripFactory;
 
 public abstract class Trip {
@@ -36,6 +36,11 @@ public abstract class Trip {
 
 	public Trip(String id) {
 		this.id = id;
+		// this one is for delete
+	}
+
+	public Trip(){
+		// this one is for undo delete
 	}
 
 	private String randomGenerateID(Company servicedBy) {
@@ -62,10 +67,19 @@ public abstract class Trip {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			File file = new File("src/Database/Trip.json");
-			if (!file.exists()) {
+			if (!file.exists()) return true;
+
+			JsonNode root = mapper.readTree(file);
+
+			ArrayNode trips;
+			if (root.isArray()) {
+				trips = (ArrayNode) root;
+			} else if (root.has("trips") && root.get("trips").isArray()) {
+				trips = (ArrayNode) root.get("trips");
+			} else {
 				return true;
 			}
-			ArrayNode trips = (ArrayNode) mapper.readTree(file);
+
 			for (JsonNode node : trips) {
 				if (node.has("id") && node.get("id").asText().equals(tripId)) {
 					return false;
@@ -105,14 +119,18 @@ public abstract class Trip {
 		return tripDuration;
 	}
 
-	public void delete() throws IOException {
+	public void delete() throws IOException{
+
+		ObjectMapper historyMapper = new ObjectMapper();
+		File historyFile = new File("src/Database/tripDeleteHistory.json");
+
 		ObjectMapper displayMapper = new ObjectMapper();
 		File tripFile = new File("src/Database/Trip.json");
 		ArrayNode tripArray = (ArrayNode) displayMapper.readTree(tripFile);
 		for (int i = 0; i < tripArray.size(); i++) {
-			if (tripArray.get(i).get("id").asText().equals(this.id)) {
-				tripArray.remove(i);
-				break;
+			if (tripArray.get(i).get("id").asText().equals(this.id)) { 
+				historyMapper.writerWithDefaultPrettyPrinter().writeValue(historyFile, tripArray.get(i));
+				tripArray.remove(i); break; 
 			}
 		}
 		try {
@@ -134,16 +152,14 @@ public abstract class Trip {
 				}
 			}
 			cm.writerWithDefaultPrettyPrinter().writeValue(cf, ca);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		} catch (IOException ex) { ex.printStackTrace(); }
 	}
 
 	public void updatePrice(String newPrice) {
 		try {
 			ObjectMapper m = new ObjectMapper();
 			File f = new File("src/Database/Trip.json");
-			ArrayNode arr = (ArrayNode) m.readTree(f);
+			ArrayNode arr = readArray(m, f); // use your existing readArray helper
 			for (int i = 0; i < arr.size(); i++) {
 				if (arr.get(i).get("id").asText().equals(this.id)) {
 					((ObjectNode) arr.get(i)).put("price", newPrice);
@@ -220,6 +236,8 @@ public abstract class Trip {
 					throw new IllegalStateException("Original transport not found: " + oldTransportId);
 				}
 
+				SeatStateController seatStateController = new SeatStateController();
+
 				File userFile = new File("src/Database/User.json");
 				userReservations = readArray(mapper, userFile);
 				String seatsKey = seatsKey(newTransportNode);
@@ -236,12 +254,15 @@ public abstract class Trip {
 						throw new IllegalArgumentException(
 								"Seat " + seatId + " is not available on the selected transport.");
 					}
-					if (seatNode.path("occupied").asBoolean(false)) {
+					if (!"Available".equals(seatStateController.getSeatState(seatNode))) {
 						throw new IllegalArgumentException(
 								"Seat " + seatId + " is already occupied on the selected transport.");
 					}
 				}
 			}
+
+			File historyFile = new File("src/Database/tripUpdateHistory.json");
+			mapper.writerWithDefaultPrettyPrinter().writeValue(historyFile, tripNode);
 
 			tripNode.put("company", newCompany);
 			tripNode.put("startDate", newDepartureTime.toString());
@@ -250,12 +271,15 @@ public abstract class Trip {
 			tripNode.put("price", newPrice);
 			tripNode.put("transport", newTransportId);
 
+			
+
 			if (!oldCompany.equals(newCompany)) {
 				updateCompanyTrips(companies, oldCompany, newCompany, this.id);
 				mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
 			}
 
 			if (transportChanged) {
+				SeatStateController seatStateController = new SeatStateController();
 				File userFile = new File("src/Database/User.json");
 				if (userReservations == null) {
 					userReservations = readArray(mapper, userFile);
@@ -277,13 +301,18 @@ public abstract class Trip {
 					if (oldSeat == null) {
 						throw new IllegalStateException("Seat " + seatId + " was not found on the original transport.");
 					}
-					oldSeat.put("occupied", false);
+					seatStateController.freeSeat(oldSeat);
 
 					ObjectNode newSeat = findSeatNode(newTransportNode, newSeatsKey, seatId);
 					if (newSeat == null) {
 						throw new IllegalStateException("Seat " + seatId + " was not found on the selected transport.");
 					}
-					newSeat.put("occupied", true);
+					if (reservation.path("confirmed").asBoolean(false)) {
+						seatStateController.reserveSeat(newSeat);
+						seatStateController.occupySeat(newSeat);
+					} else {
+						seatStateController.reserveSeat(newSeat);
+					}
 
 					((ObjectNode) reservation).put("transportID", newTransportId);
 				}

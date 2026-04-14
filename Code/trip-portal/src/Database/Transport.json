@@ -1,2133 +1,627 @@
 [ {
-  "transportID" : "571308",
+  "transportID" : "458033",
   "type" : "Plane",
-  "name" : "Boeing",
-  "company" : "Air Canada Test",
-  "available" : true,
-  "sections" : [ ]
-}, {
-  "transportID" : "386626",
-  "type" : "Train",
-  "name" : "REM",
-  "company" : "CN",
+  "name" : "Air Belg",
+  "company" : "Air Belgium",
   "available" : true,
   "sections" : [ {
-    "sectionType" : "P",
-    "layout" : "S",
-    "numberOfRows" : 7,
-    "numberOfColumns" : 3,
-    "seats" : [ {
-      "seatID" : "P1A",
-      "occupied" : false
-    }, {
-      "seatID" : "P1B",
-      "occupied" : false
-    }, {
-      "seatID" : "P1C",
-      "occupied" : false
-    }, {
-      "seatID" : "P2A",
-      "occupied" : false
-    }, {
-      "seatID" : "P2B",
-      "occupied" : false
-    }, {
-      "seatID" : "P2C",
-      "occupied" : false
-    }, {
-      "seatID" : "P3A",
-      "occupied" : false
-    }, {
-      "seatID" : "P3B",
-      "occupied" : false
-    }, {
-      "seatID" : "P3C",
-      "occupied" : false
-    }, {
-      "seatID" : "P4A",
-      "occupied" : false
-    }, {
-      "seatID" : "P4B",
-      "occupied" : false
-    }, {
-      "seatID" : "P4C",
-      "occupied" : false
-    }, {
-      "seatID" : "P5A",
-      "occupied" : false
-    }, {
-      "seatID" : "P5B",
-      "occupied" : false
-    }, {
-      "seatID" : "P5C",
-      "occupied" : false
-    }, {
-      "seatID" : "P6A",
-      "occupied" : false
-    }, {
-      "seatID" : "P6B",
-      "occupied" : false
-    }, {
-      "seatID" : "P6C",
-      "occupied" : false
-    }, {
-      "seatID" : "P7A",
-      "occupied" : false
-    }, {
-      "seatID" : "P7B",
-      "occupied" : false
-    }, {
-      "seatID" : "P7C",
-      "occupied" : false
-    } ]
-  }, {
-    "sectionType" : "E",
-    "layout" : "S",
-    "numberOfRows" : 10,
-    "numberOfColumns" : 3,
-    "seats" : [ {
-      "seatID" : "E1A",
-      "occupied" : false
-    }, {
-      "seatID" : "E1B",
-      "occupied" : false
-    }, {
-      "seatID" : "E1C",
-      "occupied" : false
-    }, {
-      "seatID" : "E2A",
-      "occupied" : false
-    }, {
-      "seatID" : "E2B",
-      "occupied" : false
-    }, {
-      "seatID" : "E2C",
-      "occupied" : false
-    }, {
-      "seatID" : "E3A",
-      "occupied" : false
-    }, {
-      "seatID" : "E3B",
-      "occupied" : false
-    }, {
-      "seatID" : "E3C",
-      "occupied" : false
-    }, {
-      "seatID" : "E4A",
-      "occupied" : false
-    }, {
-      "seatID" : "E4B",
-      "occupied" : false
-    }, {
-      "seatID" : "E4C",
-      "occupied" : false
-    }, {
-      "seatID" : "E5A",
-      "occupied" : false
-    }, {
-      "seatID" : "E5B",
-      "occupied" : false
-    }, {
-      "seatID" : "E5C",
-      "occupied" : false
-    }, {
-      "seatID" : "E6A",
-      "occupied" : false
-    }, {
-      "seatID" : "E6B",
-      "occupied" : false
-    }, {
-      "seatID" : "E6C",
-      "occupied" : false
-    }, {
-      "seatID" : "E7A",
-      "occupied" : false
-    }, {
-      "seatID" : "E7B",
-      "occupied" : false
-    }, {
-      "seatID" : "E7C",
-      "occupied" : false
-    }, {
-      "seatID" : "E8A",
-      "occupied" : false
-    }, {
-      "seatID" : "E8B",
-      "occupied" : false
-    }, {
-      "seatID" : "E8C",
-      "occupied" : false
-    }, {
-      "seatID" : "E9A",
-      "occupied" : false
-    }, {
-      "seatID" : "E9B",
-      "occupied" : true
-    }, {
-      "seatID" : "E9C",
-      "occupied" : false
-    }, {
-      "seatID" : "E10A",
-      "occupied" : false
-    }, {
-      "seatID" : "E10B",
-      "occupied" : false
-    }, {
-      "seatID" : "E10C",
-      "occupied" : false
-    } ]
-  } ]
-}, {
-  "transportID" : "383386",
-  "type" : "Plane",
-  "name" : "Airbus",
-  "company" : "Air Canada Test",
-  "available" : true,
-  "sections" : [ {
-    "sectionType" : "P",
-    "layout" : "L",
-    "numberOfRows" : 10,
-    "numberOfColumns" : 10,
-    "seats" : [ {
-      "seatID" : "P1A",
-      "occupied" : false
-    }, {
-      "seatID" : "P1B",
-      "occupied" : false
-    }, {
-      "seatID" : "P1C",
-      "occupied" : false
-    }, {
-      "seatID" : "P1D",
-      "occupied" : false
-    }, {
-      "seatID" : "P1E",
-      "occupied" : false
-    }, {
-      "seatID" : "P1F",
-      "occupied" : true
-    }, {
-      "seatID" : "P1G",
-      "occupied" : true
-    }, {
-      "seatID" : "P1H",
-      "occupied" : false
-    }, {
-      "seatID" : "P1I",
-      "occupied" : false
-    }, {
-      "seatID" : "P1J",
-      "occupied" : false
-    }, {
-      "seatID" : "P2A",
-      "occupied" : false
-    }, {
-      "seatID" : "P2B",
-      "occupied" : false
-    }, {
-      "seatID" : "P2C",
-      "occupied" : false
-    }, {
-      "seatID" : "P2D",
-      "occupied" : false
-    }, {
-      "seatID" : "P2E",
-      "occupied" : false
-    }, {
-      "seatID" : "P2F",
-      "occupied" : false
-    }, {
-      "seatID" : "P2G",
-      "occupied" : false
-    }, {
-      "seatID" : "P2H",
-      "occupied" : false
-    }, {
-      "seatID" : "P2I",
-      "occupied" : false
-    }, {
-      "seatID" : "P2J",
-      "occupied" : false
-    }, {
-      "seatID" : "P3A",
-      "occupied" : false
-    }, {
-      "seatID" : "P3B",
-      "occupied" : false
-    }, {
-      "seatID" : "P3C",
-      "occupied" : false
-    }, {
-      "seatID" : "P3D",
-      "occupied" : false
-    }, {
-      "seatID" : "P3E",
-      "occupied" : false
-    }, {
-      "seatID" : "P3F",
-      "occupied" : false
-    }, {
-      "seatID" : "P3G",
-      "occupied" : false
-    }, {
-      "seatID" : "P3H",
-      "occupied" : false
-    }, {
-      "seatID" : "P3I",
-      "occupied" : false
-    }, {
-      "seatID" : "P3J",
-      "occupied" : false
-    }, {
-      "seatID" : "P4A",
-      "occupied" : false
-    }, {
-      "seatID" : "P4B",
-      "occupied" : false
-    }, {
-      "seatID" : "P4C",
-      "occupied" : false
-    }, {
-      "seatID" : "P4D",
-      "occupied" : false
-    }, {
-      "seatID" : "P4E",
-      "occupied" : false
-    }, {
-      "seatID" : "P4F",
-      "occupied" : false
-    }, {
-      "seatID" : "P4G",
-      "occupied" : false
-    }, {
-      "seatID" : "P4H",
-      "occupied" : false
-    }, {
-      "seatID" : "P4I",
-      "occupied" : false
-    }, {
-      "seatID" : "P4J",
-      "occupied" : false
-    }, {
-      "seatID" : "P5A",
-      "occupied" : false
-    }, {
-      "seatID" : "P5B",
-      "occupied" : false
-    }, {
-      "seatID" : "P5C",
-      "occupied" : false
-    }, {
-      "seatID" : "P5D",
-      "occupied" : false
-    }, {
-      "seatID" : "P5E",
-      "occupied" : false
-    }, {
-      "seatID" : "P5F",
-      "occupied" : false
-    }, {
-      "seatID" : "P5G",
-      "occupied" : false
-    }, {
-      "seatID" : "P5H",
-      "occupied" : false
-    }, {
-      "seatID" : "P5I",
-      "occupied" : false
-    }, {
-      "seatID" : "P5J",
-      "occupied" : false
-    }, {
-      "seatID" : "P6A",
-      "occupied" : false
-    }, {
-      "seatID" : "P6B",
-      "occupied" : false
-    }, {
-      "seatID" : "P6C",
-      "occupied" : false
-    }, {
-      "seatID" : "P6D",
-      "occupied" : false
-    }, {
-      "seatID" : "P6E",
-      "occupied" : false
-    }, {
-      "seatID" : "P6F",
-      "occupied" : false
-    }, {
-      "seatID" : "P6G",
-      "occupied" : false
-    }, {
-      "seatID" : "P6H",
-      "occupied" : false
-    }, {
-      "seatID" : "P6I",
-      "occupied" : false
-    }, {
-      "seatID" : "P6J",
-      "occupied" : false
-    }, {
-      "seatID" : "P7A",
-      "occupied" : false
-    }, {
-      "seatID" : "P7B",
-      "occupied" : false
-    }, {
-      "seatID" : "P7C",
-      "occupied" : false
-    }, {
-      "seatID" : "P7D",
-      "occupied" : false
-    }, {
-      "seatID" : "P7E",
-      "occupied" : false
-    }, {
-      "seatID" : "P7F",
-      "occupied" : false
-    }, {
-      "seatID" : "P7G",
-      "occupied" : false
-    }, {
-      "seatID" : "P7H",
-      "occupied" : false
-    }, {
-      "seatID" : "P7I",
-      "occupied" : false
-    }, {
-      "seatID" : "P7J",
-      "occupied" : false
-    }, {
-      "seatID" : "P8A",
-      "occupied" : false
-    }, {
-      "seatID" : "P8B",
-      "occupied" : false
-    }, {
-      "seatID" : "P8C",
-      "occupied" : false
-    }, {
-      "seatID" : "P8D",
-      "occupied" : false
-    }, {
-      "seatID" : "P8E",
-      "occupied" : false
-    }, {
-      "seatID" : "P8F",
-      "occupied" : false
-    }, {
-      "seatID" : "P8G",
-      "occupied" : false
-    }, {
-      "seatID" : "P8H",
-      "occupied" : false
-    }, {
-      "seatID" : "P8I",
-      "occupied" : false
-    }, {
-      "seatID" : "P8J",
-      "occupied" : false
-    }, {
-      "seatID" : "P9A",
-      "occupied" : false
-    }, {
-      "seatID" : "P9B",
-      "occupied" : false
-    }, {
-      "seatID" : "P9C",
-      "occupied" : false
-    }, {
-      "seatID" : "P9D",
-      "occupied" : false
-    }, {
-      "seatID" : "P9E",
-      "occupied" : false
-    }, {
-      "seatID" : "P9F",
-      "occupied" : false
-    }, {
-      "seatID" : "P9G",
-      "occupied" : false
-    }, {
-      "seatID" : "P9H",
-      "occupied" : false
-    }, {
-      "seatID" : "P9I",
-      "occupied" : false
-    }, {
-      "seatID" : "P9J",
-      "occupied" : false
-    }, {
-      "seatID" : "P10A",
-      "occupied" : false
-    }, {
-      "seatID" : "P10B",
-      "occupied" : false
-    }, {
-      "seatID" : "P10C",
-      "occupied" : false
-    }, {
-      "seatID" : "P10D",
-      "occupied" : false
-    }, {
-      "seatID" : "P10E",
-      "occupied" : false
-    }, {
-      "seatID" : "P10F",
-      "occupied" : false
-    }, {
-      "seatID" : "P10G",
-      "occupied" : false
-    }, {
-      "seatID" : "P10H",
-      "occupied" : false
-    }, {
-      "seatID" : "P10I",
-      "occupied" : false
-    }, {
-      "seatID" : "P10J",
-      "occupied" : false
-    } ]
-  } ]
-}, {
-  "transportID" : "715045",
-  "type" : "Plane",
-  "name" : "Airbus 2",
-  "company" : "Air Canada Test",
-  "available" : true,
-  "sections" : [ {
-    "sectionType" : "F",
-    "layout" : "M",
-    "numberOfRows" : 10,
-    "numberOfColumns" : 6,
-    "seats" : [ {
-      "seatID" : "F1A",
-      "occupied" : true
-    }, {
-      "seatID" : "F1B",
-      "occupied" : false
-    }, {
-      "seatID" : "F1C",
-      "occupied" : false
-    }, {
-      "seatID" : "F1D",
-      "occupied" : false
-    }, {
-      "seatID" : "F1E",
-      "occupied" : false
-    }, {
-      "seatID" : "F1F",
-      "occupied" : false
-    }, {
-      "seatID" : "F2A",
-      "occupied" : false
-    }, {
-      "seatID" : "F2B",
-      "occupied" : false
-    }, {
-      "seatID" : "F2C",
-      "occupied" : false
-    }, {
-      "seatID" : "F2D",
-      "occupied" : false
-    }, {
-      "seatID" : "F2E",
-      "occupied" : false
-    }, {
-      "seatID" : "F2F",
-      "occupied" : true
-    }, {
-      "seatID" : "F3A",
-      "occupied" : true
-    }, {
-      "seatID" : "F3B",
-      "occupied" : false
-    }, {
-      "seatID" : "F3C",
-      "occupied" : false
-    }, {
-      "seatID" : "F3D",
-      "occupied" : false
-    }, {
-      "seatID" : "F3E",
-      "occupied" : false
-    }, {
-      "seatID" : "F3F",
-      "occupied" : false
-    }, {
-      "seatID" : "F4A",
-      "occupied" : false
-    }, {
-      "seatID" : "F4B",
-      "occupied" : false
-    }, {
-      "seatID" : "F4C",
-      "occupied" : false
-    }, {
-      "seatID" : "F4D",
-      "occupied" : false
-    }, {
-      "seatID" : "F4E",
-      "occupied" : false
-    }, {
-      "seatID" : "F4F",
-      "occupied" : false
-    }, {
-      "seatID" : "F5A",
-      "occupied" : true
-    }, {
-      "seatID" : "F5B",
-      "occupied" : false
-    }, {
-      "seatID" : "F5C",
-      "occupied" : false
-    }, {
-      "seatID" : "F5D",
-      "occupied" : false
-    }, {
-      "seatID" : "F5E",
-      "occupied" : false
-    }, {
-      "seatID" : "F5F",
-      "occupied" : false
-    }, {
-      "seatID" : "F6A",
-      "occupied" : false
-    }, {
-      "seatID" : "F6B",
-      "occupied" : false
-    }, {
-      "seatID" : "F6C",
-      "occupied" : false
-    }, {
-      "seatID" : "F6D",
-      "occupied" : false
-    }, {
-      "seatID" : "F6E",
-      "occupied" : false
-    }, {
-      "seatID" : "F6F",
-      "occupied" : false
-    }, {
-      "seatID" : "F7A",
-      "occupied" : false
-    }, {
-      "seatID" : "F7B",
-      "occupied" : false
-    }, {
-      "seatID" : "F7C",
-      "occupied" : false
-    }, {
-      "seatID" : "F7D",
-      "occupied" : false
-    }, {
-      "seatID" : "F7E",
-      "occupied" : false
-    }, {
-      "seatID" : "F7F",
-      "occupied" : false
-    }, {
-      "seatID" : "F8A",
-      "occupied" : false
-    }, {
-      "seatID" : "F8B",
-      "occupied" : false
-    }, {
-      "seatID" : "F8C",
-      "occupied" : false
-    }, {
-      "seatID" : "F8D",
-      "occupied" : false
-    }, {
-      "seatID" : "F8E",
-      "occupied" : false
-    }, {
-      "seatID" : "F8F",
-      "occupied" : false
-    }, {
-      "seatID" : "F9A",
-      "occupied" : false
-    }, {
-      "seatID" : "F9B",
-      "occupied" : false
-    }, {
-      "seatID" : "F9C",
-      "occupied" : false
-    }, {
-      "seatID" : "F9D",
-      "occupied" : false
-    }, {
-      "seatID" : "F9E",
-      "occupied" : false
-    }, {
-      "seatID" : "F9F",
-      "occupied" : false
-    }, {
-      "seatID" : "F10A",
-      "occupied" : false
-    }, {
-      "seatID" : "F10B",
-      "occupied" : false
-    }, {
-      "seatID" : "F10C",
-      "occupied" : false
-    }, {
-      "seatID" : "F10D",
-      "occupied" : false
-    }, {
-      "seatID" : "F10E",
-      "occupied" : false
-    }, {
-      "seatID" : "F10F",
-      "occupied" : false
-    } ]
-  }, {
     "sectionType" : "A",
     "layout" : "L",
     "numberOfRows" : 10,
     "numberOfColumns" : 10,
     "seats" : [ {
       "seatID" : "A1A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A1B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A1C",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A1D",
-      "occupied" : false
-    }, {
-      "seatID" : "A2A",
-      "occupied" : false
-    }, {
-      "seatID" : "A2B",
-      "occupied" : false
-    }, {
-      "seatID" : "A2C",
-      "occupied" : false
-    }, {
-      "seatID" : "A2D",
-      "occupied" : false
-    }, {
-      "seatID" : "A3A",
-      "occupied" : false
-    }, {
-      "seatID" : "A3B",
-      "occupied" : false
-    }, {
-      "seatID" : "A3C",
-      "occupied" : false
-    }, {
-      "seatID" : "A3D",
-      "occupied" : false
-    }, {
-      "seatID" : "A4A",
-      "occupied" : false
-    }, {
-      "seatID" : "A4B",
-      "occupied" : false
-    }, {
-      "seatID" : "A4C",
-      "occupied" : false
-    }, {
-      "seatID" : "A4D",
-      "occupied" : false
-    }, {
-      "seatID" : "A5A",
-      "occupied" : false
-    }, {
-      "seatID" : "A5B",
-      "occupied" : false
-    }, {
-      "seatID" : "A5C",
-      "occupied" : false
-    }, {
-      "seatID" : "A5D",
-      "occupied" : false
-    }, {
-      "seatID" : "A6A",
-      "occupied" : false
-    }, {
-      "seatID" : "A6B",
-      "occupied" : false
-    }, {
-      "seatID" : "A6C",
-      "occupied" : false
-    }, {
-      "seatID" : "A6D",
-      "occupied" : false
-    }, {
-      "seatID" : "A7A",
-      "occupied" : false
-    }, {
-      "seatID" : "A7B",
-      "occupied" : false
-    }, {
-      "seatID" : "A7C",
-      "occupied" : false
-    }, {
-      "seatID" : "A7D",
-      "occupied" : false
-    }, {
-      "seatID" : "A8A",
-      "occupied" : false
-    }, {
-      "seatID" : "A8B",
-      "occupied" : false
-    }, {
-      "seatID" : "A8C",
-      "occupied" : false
-    }, {
-      "seatID" : "A8D",
-      "occupied" : false
-    }, {
-      "seatID" : "A9A",
-      "occupied" : false
-    }, {
-      "seatID" : "A9B",
-      "occupied" : false
-    }, {
-      "seatID" : "A9C",
-      "occupied" : false
-    }, {
-      "seatID" : "A9D",
-      "occupied" : false
-    }, {
-      "seatID" : "A10A",
-      "occupied" : false
-    }, {
-      "seatID" : "A10B",
-      "occupied" : false
-    }, {
-      "seatID" : "A10C",
-      "occupied" : false
-    }, {
-      "seatID" : "A10D",
-      "occupied" : false
-    } ]
-  }, {
-    "sectionType" : "E",
-    "layout" : "C",
-    "numberOfRows" : 10,
-    "numberOfColumns" : 4,
-    "seats" : [ {
-      "seatID" : "E1A",
-      "occupied" : false
-    }, {
-      "seatID" : "E1B",
-      "occupied" : false
-    }, {
-      "seatID" : "E1C",
-      "occupied" : false
-    }, {
-      "seatID" : "E1D",
-      "occupied" : false
-    }, {
-      "seatID" : "E2A",
-      "occupied" : false
-    }, {
-      "seatID" : "E2B",
-      "occupied" : false
-    }, {
-      "seatID" : "E2C",
-      "occupied" : false
-    }, {
-      "seatID" : "E2D",
-      "occupied" : false
-    }, {
-      "seatID" : "E3A",
-      "occupied" : false
-    }, {
-      "seatID" : "E3B",
-      "occupied" : false
-    }, {
-      "seatID" : "E3C",
-      "occupied" : false
-    }, {
-      "seatID" : "E3D",
-      "occupied" : false
-    }, {
-      "seatID" : "E4A",
-      "occupied" : false
-    }, {
-      "seatID" : "E4B",
-      "occupied" : false
-    }, {
-      "seatID" : "E4C",
-      "occupied" : false
-    }, {
-      "seatID" : "E4D",
-      "occupied" : false
-    }, {
-      "seatID" : "E5A",
-      "occupied" : false
-    }, {
-      "seatID" : "E5B",
-      "occupied" : false
-    }, {
-      "seatID" : "E5C",
-      "occupied" : false
-    }, {
-      "seatID" : "E5D",
-      "occupied" : false
-    }, {
-      "seatID" : "E6A",
-      "occupied" : false
-    }, {
-      "seatID" : "E6B",
-      "occupied" : false
-    }, {
-      "seatID" : "E6C",
-      "occupied" : false
-    }, {
-      "seatID" : "E6D",
-      "occupied" : false
-    }, {
-      "seatID" : "E7A",
-      "occupied" : false
-    }, {
-      "seatID" : "E7B",
-      "occupied" : false
-    }, {
-      "seatID" : "E7C",
-      "occupied" : false
-    }, {
-      "seatID" : "E7D",
-      "occupied" : false
-    }, {
-      "seatID" : "E8A",
-      "occupied" : false
-    }, {
-      "seatID" : "E8B",
-      "occupied" : false
-    }, {
-      "seatID" : "E8C",
-      "occupied" : false
-    }, {
-      "seatID" : "E8D",
-      "occupied" : false
-    }, {
-      "seatID" : "E9A",
-      "occupied" : false
-    }, {
-      "seatID" : "E9B",
-      "occupied" : false
-    }, {
-      "seatID" : "E9C",
-      "occupied" : false
-    }, {
-      "seatID" : "E9D",
-      "occupied" : false
-    }, {
-      "seatID" : "E10A",
-      "occupied" : false
-    }, {
-      "seatID" : "E10B",
-      "occupied" : false
-    }, {
-      "seatID" : "E10C",
-      "occupied" : false
-    }, {
-      "seatID" : "E10D",
-      "occupied" : false
-    } ]
-  } ]
-}, {
-  "transportID" : "571308",
-  "type" : "Plane",
-  "name" : "Boeing",
-  "company" : "Air Canada Test",
-  "available" : true,
-  "sections" : [ ]
-}, {
-  "transportID" : "386626",
-  "type" : "Train",
-  "name" : "REM",
-  "company" : "CN",
-  "available" : true,
-  "sections" : [ {
-    "sectionType" : "P",
-    "layout" : "S",
-    "numberOfRows" : 7,
-    "numberOfColumns" : 3,
-    "seats" : [ {
-      "seatID" : "P1A",
-      "occupied" : false
-    }, {
-      "seatID" : "P1B",
-      "occupied" : false
-    }, {
-      "seatID" : "P1C",
-      "occupied" : false
-    }, {
-      "seatID" : "P2A",
-      "occupied" : false
-    }, {
-      "seatID" : "P2B",
-      "occupied" : false
-    }, {
-      "seatID" : "P2C",
-      "occupied" : false
-    }, {
-      "seatID" : "P3A",
-      "occupied" : false
-    }, {
-      "seatID" : "P3B",
-      "occupied" : false
-    }, {
-      "seatID" : "P3C",
-      "occupied" : false
-    }, {
-      "seatID" : "P4A",
-      "occupied" : false
-    }, {
-      "seatID" : "P4B",
-      "occupied" : false
-    }, {
-      "seatID" : "P4C",
-      "occupied" : false
-    }, {
-      "seatID" : "P5A",
-      "occupied" : false
-    }, {
-      "seatID" : "P5B",
-      "occupied" : false
-    }, {
-      "seatID" : "P5C",
-      "occupied" : false
-    }, {
-      "seatID" : "P6A",
-      "occupied" : false
-    }, {
-      "seatID" : "P6B",
-      "occupied" : false
-    }, {
-      "seatID" : "P6C",
-      "occupied" : false
-    }, {
-      "seatID" : "P7A",
-      "occupied" : false
-    }, {
-      "seatID" : "P7B",
-      "occupied" : false
-    }, {
-      "seatID" : "P7C",
-      "occupied" : false
-    } ]
-  }, {
-    "sectionType" : "E",
-    "layout" : "S",
-    "numberOfRows" : 10,
-    "numberOfColumns" : 3,
-    "seats" : [ {
-      "seatID" : "E1A",
-      "occupied" : false
-    }, {
-      "seatID" : "E1B",
-      "occupied" : false
-    }, {
-      "seatID" : "E1C",
-      "occupied" : false
-    }, {
-      "seatID" : "E2A",
-      "occupied" : false
-    }, {
-      "seatID" : "E2B",
-      "occupied" : false
-    }, {
-      "seatID" : "E2C",
-      "occupied" : false
-    }, {
-      "seatID" : "E3A",
-      "occupied" : false
-    }, {
-      "seatID" : "E3B",
-      "occupied" : false
-    }, {
-      "seatID" : "E3C",
-      "occupied" : false
-    }, {
-      "seatID" : "E4A",
-      "occupied" : false
-    }, {
-      "seatID" : "E4B",
-      "occupied" : false
-    }, {
-      "seatID" : "E4C",
-      "occupied" : false
-    }, {
-      "seatID" : "E5A",
-      "occupied" : false
-    }, {
-      "seatID" : "E5B",
-      "occupied" : false
-    }, {
-      "seatID" : "E5C",
-      "occupied" : false
-    }, {
-      "seatID" : "E6A",
-      "occupied" : false
-    }, {
-      "seatID" : "E6B",
-      "occupied" : false
-    }, {
-      "seatID" : "E6C",
-      "occupied" : false
-    }, {
-      "seatID" : "E7A",
-      "occupied" : false
-    }, {
-      "seatID" : "E7B",
-      "occupied" : false
-    }, {
-      "seatID" : "E7C",
-      "occupied" : false
-    }, {
-      "seatID" : "E8A",
-      "occupied" : false
-    }, {
-      "seatID" : "E8B",
-      "occupied" : false
-    }, {
-      "seatID" : "E8C",
-      "occupied" : false
-    }, {
-      "seatID" : "E9A",
-      "occupied" : false
-    }, {
-      "seatID" : "E9B",
-      "occupied" : true
-    }, {
-      "seatID" : "E9C",
-      "occupied" : false
-    }, {
-      "seatID" : "E10A",
-      "occupied" : false
-    }, {
-      "seatID" : "E10B",
-      "occupied" : false
-    }, {
-      "seatID" : "E10C",
-      "occupied" : false
-    } ]
-  } ]
-}, {
-  "transportID" : "383386",
-  "type" : "Plane",
-  "name" : "Airbus",
-  "company" : "Air Canada Test",
-  "available" : true,
-  "sections" : [ {
-    "sectionType" : "P",
-    "layout" : "L",
-    "numberOfRows" : 10,
-    "numberOfColumns" : 10,
-    "seats" : [ {
-      "seatID" : "P1A",
-      "occupied" : false
-    }, {
-      "seatID" : "P1B",
-      "occupied" : false
-    }, {
-      "seatID" : "P1C",
-      "occupied" : false
-    }, {
-      "seatID" : "P1D",
-      "occupied" : false
-    }, {
-      "seatID" : "P1E",
-      "occupied" : false
-    }, {
-      "seatID" : "P1F",
-      "occupied" : true
-    }, {
-      "seatID" : "P1G",
-      "occupied" : true
-    }, {
-      "seatID" : "P1H",
-      "occupied" : false
-    }, {
-      "seatID" : "P1I",
-      "occupied" : false
-    }, {
-      "seatID" : "P1J",
-      "occupied" : false
-    }, {
-      "seatID" : "P2A",
-      "occupied" : false
-    }, {
-      "seatID" : "P2B",
-      "occupied" : false
-    }, {
-      "seatID" : "P2C",
-      "occupied" : false
-    }, {
-      "seatID" : "P2D",
-      "occupied" : false
-    }, {
-      "seatID" : "P2E",
-      "occupied" : false
-    }, {
-      "seatID" : "P2F",
-      "occupied" : false
-    }, {
-      "seatID" : "P2G",
-      "occupied" : false
-    }, {
-      "seatID" : "P2H",
-      "occupied" : false
-    }, {
-      "seatID" : "P2I",
-      "occupied" : false
-    }, {
-      "seatID" : "P2J",
-      "occupied" : false
-    }, {
-      "seatID" : "P3A",
-      "occupied" : false
-    }, {
-      "seatID" : "P3B",
-      "occupied" : false
-    }, {
-      "seatID" : "P3C",
-      "occupied" : false
-    }, {
-      "seatID" : "P3D",
-      "occupied" : false
-    }, {
-      "seatID" : "P3E",
-      "occupied" : false
-    }, {
-      "seatID" : "P3F",
-      "occupied" : false
-    }, {
-      "seatID" : "P3G",
-      "occupied" : false
-    }, {
-      "seatID" : "P3H",
-      "occupied" : false
-    }, {
-      "seatID" : "P3I",
-      "occupied" : false
-    }, {
-      "seatID" : "P3J",
-      "occupied" : false
-    }, {
-      "seatID" : "P4A",
-      "occupied" : false
-    }, {
-      "seatID" : "P4B",
-      "occupied" : false
-    }, {
-      "seatID" : "P4C",
-      "occupied" : false
-    }, {
-      "seatID" : "P4D",
-      "occupied" : false
-    }, {
-      "seatID" : "P4E",
-      "occupied" : false
-    }, {
-      "seatID" : "P4F",
-      "occupied" : false
-    }, {
-      "seatID" : "P4G",
-      "occupied" : false
-    }, {
-      "seatID" : "P4H",
-      "occupied" : false
-    }, {
-      "seatID" : "P4I",
-      "occupied" : false
-    }, {
-      "seatID" : "P4J",
-      "occupied" : false
-    }, {
-      "seatID" : "P5A",
-      "occupied" : false
-    }, {
-      "seatID" : "P5B",
-      "occupied" : false
-    }, {
-      "seatID" : "P5C",
-      "occupied" : false
-    }, {
-      "seatID" : "P5D",
-      "occupied" : false
-    }, {
-      "seatID" : "P5E",
-      "occupied" : false
-    }, {
-      "seatID" : "P5F",
-      "occupied" : false
-    }, {
-      "seatID" : "P5G",
-      "occupied" : false
-    }, {
-      "seatID" : "P5H",
-      "occupied" : false
-    }, {
-      "seatID" : "P5I",
-      "occupied" : false
-    }, {
-      "seatID" : "P5J",
-      "occupied" : false
-    }, {
-      "seatID" : "P6A",
-      "occupied" : false
-    }, {
-      "seatID" : "P6B",
-      "occupied" : false
-    }, {
-      "seatID" : "P6C",
-      "occupied" : false
-    }, {
-      "seatID" : "P6D",
-      "occupied" : false
-    }, {
-      "seatID" : "P6E",
-      "occupied" : false
-    }, {
-      "seatID" : "P6F",
-      "occupied" : false
-    }, {
-      "seatID" : "P6G",
-      "occupied" : false
-    }, {
-      "seatID" : "P6H",
-      "occupied" : false
-    }, {
-      "seatID" : "P6I",
-      "occupied" : false
-    }, {
-      "seatID" : "P6J",
-      "occupied" : false
-    }, {
-      "seatID" : "P7A",
-      "occupied" : false
-    }, {
-      "seatID" : "P7B",
-      "occupied" : false
-    }, {
-      "seatID" : "P7C",
-      "occupied" : false
-    }, {
-      "seatID" : "P7D",
-      "occupied" : false
-    }, {
-      "seatID" : "P7E",
-      "occupied" : false
-    }, {
-      "seatID" : "P7F",
-      "occupied" : false
-    }, {
-      "seatID" : "P7G",
-      "occupied" : false
-    }, {
-      "seatID" : "P7H",
-      "occupied" : false
-    }, {
-      "seatID" : "P7I",
-      "occupied" : false
-    }, {
-      "seatID" : "P7J",
-      "occupied" : false
-    }, {
-      "seatID" : "P8A",
-      "occupied" : false
-    }, {
-      "seatID" : "P8B",
-      "occupied" : false
-    }, {
-      "seatID" : "P8C",
-      "occupied" : false
-    }, {
-      "seatID" : "P8D",
-      "occupied" : false
-    }, {
-      "seatID" : "P8E",
-      "occupied" : false
-    }, {
-      "seatID" : "P8F",
-      "occupied" : false
-    }, {
-      "seatID" : "P8G",
-      "occupied" : false
-    }, {
-      "seatID" : "P8H",
-      "occupied" : false
-    }, {
-      "seatID" : "P8I",
-      "occupied" : false
-    }, {
-      "seatID" : "P8J",
-      "occupied" : false
-    }, {
-      "seatID" : "P9A",
-      "occupied" : false
-    }, {
-      "seatID" : "P9B",
-      "occupied" : false
-    }, {
-      "seatID" : "P9C",
-      "occupied" : false
-    }, {
-      "seatID" : "P9D",
-      "occupied" : false
-    }, {
-      "seatID" : "P9E",
-      "occupied" : false
-    }, {
-      "seatID" : "P9F",
-      "occupied" : false
-    }, {
-      "seatID" : "P9G",
-      "occupied" : false
-    }, {
-      "seatID" : "P9H",
-      "occupied" : false
-    }, {
-      "seatID" : "P9I",
-      "occupied" : false
-    }, {
-      "seatID" : "P9J",
-      "occupied" : false
-    }, {
-      "seatID" : "P10A",
-      "occupied" : false
-    }, {
-      "seatID" : "P10B",
-      "occupied" : false
-    }, {
-      "seatID" : "P10C",
-      "occupied" : false
-    }, {
-      "seatID" : "P10D",
-      "occupied" : false
-    }, {
-      "seatID" : "P10E",
-      "occupied" : false
-    }, {
-      "seatID" : "P10F",
-      "occupied" : false
-    }, {
-      "seatID" : "P10G",
-      "occupied" : false
-    }, {
-      "seatID" : "P10H",
-      "occupied" : false
-    }, {
-      "seatID" : "P10I",
-      "occupied" : false
-    }, {
-      "seatID" : "P10J",
-      "occupied" : false
-    } ]
-  } ]
-}, {
-  "transportID" : "715045",
-  "type" : "Plane",
-  "name" : "Airbus 2",
-  "company" : "Air Canada Test",
-  "available" : true,
-  "sections" : [ {
-    "sectionType" : "F",
-    "layout" : "M",
-    "numberOfRows" : 10,
-    "numberOfColumns" : 6,
-    "seats" : [ {
-      "seatID" : "F1A",
-      "occupied" : false
-    }, {
-      "seatID" : "F1B",
-      "occupied" : false
-    }, {
-      "seatID" : "F1C",
-      "occupied" : false
-    }, {
-      "seatID" : "F1D",
-      "occupied" : false
-    }, {
-      "seatID" : "F1E",
-      "occupied" : false
-    }, {
-      "seatID" : "F1F",
-      "occupied" : false
-    }, {
-      "seatID" : "F2A",
-      "occupied" : false
-    }, {
-      "seatID" : "F2B",
-      "occupied" : false
-    }, {
-      "seatID" : "F2C",
-      "occupied" : false
-    }, {
-      "seatID" : "F2D",
-      "occupied" : false
-    }, {
-      "seatID" : "F2E",
-      "occupied" : false
-    }, {
-      "seatID" : "F2F",
-      "occupied" : true
-    }, {
-      "seatID" : "F3A",
-      "occupied" : false
-    }, {
-      "seatID" : "F3B",
-      "occupied" : false
-    }, {
-      "seatID" : "F3C",
-      "occupied" : false
-    }, {
-      "seatID" : "F3D",
-      "occupied" : false
-    }, {
-      "seatID" : "F3E",
-      "occupied" : false
-    }, {
-      "seatID" : "F3F",
-      "occupied" : false
-    }, {
-      "seatID" : "F4A",
-      "occupied" : false
-    }, {
-      "seatID" : "F4B",
-      "occupied" : false
-    }, {
-      "seatID" : "F4C",
-      "occupied" : false
-    }, {
-      "seatID" : "F4D",
-      "occupied" : false
-    }, {
-      "seatID" : "F4E",
-      "occupied" : false
-    }, {
-      "seatID" : "F4F",
-      "occupied" : false
-    }, {
-      "seatID" : "F5A",
-      "occupied" : true
-    }, {
-      "seatID" : "F5B",
-      "occupied" : false
-    }, {
-      "seatID" : "F5C",
-      "occupied" : false
-    }, {
-      "seatID" : "F5D",
-      "occupied" : false
-    }, {
-      "seatID" : "F5E",
-      "occupied" : false
-    }, {
-      "seatID" : "F5F",
-      "occupied" : false
-    }, {
-      "seatID" : "F6A",
-      "occupied" : false
-    }, {
-      "seatID" : "F6B",
-      "occupied" : false
-    }, {
-      "seatID" : "F6C",
-      "occupied" : false
-    }, {
-      "seatID" : "F6D",
-      "occupied" : false
-    }, {
-      "seatID" : "F6E",
-      "occupied" : false
-    }, {
-      "seatID" : "F6F",
-      "occupied" : false
-    }, {
-      "seatID" : "F7A",
-      "occupied" : false
-    }, {
-      "seatID" : "F7B",
-      "occupied" : false
-    }, {
-      "seatID" : "F7C",
-      "occupied" : false
-    }, {
-      "seatID" : "F7D",
-      "occupied" : false
-    }, {
-      "seatID" : "F7E",
-      "occupied" : false
-    }, {
-      "seatID" : "F7F",
-      "occupied" : false
-    }, {
-      "seatID" : "F8A",
-      "occupied" : false
-    }, {
-      "seatID" : "F8B",
-      "occupied" : false
-    }, {
-      "seatID" : "F8C",
-      "occupied" : false
-    }, {
-      "seatID" : "F8D",
-      "occupied" : false
-    }, {
-      "seatID" : "F8E",
-      "occupied" : false
-    }, {
-      "seatID" : "F8F",
-      "occupied" : false
-    }, {
-      "seatID" : "F9A",
-      "occupied" : false
-    }, {
-      "seatID" : "F9B",
-      "occupied" : false
-    }, {
-      "seatID" : "F9C",
-      "occupied" : false
-    }, {
-      "seatID" : "F9D",
-      "occupied" : false
-    }, {
-      "seatID" : "F9E",
-      "occupied" : false
-    }, {
-      "seatID" : "F9F",
-      "occupied" : false
-    }, {
-      "seatID" : "F10A",
-      "occupied" : false
-    }, {
-      "seatID" : "F10B",
-      "occupied" : false
-    }, {
-      "seatID" : "F10C",
-      "occupied" : false
-    }, {
-      "seatID" : "F10D",
-      "occupied" : false
-    }, {
-      "seatID" : "F10E",
-      "occupied" : false
-    }, {
-      "seatID" : "F10F",
-      "occupied" : false
-    } ]
-  }, {
-    "sectionType" : "A",
-    "layout" : "L",
-    "numberOfRows" : 10,
-    "numberOfColumns" : 10,
-    "seats" : [ {
-      "seatID" : "A1A",
-      "occupied" : false
-    }, {
-      "seatID" : "A1B",
-      "occupied" : false
-    }, {
-      "seatID" : "A1C",
-      "occupied" : false
-    }, {
-      "seatID" : "A1D",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A1E",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A1F",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A1G",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A1H",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A1I",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A1J",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A2A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A2B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A2C",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A2D",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A2E",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A2F",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A2G",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A2H",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A2I",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A2J",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A3A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A3B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A3C",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A3D",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A3E",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A3F",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A3G",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A3H",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A3I",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A3J",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A4A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A4B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A4C",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A4D",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A4E",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A4F",
-      "occupied" : true
+      "state" : "Available"
     }, {
       "seatID" : "A4G",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A4H",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A4I",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A4J",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A5A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A5B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A5C",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A5D",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A5E",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A5F",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A5G",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A5H",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A5I",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A5J",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A6A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A6B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A6C",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A6D",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A6E",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A6F",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A6G",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A6H",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A6I",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A6J",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A7A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A7B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A7C",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A7D",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A7E",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A7F",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A7G",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A7H",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A7I",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A7J",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A8A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A8B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A8C",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A8D",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A8E",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A8F",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A8G",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A8H",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A8I",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A8J",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A9A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A9B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A9C",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A9D",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A9E",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A9F",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A9G",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A9H",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A9I",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A9J",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A10A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A10B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A10C",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A10D",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A10E",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A10F",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A10G",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A10H",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "A10I",
-      "occupied" : true
+      "state" : "Available"
     }, {
       "seatID" : "A10J",
-      "occupied" : false
+      "state" : "Available"
     } ]
   } ]
 }, {
-  "transportID" : "125042",
-  "type" : "Boat",
-  "name" : "Norwegian Cruise",
-  "company" : "Bui",
+  "transportID" : "206107",
+  "type" : "Plane",
+  "name" : "Boing",
+  "company" : "Air Finland",
   "available" : true,
   "sections" : [ {
-    "sectionType" : "F",
-    "maxCapacity" : 6,
-    "numberOfCabins" : 7,
-    "cabins" : [ {
-      "seatID" : "F-C1",
-      "occupied" : false
-    }, {
-      "seatID" : "F-C2",
-      "occupied" : false
-    }, {
-      "seatID" : "F-C3",
-      "occupied" : false
-    }, {
-      "seatID" : "F-C4",
-      "occupied" : false
-    }, {
-      "seatID" : "F-C5",
-      "occupied" : false
-    }, {
-      "seatID" : "F-C6",
-      "occupied" : false
-    }, {
-      "seatID" : "F-C7",
-      "occupied" : false
-    } ]
-  }, {
-    "sectionType" : "O",
-    "maxCapacity" : 2,
-    "numberOfCabins" : 10,
-    "cabins" : [ {
-      "seatID" : "O-C1",
-      "occupied" : false
-    }, {
-      "seatID" : "O-C2",
-      "occupied" : false
-    }, {
-      "seatID" : "O-C3",
-      "occupied" : false
-    }, {
-      "seatID" : "O-C4",
-      "occupied" : false
-    }, {
-      "seatID" : "O-C5",
-      "occupied" : false
-    }, {
-      "seatID" : "O-C6",
-      "occupied" : false
-    }, {
-      "seatID" : "O-C7",
-      "occupied" : false
-    }, {
-      "seatID" : "O-C8",
-      "occupied" : false
-    }, {
-      "seatID" : "O-C9",
-      "occupied" : false
-    }, {
-      "seatID" : "O-C10",
-      "occupied" : false
-    } ]
-  } ]
-}, {
-  "transportID" : "447165",
-  "type" : "Train",
-  "name" : "Blue Line",
-  "company" : "STM",
-  "available" : true,
-  "sections" : [ {
-    "sectionType" : "P",
-    "layout" : "S",
-    "numberOfRows" : 8,
-    "numberOfColumns" : 3,
-    "seats" : [ {
-      "seatID" : "P1A",
-      "occupied" : false
-    }, {
-      "seatID" : "P1B",
-      "occupied" : false
-    }, {
-      "seatID" : "P1C",
-      "occupied" : false
-    }, {
-      "seatID" : "P2A",
-      "occupied" : false
-    }, {
-      "seatID" : "P2B",
-      "occupied" : false
-    }, {
-      "seatID" : "P2C",
-      "occupied" : false
-    }, {
-      "seatID" : "P3A",
-      "occupied" : false
-    }, {
-      "seatID" : "P3B",
-      "occupied" : false
-    }, {
-      "seatID" : "P3C",
-      "occupied" : false
-    }, {
-      "seatID" : "P4A",
-      "occupied" : false
-    }, {
-      "seatID" : "P4B",
-      "occupied" : false
-    }, {
-      "seatID" : "P4C",
-      "occupied" : false
-    }, {
-      "seatID" : "P5A",
-      "occupied" : false
-    }, {
-      "seatID" : "P5B",
-      "occupied" : false
-    }, {
-      "seatID" : "P5C",
-      "occupied" : false
-    }, {
-      "seatID" : "P6A",
-      "occupied" : false
-    }, {
-      "seatID" : "P6B",
-      "occupied" : false
-    }, {
-      "seatID" : "P6C",
-      "occupied" : false
-    }, {
-      "seatID" : "P7A",
-      "occupied" : false
-    }, {
-      "seatID" : "P7B",
-      "occupied" : false
-    }, {
-      "seatID" : "P7C",
-      "occupied" : false
-    }, {
-      "seatID" : "P8A",
-      "occupied" : false
-    }, {
-      "seatID" : "P8B",
-      "occupied" : false
-    }, {
-      "seatID" : "P8C",
-      "occupied" : false
-    } ]
-  }, {
     "sectionType" : "E",
-    "layout" : "S",
-    "numberOfRows" : 5,
-    "numberOfColumns" : 3,
+    "layout" : "L",
+    "numberOfRows" : 10,
+    "numberOfColumns" : 10,
     "seats" : [ {
       "seatID" : "E1A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "E1B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "E1C",
-      "occupied" : false
+      "state" : "Available"
+    }, {
+      "seatID" : "E1D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1J",
+      "state" : "Available"
     }, {
       "seatID" : "E2A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "E2B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "E2C",
-      "occupied" : false
+      "state" : "Available"
+    }, {
+      "seatID" : "E2D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2J",
+      "state" : "Available"
     }, {
       "seatID" : "E3A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "E3B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "E3C",
-      "occupied" : false
+      "state" : "Available"
+    }, {
+      "seatID" : "E3D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3J",
+      "state" : "Available"
     }, {
       "seatID" : "E4A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "E4B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "E4C",
-      "occupied" : false
+      "state" : "Available"
+    }, {
+      "seatID" : "E4D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4J",
+      "state" : "Available"
     }, {
       "seatID" : "E5A",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "E5B",
-      "occupied" : false
+      "state" : "Available"
     }, {
       "seatID" : "E5C",
-      "occupied" : false
+      "state" : "Available"
+    }, {
+      "seatID" : "E5D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10J",
+      "state" : "Available"
     } ]
   } ]
 } ]

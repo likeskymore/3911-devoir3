@@ -1,59 +1,13 @@
 [ {
   "type" : "Flight",
-  "id" : "LGAZUA",
-  "company" : "Air Canada Test",
-  "startDate" : "2026-04-09",
-  "endDate" : "2026-05-01",
-  "price" : 335.0,
-  "duration" : 22,
-  "origin" : "BTA",
-  "destination" : "ZBY",
-  "transport" : "715045",
-  "active" : 1
-}, {
-  "type" : "Flight",
-  "id" : "LGZJKV",
-  "company" : "Air Canada Test",
-  "startDate" : "2026-04-02",
-  "endDate" : "2026-04-09",
-  "price" : 450.0,
-  "duration" : 7,
-  "origin" : "BTA",
-  "destination" : "AJT",
-  "transport" : "383386",
-  "active" : 1
-}, {
-  "type" : "Flight",
-  "id" : "LGIRPS",
-  "company" : "Air Canada Test",
-  "startDate" : "2026-04-21",
-  "endDate" : "2026-04-29",
-  "price" : 200.0,
-  "duration" : 8,
-  "origin" : "AJT",
-  "destination" : "ZBY",
-  "transport" : "715045",
-  "active" : 1
-}, {
-  "type" : "Route",
-  "id" : "PHRWVS",
-  "company" : "CN",
-  "startDate" : "2026-04-01",
-  "endDate" : "2026-04-16",
-  "price" : 360.0,
+  "id" : "WZOSJU",
+  "company" : "Air Finland",
+  "startDate" : "2026-04-06",
+  "endDate" : "2026-04-21",
+  "price" : 244.0,
   "duration" : 15,
-  "transport" : "386626",
-  "active" : 1,
-  "path" : [ "WMU", "QOT" ]
-}, {
-  "type" : "Route",
-  "id" : "JJWFDF",
-  "company" : "STM",
-  "startDate" : "2026-04-14",
-  "endDate" : "2026-04-22",
-  "price" : 15.0,
-  "duration" : 8,
-  "transport" : "447165",
-  "active" : 1,
-  "path" : [ "WMU", "QOT" ]
+  "origin" : "YSJ",
+  "destination" : "ECS",
+  "transport" : "458058",
+  "active" : 1
 } ]

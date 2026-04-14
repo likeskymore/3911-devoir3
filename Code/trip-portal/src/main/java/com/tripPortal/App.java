@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     // ═══════════════════════════════════════════════════════════════
-    // DESIGN TOKENS  (same palette as Admin/Client menus)
+    // Portail Principal
     // ═══════════════════════════════════════════════════════════════
     private static final String C_BG_DARK  = "#0f1117";
     private static final String C_CARD     = "#1e2535";
@@ -70,7 +70,7 @@ public class App extends Application {
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // ROLE CARD
+    // Cartes de rôle
     // ═══════════════════════════════════════════════════════════════
     private VBox roleCard(String icon, String title, String description, Runnable onClick) {
         Label ico = new Label(icon);

@@ -47,4 +47,11 @@ public class locationController {
 		command.execute();
 	}
 
+	public void undoUpdateLocation(){
+		command.undo();
+	}
+
+	public void undoDeleteLocation(){
+		command.undo();
+	}
 }

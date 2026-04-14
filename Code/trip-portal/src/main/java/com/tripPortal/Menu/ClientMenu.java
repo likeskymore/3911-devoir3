@@ -560,7 +560,7 @@ public class ClientMenu {
                     if (node.has("transportID") && node.get("transportID").asText().equals(transport.asText())) {
                         for (JsonNode section : node.get("sections")) {
                             for (JsonNode cabin : section.get("cabins")) {
-                                if (!cabin.get("occupied").asBoolean()) {
+                                if ("Available".equals(cabin.path("state").asText("Available"))) {
                                     listView.getItems().add("Cabin ID: " + cabin.get("seatID").asText());
                                 }
                             }
@@ -572,7 +572,7 @@ public class ClientMenu {
                     if (node.has("transportID") && node.get("transportID").asText().equals(transport.asText())) {
                         for (JsonNode section : node.get("sections")) {
                             for (JsonNode seat : section.get("seats")) {
-                                if (!seat.get("occupied").asBoolean()) {
+                                if ("Available".equals(seat.path("state").asText("Available"))) {
                                     listView.getItems().add("Seat ID: " + seat.get("seatID").asText());
                                 }
                             }

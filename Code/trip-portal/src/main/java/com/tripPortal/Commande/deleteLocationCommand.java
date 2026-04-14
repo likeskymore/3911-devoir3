@@ -1,5 +1,11 @@
 package com.tripPortal.Commande;
 
+import java.io.File;
+import java.lang.reflect.Array;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.tripPortal.Model.Location;
 
 public class deleteLocationCommand implements Command {
@@ -8,6 +14,9 @@ public class deleteLocationCommand implements Command {
     public deleteLocationCommand(Location location){
         this.location = location;
     }
+    public deleteLocationCommand(){
+        //this one is for undo
+    }
 
     @Override
     public void execute() {
@@ -15,7 +24,27 @@ public class deleteLocationCommand implements Command {
     }
     @Override
     public void undo() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'undo'");
+        try {
+            ObjectMapper locationRestorerMapper = new ObjectMapper();
+            File locationRestorerFile = new File("src/Database/locationDeleteHistory.json");
+            JsonNode locationToRestore = locationRestorerMapper.readTree(locationRestorerFile);
+
+            JsonNode location = locationToRestore.get("location");
+            
+            ObjectMapper locationMapper = new ObjectMapper();
+            File locationFile = new File("src/Database/Location.json");
+            ArrayNode locations = (ArrayNode) locationMapper.readTree(locationFile);
+
+            locations.add(location);
+
+            locationMapper.writerWithDefaultPrettyPrinter().writeValue(locationFile, locations);
+            locationRestorerMapper.writerWithDefaultPrettyPrinter().writeValue(locationRestorerFile,
+            locationRestorerMapper.createObjectNode());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+
     }
 }

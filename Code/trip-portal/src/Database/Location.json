@@ -1,46 +1,16 @@
 [ {
-  "type" : "Port",
-  "id" : "EOJ",
-  "city" : "Laval",
-  "name" : "Lachine"
-}, {
-  "type" : "Port",
-  "id" : "EXN",
-  "city" : "Shanghai",
-  "name" : "Port"
+  "type" : "Airport",
+  "id" : "YSJ",
+  "city" : "Montreal Airport",
+  "name" : "Montreal"
 }, {
   "type" : "Airport",
-  "id" : "BTA",
-  "city" : "Pekin",
-  "name" : "Airport Pekin"
-}, {
-  "type" : "TrainStation",
-  "id" : "WMU",
-  "city" : "Vancouver",
-  "name" : "Pipeline Station"
-}, {
-  "type" : "TrainStation",
-  "id" : "QOT",
-  "city" : "Toronto",
-  "name" : "Toronto Station"
-}, {
-  "type" : "Airport",
-  "id" : "AJT",
+  "id" : "ECS",
   "city" : "Paris",
-  "name" : "Airport"
-}, {
-  "type" : "Airport",
-  "id" : "ZBY",
-  "city" : "Los Angeles",
-  "name" : "Airport LA"
-}, {
-  "type" : "TrainStation",
-  "id" : "JXA",
-  "city" : "Montreal",
-  "name" : "Montreal Station"
+  "name" : "Air Paris"
 }, {
   "type" : "Port",
-  "id" : "XJN",
-  "city" : "India",
-  "name" : "India Port"
+  "id" : "OFF",
+  "city" : "Norwgian Cruise",
+  "name" : "Europe"
 } ]

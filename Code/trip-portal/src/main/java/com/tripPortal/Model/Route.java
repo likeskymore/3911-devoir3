@@ -18,4 +18,8 @@ public class Route extends Trip {
 	public Route(String id) {
 		super(id);
 	}
+
+	public Route(){
+		super();
+	}
 }

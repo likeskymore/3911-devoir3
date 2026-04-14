@@ -43,7 +43,7 @@ public class ConcreteCruiseLineVisitor implements Visitor {
                             if (section.has("cabins")) {
                                 for (JsonNode cabin : section.get("cabins")) {
                                     total++;
-                                    if (cabin.has("occupied") && cabin.get("occupied").asBoolean())
+                                    if (!"Available".equals(cabin.path("state").asText("Available")))
                                         occupied++;
                                 }
                             }

@@ -18,4 +18,8 @@ public class Flight extends Trip {
 	public Flight(String id) {
 		super(id);
 	}
+
+	public Flight(){
+		super();
+	}
 }

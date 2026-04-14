@@ -6,9 +6,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class TrainCompany extends Company {
 
-    public TrainCompany(String name) {
-        super(name);
-    }
+	public TrainCompany(String name) {
+		super(name);
+	}
+  
+  public TrainCompany(){
+        super();
+	}
 
     public TrainCompany(JsonNode node) {
         super(node.get("name").asText());

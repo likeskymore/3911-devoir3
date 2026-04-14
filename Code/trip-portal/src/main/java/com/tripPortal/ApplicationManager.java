@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 import com.tripPortal.Mediateur.*;
 
+// Tous les éléments de l'application sont initialisés et connectés ici
 public class ApplicationManager {
 
     private ClientMenu clientMenu;
@@ -26,15 +27,15 @@ public class ApplicationManager {
     private ClientDisplay clientDisplay;
 
     public ApplicationManager() {
-        // Shared controllers (optional but smart)
-        tripController = new tripController();
 
+        // Controleurs / Mediateurs
+        tripController = new tripController();
         reservationController = new reservationController();
         companyController = new companyController();
         locationController = new locationController();
         transportController = new transportController();
 
-        // Initialize menus
+        // Menus
         clientMenu = new ClientMenu();
         adminMenu = new AdminMenu();
 
@@ -43,12 +44,12 @@ public class ApplicationManager {
         adminDisplay = new AdminDisplay(adminStation);
         clientDisplay = new ClientDisplay(clientStation);
 
-        // Set up observer relationships
+        // Observateurs
         adminStation.addObserver(adminDisplay);
         clientStation.addObserver(clientDisplay);
 
 
-        // Inject dependencies
+        // Connexions des contrôleurs aux menus
         clientMenu.setTripControllerForClientMenu(tripController);
         clientMenu.setReservationControllerForClientMenu(reservationController);
         clientMenu.setClientStation(clientStation);
@@ -60,6 +61,7 @@ public class ApplicationManager {
         adminMenu.setAdminStation(adminStation);
     }
 
+    // Ouvrir Nouvelle Fenêtre
     public void launchClient(Stage stage) {
         clientMenu.start(stage);
     }
