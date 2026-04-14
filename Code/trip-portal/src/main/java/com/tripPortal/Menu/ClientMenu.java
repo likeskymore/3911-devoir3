@@ -411,6 +411,7 @@ public class ClientMenu {
 				Button cancelBtn = dangerBtn("🗑  Cancel");
 				cancelBtn.setOnAction(e -> {
 					reservationControllerForClientMenu.cancelReservation(res);
+                    clientStation.notifyObservers("reservationCancelled");
 					displayProfileMenu(scene);
 				});
 
@@ -600,6 +601,7 @@ public class ClientMenu {
                 }
                 String seatID = selected.split(": ")[1];
                 reservationControllerForClientMenu.reserveTrip(tripNode, seatID);
+                clientStation.notifyObservers("seatReserved");
                 displayReserveMenu(scene, "✔  Reservation confirmed for seat: " + seatID);
             });
 

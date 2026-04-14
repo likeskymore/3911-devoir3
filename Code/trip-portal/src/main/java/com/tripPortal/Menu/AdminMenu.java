@@ -481,7 +481,7 @@ public class AdminMenu {
         Button listBtn   = ghostBtn("☰  View All Trips");
 		listBtn.setPrefSize(200, 50);
         createBtn.setOnAction(e -> displayTripCreationForm(scene));
-        listBtn.setOnAction(e   -> displayTrips(scene));
+        listBtn.setOnAction(e   -> displayTrips(scene, ""));
 
         HBox btnRow = new HBox(10, createBtn, listBtn);
 
@@ -735,7 +735,7 @@ public class AdminMenu {
     // ═══════════════════════════════════════════════════════════════
     // DISPLAY TRIPS
     // ═══════════════════════════════════════════════════════════════
-    private void displayTrips(Scene scene) {
+    public void displayTrips(Scene scene, String message) {
         this.currentPage = "tripList";
         this.currentScene = scene;
         VBox nav = new VBox(2);
@@ -790,6 +790,44 @@ public class AdminMenu {
                 Label dateLbl   = new Label(dates);
                 dateLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
 
+                // ── reserved seats (look up transport and count occupied seats/cabins) ──
+                int reservedSeats = 0;
+                try {
+                    File transportFile = new File("src/Database/Transport.json");
+                    if (transportFile.exists()) {
+                        JsonNode transportRoot = displayMapper.readTree(transportFile);
+                        String transportId = trip.path("transport").asText("");
+                        if (transportRoot != null && transportRoot.isArray() && transportId != null && !transportId.isBlank()) {
+                            for (JsonNode tnode : transportRoot) {
+                                if (!tnode.has("transportID") || !tnode.get("transportID").asText().equals(transportId)) continue;
+                                JsonNode sections = tnode.get("sections");
+                                if (sections == null || !sections.isArray()) break;
+                                for (JsonNode section : sections) {
+                                    if (type.equals("CruiseLine")) {
+                                        JsonNode cabins = section.get("cabins");
+                                        if (cabins != null && cabins.isArray()) {
+                                            for (JsonNode cabin : cabins) {
+                                                if (cabin.path("occupied").asBoolean(false)) reservedSeats++;
+                                            }
+                                        }
+                                    } else {
+                                        JsonNode seats = section.get("seats");
+                                        if (seats != null && seats.isArray()) {
+                                            for (JsonNode seat : seats) {
+                                                if (seat.path("occupied").asBoolean(false)) reservedSeats++;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                } catch (IOException ioe) { /* ignore, reservedSeats stays 0 */ }
+
+                Label seatsLbl = new Label("Number of Reserved Seats: " + reservedSeats);
+                seatsLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
+
                 Separator s = new Separator();
                 s.setStyle("-fx-background-color: " + C_BORDER + ";");
 
@@ -813,12 +851,13 @@ public class AdminMenu {
                     tripControllerForAdminMenu.setCommand(deleteTripCommand);
                     tripControllerForAdminMenu.deleteTrip();
                     adminStation.notifyObservers("tripDeleted");
-                    displayTrips(scene);
+                    displayTrips(scene,"");
                 });
                 updateBtn.setOnAction(upd -> displayingTripsToUpdate(scene, trip));
 
                 HBox btnRow = new HBox(8, deleteBtn, updateBtn);
-                tc.getChildren().addAll(typeLbl, cityLbl, compLbl, dateLbl, s, btnRow);
+                tc.getChildren().addAll(typeLbl, cityLbl, compLbl, dateLbl, seatsLbl, s, btnRow);
+                
                 grid.getChildren().add(tc);
             }
         } catch (IOException ex) { ex.printStackTrace(); }
@@ -828,7 +867,11 @@ public class AdminMenu {
         scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        main.getChildren().addAll(title, scroll);
+
+        if (message != null && !message.isBlank())
+            main.getChildren().addAll(title, successBanner(message), scroll);
+        else
+            main.getChildren().addAll(title, scroll);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -843,7 +886,7 @@ public class AdminMenu {
 		Button btnBack  = navBtn("←  Back");
 		Button btnTrips = navBtn("🗺  Trips");
 		btnTrips.setStyle(activeNavStyle());
-		btnBack.setOnAction(e -> displayTrips(scene));
+		btnBack.setOnAction(e -> displayTrips(scene,""));
 		nav.getChildren().addAll(btnBack, new Separator(), btnTrips);
 
         VBox main = new VBox(20);
@@ -967,7 +1010,7 @@ public class AdminMenu {
                 tripControllerForAdminMenu.setCommand(editTripCommand);
                 tripControllerForAdminMenu.updateTrip();
                 adminStation.notifyObservers("tripUpdated");
-                displayTrips(scene);
+                displayTrips(scene,"");
             } catch (RuntimeException runtimeException) {
                 showError(runtimeException.getMessage() != null ? runtimeException.getMessage() : "Unable to update trip.");
             }
@@ -2080,6 +2123,6 @@ public class AdminMenu {
     public void setTransportControllerForAdminMenu(transportController c){ this.TransportControllerForAdminMenu = c; }
     public void setTripControllerForAdminMenu(tripController c)          { this.tripControllerForAdminMenu = c; }
     public void setAdminStation(AdminStation adminStation) { this.adminStation = adminStation; }
-    public void getCurrentScene(Scene scene) { this.currentScene = scene; }
-    public void getCurrentPage(String page) { this.currentPage = page; }
+    public Scene getCurrentScene() { return this.currentScene; }
+    public String getCurrentPage() { return this.currentPage; }
 }
