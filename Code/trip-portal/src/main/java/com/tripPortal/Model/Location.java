@@ -119,8 +119,11 @@ public abstract class Location {
 
 			File locationFile = new File("src/Database/Location.json");
 			ArrayNode locations = (ArrayNode) mapper.readTree(locationFile);
+			ObjectNode snapShot = mapper.createObjectNode();
+
 			for (int i = 0; i < locations.size(); i++) {
 				if (locations.get(i).path("id").asText().equals(this.getId())) {
+					snapShot.set("location",locations.get(i));
 					locations.remove(i);
 					break;
 				}
@@ -130,6 +133,8 @@ public abstract class Location {
 			File tripFile = new File("src/Database/Trip.json");
 			ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
 			ArrayNode removedTripIds = mapper.createArrayNode();
+			ArrayNode tripsRemoved = mapper.createArrayNode();
+
 			for (int i = trips.size() - 1; i >= 0; i--) {
 				JsonNode trip = trips.get(i);
 				boolean referencesLocation = false;
@@ -145,11 +150,16 @@ public abstract class Location {
 				}
 
 				if (referencesLocation) {
+					tripsRemoved.add(trip);
 					removedTripIds.add(trip.path("id").asText());
 					trips.remove(i);
 				}
 			}
+
+			snapShot.set("tripsRemoved", tripsRemoved);
 			mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
+
+			ArrayNode tripsFromCompany = mapper.createArrayNode();
 
 			if (removedTripIds.size() > 0) {
 				File companyFile = new File("src/Database/Company.json");
@@ -163,14 +173,18 @@ public abstract class Location {
 						String tripId = companyTrips.get(i).asText();
 						for (JsonNode removedTripId : removedTripIds) {
 							if (removedTripId.asText().equals(tripId)) {
+								tripsFromCompany.add(companyTrips.get(i));
 								companyTrips.remove(i);
 								break;
 							}
 						}
 					}
 				}
+				snapShot.set("tripsFromCompany", tripsFromCompany);
 				mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
 			}
+
+			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/Database/locationDeleteHistory.json"), tripsFromCompany);
 
 			return;
 		} catch (IOException ex) {

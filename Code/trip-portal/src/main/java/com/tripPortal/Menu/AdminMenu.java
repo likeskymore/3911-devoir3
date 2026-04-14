@@ -1386,6 +1386,12 @@ public class AdminMenu {
         }
         undoDeleteBtn.setVisible(locationDeleteHistory);
 
+        undoDeleteBtn.setOnAction(undoDelete -> {
+
+            deleteLocationCommand deleteLocationCommand = new deleteLocationCommand();
+            LocationControllerForAdminMenu.setCommand(deleteLocationCommand);
+            LocationControllerForAdminMenu.undoDeleteLocation();
+        });
         FlowPane grid = new FlowPane(14, 14);
         grid.setPadding(new Insets(4));
 

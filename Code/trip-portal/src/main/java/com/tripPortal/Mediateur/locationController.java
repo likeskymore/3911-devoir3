@@ -154,4 +154,7 @@ public class locationController {
 		command.undo();
 	}
 
+	public void undoDeleteLocation(){
+		command.undo();
+	}
 }

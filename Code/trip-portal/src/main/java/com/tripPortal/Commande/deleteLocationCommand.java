@@ -8,6 +8,9 @@ public class deleteLocationCommand implements Command {
     public deleteLocationCommand(Location location){
         this.location = location;
     }
+    public deleteLocationCommand(){
+        //this one is for undo
+    }
 
     @Override
     public void execute() {
@@ -15,7 +18,6 @@ public class deleteLocationCommand implements Command {
     }
     @Override
     public void undo() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'undo'");
+        
     }
 }
