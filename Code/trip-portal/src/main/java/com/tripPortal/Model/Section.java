@@ -39,7 +39,7 @@ public abstract class Section {
     public boolean bookSeat(String seatId) {
         Seat seat = findSeatById(seatId);
         if (seat == null || seat.isOccupied()) return false;
-        seat.setOccupied(true);
+        seat.next();
         return true;
     }
 
@@ -47,7 +47,7 @@ public abstract class Section {
     public boolean releaseSeat(String seatId) {
         Seat seat = findSeatById(seatId);
         if (seat == null || !seat.isOccupied()) return false;
-        seat.setOccupied(false);
+        seat.cancel();
         return true;
     }
 

@@ -1,13 +1,5 @@
 package com.tripPortal;
 
-import com.tripPortal.Mediateur.companyController;
-import com.tripPortal.Mediateur.locationController;
-import com.tripPortal.Mediateur.reservationController;
-import com.tripPortal.Mediateur.transportController;
-import com.tripPortal.Mediateur.tripController;
-import com.tripPortal.Menu.AdminMenu;
-import com.tripPortal.Menu.ClientMenu;
-import com.tripPortal.Observateur.AdminStation;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -33,6 +25,8 @@ public class App extends Application {
     private static final String C_TEXT     = "#e8eaf0";
     private static final String C_MUTED    = "#7a8499";
 
+    private ApplicationManager appManager = new ApplicationManager();
+
     @Override
     public void start(Stage stage) {
 
@@ -54,11 +48,11 @@ public class App extends Application {
         // ── Role cards ────────────────────────────────────────────
         VBox clientCard  = roleCard("👤", "Client",
                 "Browse trips, make reservations\nand manage your bookings.",
-                () -> launchClient());
+                () -> appManager.launchClient(stage));
 
         VBox adminCard   = roleCard("🛠", "Administrator",
                 "Manage trips, companies,\nlocations and transports.",
-                () -> launchAdmin());
+                () -> appManager.launchAdmin(stage));
 
         HBox cards = new HBox(24, clientCard, adminCard);
         cards.setAlignment(Pos.CENTER);
@@ -129,28 +123,6 @@ public class App extends Application {
              + "-fx-text-fill: " + C_BG_DARK + "; "
              + "-fx-font-size: 13px; -fx-font-weight: bold; "
              + "-fx-background-radius: 7; -fx-cursor: hand;";
-    }
-
-    // ═══════════════════════════════════════════════════════════════
-    // LAUNCHERS
-    // ═══════════════════════════════════════════════════════════════
-    private void launchClient() {
-        ClientMenu clientMenu = new ClientMenu();
-        tripController tc = new tripController();
-        reservationController rc = new reservationController();
-        clientMenu.setTripControllerForClientMenu(tc);
-        clientMenu.setReservationControllerForClientMenu(rc);
-        clientMenu.start(new Stage());
-    }
-
-    private void launchAdmin() {
-        AdminMenu adminMenu = new AdminMenu();
-        adminMenu.setTripControllerForAdminMenu(new tripController());
-        adminMenu.setCompanyControllerForAdminMenu(new companyController());
-        adminMenu.setLocationControllerForAdminMenu(new locationController());
-        adminMenu.setTransportControllerForAdminMenu(new transportController());
-        adminMenu.setAdminStationAdminMenu(new AdminStation(adminMenu.getTripController()));
-        adminMenu.start(new Stage());
     }
 
     public static void main(String[] args) {

@@ -19,7 +19,7 @@ public interface Subject {
 	 * 
 	 * @param oList
 	 */
-	void notifyObservers(String event, Object data);
+	void notifyObservers(String event);
 
 	public Object getUpdate(Observer obj);
 	
