@@ -1,9 +1,4 @@
 [ {
-  "type" : "Airport",
-  "id" : "ECS",
-  "city" : "Paris",
-  "name" : "Air Paris"
-}, {
   "type" : "Port",
   "id" : "OFF",
   "city" : "Norwgian Cruise",
@@ -13,4 +8,9 @@
   "id" : "YSJ",
   "city" : "Montreal Airport",
   "name" : "Montreal"
+}, {
+  "type" : "Airport",
+  "id" : "ECS",
+  "city" : "Paris",
+  "name" : "Air Paris"
 } ]

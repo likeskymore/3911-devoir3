@@ -43,24 +43,33 @@ public class editTripCommand implements Command {
 		try {
 			oldTrip = updateTripMapper.readTree(updateTripFile);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new IllegalStateException("Unable to read trip update history.", e);
+		}
+
+		if (oldTrip == null || !oldTrip.isObject() || oldTrip.path("id").asText("").isBlank()) {
+			throw new IllegalStateException("No trip update to undo.");
 		}
 		
 		ObjectMapper tripMapper = new ObjectMapper();
 		File tripFile = new File("src/Database/Trip.json");
 		ArrayNode trips = null;
 		try {
-			trips = (ArrayNode) updateTripMapper.readTree(tripFile);
+			JsonNode tripRoot = tripMapper.readTree(tripFile);
+			if (tripRoot != null && tripRoot.isArray()) {
+				trips = (ArrayNode) tripRoot;
+			} else {
+				trips = tripMapper.createArrayNode();
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new IllegalStateException("Unable to read trips.", e);
 		}
 
 		String companyNameToRemove = null;
 		String tripId = oldTrip.get("id").asText();
+		boolean tripFound = false;
 		for (int i = 0; i < trips.size(); i++){
 			if (trips.get(i).get("id").asText().equals(oldTrip.get("id").asText())){
+				tripFound = true;
 				companyNameToRemove = trips.get(i).get("company").asText();
 				ObjectNode newTrip = (ObjectNode) trips.get(i);
 				newTrip.put("company", oldTrip.get("company").asText());
@@ -73,16 +82,25 @@ public class editTripCommand implements Command {
 			}
 		}
 
+		if (!tripFound) {
+			throw new IllegalStateException("Cannot undo trip update because the trip no longer exists. Undo delete first.");
+		}
+
 		ObjectMapper companyMapper = new ObjectMapper();
 		File companyFile = new File("src/Database/Company.json");
 		ArrayNode companies = null;
 		try {
-			companies = (ArrayNode) companyMapper.readTree(companyFile);
+			JsonNode companyRoot = companyMapper.readTree(companyFile);
+			if (companyRoot != null && companyRoot.isArray()) {
+				companies = (ArrayNode) companyRoot;
+			} else {
+				companies = companyMapper.createArrayNode();
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Unable to read companies.", e);
 		}
 
-		if (!companyNameToRemove.equals(oldTrip.get("company").asText())){
+		if (companyNameToRemove != null && !companyNameToRemove.equals(oldTrip.get("company").asText())){
 			for (int i = 0; i < companies.size(); i++){
 				if (companies.get(i).get("name").asText().equals(companyNameToRemove)){
 					ArrayNode companyTrips = (ArrayNode) companies.get(i).get("Trips");
@@ -106,7 +124,7 @@ public class editTripCommand implements Command {
 			companyMapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
 			updateTripMapper.writerWithDefaultPrettyPrinter().writeValue(updateTripFile, updateTripMapper.createObjectNode());
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Unable to persist undo update.", e);
 		}
 
 	}

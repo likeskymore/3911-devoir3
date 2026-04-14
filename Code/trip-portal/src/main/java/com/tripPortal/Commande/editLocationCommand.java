@@ -41,19 +41,36 @@ public class editLocationCommand implements Command{
             File locationRestorerFile = new File("src/Database/locationUpdateHistory.json");
             JsonNode LocationToRestore = locationRestorerMapper.readTree(locationRestorerFile);
 
+            if (LocationToRestore == null || !LocationToRestore.isObject()) {
+                throw new IllegalStateException("No location update to undo.");
+            }
+
             JsonNode cityToRestore = LocationToRestore.get("city");
             JsonNode nameToRestore = LocationToRestore.get("name");
             String locationId = LocationToRestore.get("id").asText();
+            if (locationId.isBlank() || cityToRestore == null || nameToRestore == null) {
+                throw new IllegalStateException("No location update to undo.");
+            }
 
             ObjectMapper locationMapper = new ObjectMapper();
             File locationFile = new File("src/Database/Location.json");
-            ArrayNode locations = (ArrayNode) locationMapper.readTree(locationFile);
+            JsonNode locationRoot = locationMapper.readTree(locationFile);
+            ArrayNode locations = locationRoot != null && locationRoot.isArray()
+                    ? (ArrayNode) locationRoot
+                    : locationMapper.createArrayNode();
 
+            boolean locationFound = false;
             for (int i = 0; i < locations.size(); i++){
                 if (locations.get(i).get("id").asText().equals(locationId)){
+                   locationFound = true;
                    ((ObjectNode) locations.get(i)).set("city", cityToRestore);
                    ((ObjectNode) locations.get(i)).set("name", nameToRestore);
+                   break;
                 }
+            }
+
+            if (!locationFound) {
+                throw new IllegalStateException("Cannot undo location update because the location no longer exists. Undo delete first.");
             }
 
             locationMapper.writerWithDefaultPrettyPrinter().writeValue(locationFile, locations);
@@ -61,8 +78,10 @@ public class editLocationCommand implements Command{
 
 
 
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Unable to undo location update.", e);
         }
 
 

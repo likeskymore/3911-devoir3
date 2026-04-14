@@ -1,4 +1,107 @@
 [ {
+  "transportID" : "044465",
+  "type" : "Plane",
+  "name" : "Airbus 777",
+  "company" : "Air France",
+  "available" : true,
+  "sections" : [ {
+    "sectionType" : "F",
+    "layout" : "S",
+    "numberOfRows" : 10,
+    "numberOfColumns" : 3,
+    "seats" : [ {
+      "seatID" : "F1A",
+      "state" : "Reserved"
+    }, {
+      "seatID" : "F1B",
+      "state" : "Available"
+    }, {
+      "seatID" : "F1C",
+      "state" : "Available"
+    }, {
+      "seatID" : "F2A",
+      "state" : "Available"
+    }, {
+      "seatID" : "F2B",
+      "state" : "Available"
+    }, {
+      "seatID" : "F2C",
+      "state" : "Available"
+    }, {
+      "seatID" : "F3A",
+      "state" : "Available"
+    }, {
+      "seatID" : "F3B",
+      "state" : "Available"
+    }, {
+      "seatID" : "F3C",
+      "state" : "Available"
+    }, {
+      "seatID" : "F4A",
+      "state" : "Available"
+    }, {
+      "seatID" : "F4B",
+      "state" : "Available"
+    }, {
+      "seatID" : "F4C",
+      "state" : "Available"
+    }, {
+      "seatID" : "F5A",
+      "state" : "Available"
+    }, {
+      "seatID" : "F5B",
+      "state" : "Available"
+    }, {
+      "seatID" : "F5C",
+      "state" : "Available"
+    }, {
+      "seatID" : "F6A",
+      "state" : "Available"
+    }, {
+      "seatID" : "F6B",
+      "state" : "Available"
+    }, {
+      "seatID" : "F6C",
+      "state" : "Available"
+    }, {
+      "seatID" : "F7A",
+      "state" : "Available"
+    }, {
+      "seatID" : "F7B",
+      "state" : "Available"
+    }, {
+      "seatID" : "F7C",
+      "state" : "Available"
+    }, {
+      "seatID" : "F8A",
+      "state" : "Available"
+    }, {
+      "seatID" : "F8B",
+      "state" : "Available"
+    }, {
+      "seatID" : "F8C",
+      "state" : "Available"
+    }, {
+      "seatID" : "F9A",
+      "state" : "Available"
+    }, {
+      "seatID" : "F9B",
+      "state" : "Available"
+    }, {
+      "seatID" : "F9C",
+      "state" : "Available"
+    }, {
+      "seatID" : "F10A",
+      "state" : "Available"
+    }, {
+      "seatID" : "F10B",
+      "state" : "Available"
+    }, {
+      "seatID" : "F10C",
+      "state" : "Available"
+    } ]
+  } ]
+}, {
   "transportID" : "458033",
   "type" : "Plane",
   "name" : "Air Belg",

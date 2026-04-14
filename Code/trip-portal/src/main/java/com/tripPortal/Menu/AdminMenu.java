@@ -779,7 +779,7 @@ public class AdminMenu {
         if (updateHistoryRoot == null) {
             updateHistoryRoot = updateHistoryMapper.createArrayNode();
         }
-        Boolean updateHistory = updateHistoryRoot.size() > 0;
+        Boolean updateHistory = canUndoTripUpdate(updateHistoryRoot);
         undoUpdateBtn.setVisible(updateHistory);
 
         undoDeleteBtn.setOnAction(undoDelete -> {
@@ -791,11 +791,16 @@ public class AdminMenu {
         });
 
         undoUpdateBtn.setOnAction(undoUpdate -> {
-            editTripCommand editTripCommand = new editTripCommand();
-            tripControllerForAdminMenu.setCommand(editTripCommand);
-            tripControllerForAdminMenu.undoUpdateTrip();
-            adminStation.notifyObservers("tripUndo");
-            displayTrips(scene, "Trip update undone.");
+            try {
+                editTripCommand editTripCommand = new editTripCommand();
+                tripControllerForAdminMenu.setCommand(editTripCommand);
+                tripControllerForAdminMenu.undoUpdateTrip();
+                adminStation.notifyObservers("tripUndo");
+                displayTrips(scene, "Trip update undone.");
+            } catch (RuntimeException ex) {
+                showError(ex.getMessage() != null ? ex.getMessage() : "Unable to undo trip update.");
+                displayTrips(scene, "");
+            }
         });
 
 
@@ -1185,18 +1190,23 @@ public class AdminMenu {
         if (updateHistoryFile.exists() && updateHistoryFile.length() > 0) {
             try {
                 JsonNode root = new ObjectMapper().readTree(updateHistoryFile);
-                updateHistory = root.size() > 0;
+                updateHistory = canUndoCompanyUpdate(root);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         undoUpdateBtn.setVisible(updateHistory);
         undoUpdateBtn.setOnAction(undoUpdate -> {
-            editCompanyCommand editCompanyCommand = new editCompanyCommand();
-            CompanyControllerForAdminMenu.setCommand(editCompanyCommand);
-            CompanyControllerForAdminMenu.undoUpdateCompanyName();
-            adminStation.notifyObservers("tripUndo");
-            displayCompanies(scene, "Company update undone.");
+            try {
+                editCompanyCommand editCompanyCommand = new editCompanyCommand();
+                CompanyControllerForAdminMenu.setCommand(editCompanyCommand);
+                CompanyControllerForAdminMenu.undoUpdateCompanyName();
+                adminStation.notifyObservers("tripUndo");
+                displayCompanies(scene, "Company update undone.");
+            } catch (RuntimeException ex) {
+                showError(ex.getMessage() != null ? ex.getMessage() : "Unable to undo company update.");
+                displayCompanies(scene, "");
+            }
         });
 
 
@@ -1503,18 +1513,23 @@ public class AdminMenu {
         if (locationUpdateHistoryFile.exists() && locationUpdateHistoryFile.length() > 0) {
             try {
                 JsonNode root = new ObjectMapper().readTree(locationUpdateHistoryFile);
-                locationUpdateHistory = root.size() > 0;
+                locationUpdateHistory = canUndoLocationUpdate(root);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         undoUpdateBtn.setVisible(locationUpdateHistory);
         undoUpdateBtn.setOnAction(undoUpdate -> {
-            editLocationCommand editLocationCommand = new editLocationCommand();
-            LocationControllerForAdminMenu.setCommand(editLocationCommand);
-            LocationControllerForAdminMenu.undoUpdateLocation();
-            adminStation.notifyObservers("tripUndo");
-            displayLocations(scene, "Location update undone.");
+            try {
+                editLocationCommand editLocationCommand = new editLocationCommand();
+                LocationControllerForAdminMenu.setCommand(editLocationCommand);
+                LocationControllerForAdminMenu.undoUpdateLocation();
+                adminStation.notifyObservers("tripUndo");
+                displayLocations(scene, "Location update undone.");
+            } catch (RuntimeException ex) {
+                showError(ex.getMessage() != null ? ex.getMessage() : "Unable to undo location update.");
+                displayLocations(scene, "");
+            }
         });
         FlowPane grid = new FlowPane(14, 14);
         grid.setPadding(new Insets(4));
@@ -1873,7 +1888,6 @@ public class AdminMenu {
             try {
                 transportsList = (ArrayNode) transportMapper.readTree(File);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             Transport transportToRemove = null;
@@ -2292,6 +2306,78 @@ public class AdminMenu {
             }
         }
         return locationId;
+    }
+
+    private boolean canUndoTripUpdate(JsonNode updateHistoryRoot) {
+        if (updateHistoryRoot == null || !updateHistoryRoot.isObject()) {
+            return false;
+        }
+
+        String tripId = updateHistoryRoot.path("id").asText("");
+        if (tripId.isBlank()) {
+            return false;
+        }
+
+        try {
+            ArrayNode trips = readArrayOrEmpty(new ObjectMapper(), "src/Database/Trip.json");
+            for (JsonNode trip : trips) {
+                if (tripId.equals(trip.path("id").asText(""))) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+
+        return false;
+    }
+
+    private boolean canUndoCompanyUpdate(JsonNode updateHistoryRoot) {
+        if (updateHistoryRoot == null || !updateHistoryRoot.isObject()) {
+            return false;
+        }
+
+        String newCompanyName = updateHistoryRoot.path("newCompanyName").asText("");
+        if (newCompanyName.isBlank()) {
+            return false;
+        }
+
+        try {
+            ArrayNode companies = readArrayOrEmpty(new ObjectMapper(), "src/Database/Company.json");
+            for (JsonNode company : companies) {
+                if (newCompanyName.equals(company.path("name").asText(""))) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+
+        return false;
+    }
+
+    private boolean canUndoLocationUpdate(JsonNode updateHistoryRoot) {
+        if (updateHistoryRoot == null || !updateHistoryRoot.isObject()) {
+            return false;
+        }
+
+        String locationId = updateHistoryRoot.path("id").asText("");
+        if (locationId.isBlank()) {
+            return false;
+        }
+
+        try {
+            ArrayNode locations = readArrayOrEmpty(new ObjectMapper(), "src/Database/Location.json");
+            for (JsonNode location : locations) {
+                if (locationId.equals(location.path("id").asText(""))) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+
+        return false;
     }
 
     // ═══════════════════════════════════════════════════════════════

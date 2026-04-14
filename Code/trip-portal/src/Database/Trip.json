@@ -1,13 +1,1 @@
-[ {
-  "type" : "Flight",
-  "id" : "ILGYCB",
-  "company" : "Air Belgium",
-  "startDate" : "2026-04-14",
-  "endDate" : "2026-04-15",
-  "price" : 333.0,
-  "duration" : 1,
-  "origin" : "ECS",
-  "destination" : "YSJ",
-  "transport" : "458033",
-  "active" : 1
-} ]
+[ ]

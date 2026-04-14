@@ -35,27 +35,48 @@ public class editCompanyCommand implements Command {
 			ObjectMapper CompanyAndTripsToRestoreMapper = new ObjectMapper();
 			File CompanyAndTripsToRestoreFile = new File("src/Database/companyUpdateNameHistory.json");
 			JsonNode  CompanyAndTripsToRestore = CompanyAndTripsToRestoreMapper.readTree(CompanyAndTripsToRestoreFile);
+			if (CompanyAndTripsToRestore == null || !CompanyAndTripsToRestore.isObject()) {
+				throw new IllegalStateException("No company update to undo.");
+			}
 
 			JsonNode newName = CompanyAndTripsToRestore.get("newCompanyName");
 			JsonNode oldName = CompanyAndTripsToRestore.get("oldCompanyName");
 			JsonNode tripsToRestore = CompanyAndTripsToRestore.get("tripsToUpdate");
+			if (newName == null || oldName == null || newName.asText("").isBlank() || oldName.asText("").isBlank()) {
+				throw new IllegalStateException("No company update to undo.");
+			}
 
 			ObjectMapper companyMapper = new ObjectMapper();
 			File companyFile = new File("src/Database/Company.json");
-			ArrayNode companies = (ArrayNode) companyMapper.readTree(companyFile);
+			JsonNode companyRoot = companyMapper.readTree(companyFile);
+			ArrayNode companies = companyRoot != null && companyRoot.isArray()
+					? (ArrayNode) companyRoot
+					: companyMapper.createArrayNode();
 
+			boolean companyFound = false;
 			for (int i = 0; i < companies.size(); i++){
 				if(companies.get(i).get("name").asText().equals(newName.asText())){
+					companyFound = true;
 					((ObjectNode) companies.get(i)).set("name", oldName);
+					break;
 				}
+			}
+			if (!companyFound) {
+				throw new IllegalStateException("Cannot undo company update because the company no longer exists. Undo delete first.");
 			}
 
 			ObjectMapper tripMapper = new ObjectMapper();
 			File tripFile = new File("src/Database/Trip.json");
-			ArrayNode trips = (ArrayNode) tripMapper.readTree(tripFile);
-			for (int i = 0; i < tripsToRestore.size(); i++){
+			JsonNode tripRoot = tripMapper.readTree(tripFile);
+			ArrayNode trips = tripRoot != null && tripRoot.isArray()
+					? (ArrayNode) tripRoot
+					: tripMapper.createArrayNode();
+			ArrayNode tripsToRestoreArray = tripsToRestore != null && tripsToRestore.isArray()
+					? (ArrayNode) tripsToRestore
+					: tripMapper.createArrayNode();
+			for (int i = 0; i < tripsToRestoreArray.size(); i++){
 				for(int j = 0; j < trips.size(); j++){
-					if (trips.get(j).get("id").asText().equals(tripsToRestore.get(i).asText())){
+					if (trips.get(j).get("id").asText().equals(tripsToRestoreArray.get(i).asText())){
 						((ObjectNode) trips.get(j)).set("company", oldName);
 					}
 				}
@@ -66,8 +87,10 @@ public class editCompanyCommand implements Command {
 				CompanyAndTripsToRestoreMapper.createObjectNode()
 			);
 
+		} catch (RuntimeException e) {
+			throw e;
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Unable to undo company update.", e);
 		}
 		 
 	}

@@ -5,18 +5,6 @@
   "tripId" : "OK",
   "Trips" : [ ]
 }, {
-  "type" : "TrainCompany",
-  "id" : "ELTMD",
-  "name" : "REM",
-  "tripId" : "GW",
-  "Trips" : [ ]
-}, {
-  "type" : "BoatCompany",
-  "id" : "KAIAC",
-  "name" : "Air china",
-  "tripId" : "IU",
-  "Trips" : [ ]
-}, {
   "type" : "FlightCompany",
   "id" : "VWFDY",
   "name" : "United Airline",
@@ -27,5 +15,17 @@
   "id" : "BVUSF",
   "name" : "Air Belgium",
   "tripId" : "IL",
-  "Trips" : [ "ILGYCB" ]
+  "Trips" : [ ]
+}, {
+  "type" : "BoatCompany",
+  "id" : "KAIAC",
+  "name" : "Air China",
+  "tripId" : "IU",
+  "Trips" : [ ]
+}, {
+  "type" : "TrainCompany",
+  "id" : "ELTMD",
+  "name" : "REM",
+  "tripId" : "GW",
+  "Trips" : [ ]
 } ]
