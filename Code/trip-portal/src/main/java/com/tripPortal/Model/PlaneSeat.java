@@ -12,7 +12,6 @@ public class PlaneSeat extends Seat {
         this.column = column;
     }
 
-    // Ex: "F12A" → section Première, rangée 12, colonne A
     public String getSeatID() {
         return sectionType.name() + row + column;
     }

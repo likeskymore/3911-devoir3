@@ -14,18 +14,10 @@ public class AdminStation implements Subject {
         this.clientMenu = clientMenu;
     }
 
-	/**
-	 * 
-	 * @param o
-	 */
 	public void addObserver(Observer o) {
 		observers.add(o);
 	}
 
-	/**
-	 * 
-	 * @param o
-	 */
 	public void removeObserver(Observer o) {
 		observers.remove(o);
 	}

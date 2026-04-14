@@ -95,10 +95,4 @@ public class editCompanyCommand implements Command {
 		 
 	}
 
-	public companyMemento establish(){
-		companyMemento m = new companyMemento();
-		
-		return m;
-	}
-
 }

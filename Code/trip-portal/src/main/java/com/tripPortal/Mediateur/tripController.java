@@ -91,12 +91,6 @@ public class tripController {
 		return structure;
 	}
 
-	public ArrayList<Trip> searchTrips(Location departure, Location destination, LocalDate departureDate,
-			SectionPlane section) {
-		// TODO - implement tripController.searchTrips
-		throw new UnsupportedOperationException();
-	}
-
 	public void deleteTrip() {
 		command.execute();
 	}

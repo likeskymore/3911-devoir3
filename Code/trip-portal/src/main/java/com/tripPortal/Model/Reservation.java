@@ -105,8 +105,4 @@ public class Reservation {
 		return isPaid;
 	}
 
-	public void setPaid(boolean isPaid) {
-		this.isPaid = isPaid;
-	}
-
 }

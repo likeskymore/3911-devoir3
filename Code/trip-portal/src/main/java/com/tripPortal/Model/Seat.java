@@ -16,13 +16,9 @@ public abstract class Seat {
         this.currentState = new Available();
     }
 
-    // ── Méthode abstraite ─────────────────────────────────────────
-
     // Retourne l'identifiant lisible du siège — chaque sous-classe définit son
     // format
     public abstract String getSeatID();
-
-    // ── Méthodes communes ─────────────────────────────────────────
 
     public SeatState getCurrentState() {
         return currentState;

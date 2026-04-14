@@ -23,11 +23,9 @@ public class editLocationCommand implements Command{
 
     public editLocationCommand(Location location){
         this.location = location;
-        //this one is for undo
     }
 
     public editLocationCommand(){
-        // this one is for undo without requiring a selected location
     }
 
     public void execute() {

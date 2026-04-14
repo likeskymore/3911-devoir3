@@ -1,11 +1,5 @@
 [ {
   "type" : "FlightCompany",
-  "id" : "ULJHI",
-  "name" : "Air France",
-  "tripId" : "OK",
-  "Trips" : [ ]
-}, {
-  "type" : "FlightCompany",
   "id" : "VWFDY",
   "name" : "United Airline",
   "tripId" : "MB",
@@ -28,4 +22,16 @@
   "name" : "REM",
   "tripId" : "GW",
   "Trips" : [ ]
+}, {
+  "type" : "FlightCompany",
+  "id" : "ULJHI",
+  "name" : "Air France",
+  "tripId" : "OK",
+  "Trips" : [ ]
+}, {
+  "type" : "FlightCompany",
+  "id" : "BMLEX",
+  "name" : "Air Finland",
+  "tripId" : "WZ",
+  "Trips" : [ "WZOSJU" ]
 } ]

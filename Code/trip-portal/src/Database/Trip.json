@@ -1,1 +1,13 @@
-[ ]
+[ {
+  "type" : "Flight",
+  "id" : "WZOSJU",
+  "company" : "Air Finland",
+  "startDate" : "2026-04-06",
+  "endDate" : "2026-04-21",
+  "price" : 244.0,
+  "duration" : 15,
+  "origin" : "YSJ",
+  "destination" : "ECS",
+  "transport" : "458058",
+  "active" : 1
+} ]

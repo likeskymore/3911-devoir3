@@ -1,107 +1,4 @@
 [ {
-  "transportID" : "044465",
-  "type" : "Plane",
-  "name" : "Airbus 777",
-  "company" : "Air France",
-  "available" : true,
-  "sections" : [ {
-    "sectionType" : "F",
-    "layout" : "S",
-    "numberOfRows" : 10,
-    "numberOfColumns" : 3,
-    "seats" : [ {
-      "seatID" : "F1A",
-      "state" : "Reserved"
-    }, {
-      "seatID" : "F1B",
-      "state" : "Available"
-    }, {
-      "seatID" : "F1C",
-      "state" : "Available"
-    }, {
-      "seatID" : "F2A",
-      "state" : "Available"
-    }, {
-      "seatID" : "F2B",
-      "state" : "Available"
-    }, {
-      "seatID" : "F2C",
-      "state" : "Available"
-    }, {
-      "seatID" : "F3A",
-      "state" : "Available"
-    }, {
-      "seatID" : "F3B",
-      "state" : "Available"
-    }, {
-      "seatID" : "F3C",
-      "state" : "Available"
-    }, {
-      "seatID" : "F4A",
-      "state" : "Available"
-    }, {
-      "seatID" : "F4B",
-      "state" : "Available"
-    }, {
-      "seatID" : "F4C",
-      "state" : "Available"
-    }, {
-      "seatID" : "F5A",
-      "state" : "Available"
-    }, {
-      "seatID" : "F5B",
-      "state" : "Available"
-    }, {
-      "seatID" : "F5C",
-      "state" : "Available"
-    }, {
-      "seatID" : "F6A",
-      "state" : "Available"
-    }, {
-      "seatID" : "F6B",
-      "state" : "Available"
-    }, {
-      "seatID" : "F6C",
-      "state" : "Available"
-    }, {
-      "seatID" : "F7A",
-      "state" : "Available"
-    }, {
-      "seatID" : "F7B",
-      "state" : "Available"
-    }, {
-      "seatID" : "F7C",
-      "state" : "Available"
-    }, {
-      "seatID" : "F8A",
-      "state" : "Available"
-    }, {
-      "seatID" : "F8B",
-      "state" : "Available"
-    }, {
-      "seatID" : "F8C",
-      "state" : "Available"
-    }, {
-      "seatID" : "F9A",
-      "state" : "Available"
-    }, {
-      "seatID" : "F9B",
-      "state" : "Available"
-    }, {
-      "seatID" : "F9C",
-      "state" : "Available"
-    }, {
-      "seatID" : "F10A",
-      "state" : "Available"
-    }, {
-      "seatID" : "F10B",
-      "state" : "Available"
-    }, {
-      "seatID" : "F10C",
-      "state" : "Available"
-    } ]
-  } ]
-}, {
   "transportID" : "458033",
   "type" : "Plane",
   "name" : "Air Belg",
@@ -411,6 +308,319 @@
       "state" : "Available"
     }, {
       "seatID" : "A10J",
+      "state" : "Available"
+    } ]
+  } ]
+}, {
+  "transportID" : "206107",
+  "type" : "Plane",
+  "name" : "Boing",
+  "company" : "Air Finland",
+  "available" : true,
+  "sections" : [ {
+    "sectionType" : "E",
+    "layout" : "L",
+    "numberOfRows" : 10,
+    "numberOfColumns" : 10,
+    "seats" : [ {
+      "seatID" : "E1A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E1J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E2J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E3J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E4J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E5J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E6J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E7J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E8J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E9J",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10A",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10B",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10C",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10D",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10E",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10F",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10G",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10H",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10I",
+      "state" : "Available"
+    }, {
+      "seatID" : "E10J",
       "state" : "Available"
     } ]
   } ]
