@@ -101,12 +101,20 @@ public class tripController {
 		command.execute();
 	}
 
-	public void updatePrice() {
+	public void undoDeleteTrip(){
+		command.undo();
+	}
+
+	public void updatePrice(){
 		command.execute();
 	}
 
 	public void updateTrip() {
 		command.execute();
+	}
+
+	public void undoUpdateTrip(){
+		command.undo();
 	}
 
 }

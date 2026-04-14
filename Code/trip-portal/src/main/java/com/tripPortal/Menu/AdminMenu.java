@@ -750,6 +750,38 @@ public class AdminMenu {
         main.setPadding(new Insets(40));
         Label title = pageTitle("All Trips");
 
+        Button undoDeleteBtn = new Button("↩  Undo Delete");
+        undoDeleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+        + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        ObjectMapper historyMapper = new ObjectMapper();
+        File historyFile = new File("src/Database/tripDeleteHistory.json");
+        JsonNode historyRoot = null;
+        try {
+            historyRoot = historyMapper.readTree(historyFile);
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        Boolean history = historyRoot.size() > 0;
+        undoDeleteBtn.setVisible(history);
+
+
+        Button undoUpdateBtn = new Button("↩  Undo Update");
+        undoUpdateBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+        + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        ObjectMapper updateHistoryMapper = new ObjectMapper();
+        File updateHistoryFile = new File("src/Database/tripUpdateHistory.json");
+        JsonNode updateHistoryRoot = null;
+        try {
+            updateHistoryRoot = updateHistoryMapper.readTree(updateHistoryFile);
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        Boolean updateHistory = updateHistoryRoot.size() > 0;
+        undoUpdateBtn.setVisible(updateHistory);
+
+
         FlowPane grid = new FlowPane(14, 14);
         grid.setPadding(new Insets(4));
 
@@ -853,7 +885,25 @@ public class AdminMenu {
                     adminStation.notifyObservers("tripDeleted");
                     displayTrips(scene,"");
                 });
+                
+                undoDeleteBtn.setOnAction(undoDelete -> {
+                    
+                    deleteTripCommand deleteTripCommand = new deleteTripCommand();
+                    tripControllerForAdminMenu.setCommand(deleteTripCommand);
+                    tripControllerForAdminMenu.undoDeleteTrip();
+                    displayTrips(scene);
+                });
+
+                undoUpdateBtn.setOnAction(undoUpdate ->{
+                    editTripCommand editTripCommand = new editTripCommand();
+                    tripControllerForAdminMenu.setCommand(editTripCommand);
+                    tripControllerForAdminMenu.undoUpdateTrip();
+                    displayTrips(scene);
+                });
+
                 updateBtn.setOnAction(upd -> displayingTripsToUpdate(scene, trip));
+
+
 
                 HBox btnRow = new HBox(8, deleteBtn, updateBtn);
                 tc.getChildren().addAll(typeLbl, cityLbl, compLbl, dateLbl, seatsLbl, s, btnRow);
@@ -867,11 +917,10 @@ public class AdminMenu {
         scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-
         if (message != null && !message.isBlank())
-            main.getChildren().addAll(title, successBanner(message), scroll);
+            main.getChildren().addAll(title, successBanner(message), scroll, undoDeleteBtn, undoUpdateBtn);
         else
-            main.getChildren().addAll(title, scroll);
+            main.getChildren().addAll(title, scroll, undoDeleteBtn, undoUpdateBtn);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -1082,6 +1131,52 @@ public class AdminMenu {
 		 main.setPadding(new Insets(40));
 		 Label title = pageTitle("All Companies");
 
+        Button undoDeleteBtn = new Button("↩  Undo Delete");
+        undoDeleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+        + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        ObjectMapper deleteHistoryMapper = new ObjectMapper();
+        File deleteHistoryFile = new File("src/Database/companyDeleteHistory.json");
+        JsonNode deleteHistoryRoot = null;
+        try {
+            deleteHistoryRoot = deleteHistoryMapper.readTree(deleteHistoryFile);
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        Boolean deleteHistory = deleteHistoryRoot.size() > 0;
+        undoDeleteBtn.setVisible(deleteHistory);
+        undoDeleteBtn.setOnAction(undoDelete -> {
+            deleteCompanyCommand deleteCompanyCommand = new deleteCompanyCommand();
+            CompanyControllerForAdminMenu.setCommand(deleteCompanyCommand);
+            CompanyControllerForAdminMenu.undoDeleteCompany();
+            displayCompanies(scene);
+        });
+
+        
+
+        Button undoUpdateBtn = new Button("↩  Undo Update");
+        undoUpdateBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        File updateHistoryFile = new File("src/Database/companyUpdateNameHistory.json");
+        boolean updateHistory = false;
+        if (updateHistoryFile.exists() && updateHistoryFile.length() > 0) {
+            try {
+                JsonNode root = new ObjectMapper().readTree(updateHistoryFile);
+                updateHistory = root.size() > 0;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        undoUpdateBtn.setVisible(updateHistory);
+        undoUpdateBtn.setOnAction(undoUpdate -> {
+            editCompanyCommand editCompanyCommand = new editCompanyCommand();
+            CompanyControllerForAdminMenu.setCommand(editCompanyCommand);
+            CompanyControllerForAdminMenu.undoUpdateCompanyName();
+            displayCompanies(scene);
+        });
+
+
+
 		 FlowPane grid = new FlowPane(14, 14);
 		 grid.setPadding(new Insets(4));
 
@@ -1105,6 +1200,7 @@ public class AdminMenu {
                 Label tripsLbl  = new Label("Trips: " + node.path("Trips").size());
                 tripsLbl.setStyle("-fx-text-fill: " + C_MUTED + "; -fx-font-size: 11px;");
 
+            
 				Button deleteBtn = dangerBtn("🗑  Delete");
                 deleteBtn.setOnAction(del -> deleteCompany(scene, company));
 
@@ -1122,7 +1218,7 @@ public class AdminMenu {
 		 scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
 		 VBox.setVgrow(scroll, Priority.ALWAYS);
 
-		 main.getChildren().addAll(title, scroll);
+		 main.getChildren().addAll(title, scroll, undoDeleteBtn, undoUpdateBtn);
 		 scene.setRoot(buildShell(nav, main));
     }
 
@@ -1162,6 +1258,21 @@ public class AdminMenu {
         VBox main = new VBox(20);
         main.setPadding(new Insets(40));
         Label title = pageTitle("Edit: " + company.getName());
+
+
+        Button undoDeleteBtn = new Button("↩  Undo Delete");
+        undoDeleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        File deleteHistoryFile = new File("src/Database/tripDeleteHistory.json");
+        boolean deleteHistory = deleteHistoryFile.exists() && deleteHistoryFile.length() > 0;
+        undoDeleteBtn.setVisible(deleteHistory);
+        undoDeleteBtn.setOnAction(undoDelete -> {
+            deleteTripCommand deleteTripCommand = new deleteTripCommand();
+            tripControllerForAdminMenu.setCommand(deleteTripCommand);
+            tripControllerForAdminMenu.undoDeleteTrip();
+            displayCompanies(scene);
+        });
+
 
         // Rename card
         VBox renameCard = card(12);
@@ -1342,6 +1453,28 @@ public class AdminMenu {
         main.setPadding(new Insets(40));
         Label title = pageTitle("All Locations");
 
+        Button undoDeleteBtn = new Button("↩  Undo Delete");
+        undoDeleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        File locationDeleteHistoryFile = new File("src/Database/locationDeleteHistory.json");
+        boolean locationDeleteHistory = false;
+        if (locationDeleteHistoryFile.exists() && locationDeleteHistoryFile.length() > 0) {
+            try {
+                JsonNode root = new ObjectMapper().readTree(locationDeleteHistoryFile);
+                locationDeleteHistory = root.size() > 0;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        undoDeleteBtn.setVisible(locationDeleteHistory);
+
+        undoDeleteBtn.setOnAction(undoDelete -> {
+
+            deleteLocationCommand deleteLocationCommand = new deleteLocationCommand();
+            LocationControllerForAdminMenu.setCommand(deleteLocationCommand);
+            LocationControllerForAdminMenu.undoDeleteLocation();
+            displayLocations(scene);
+        });
         FlowPane grid = new FlowPane(14, 14);
         grid.setPadding(new Insets(4));
 
@@ -1399,7 +1532,7 @@ public class AdminMenu {
         scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        main.getChildren().addAll(title, scroll);
+        main.getChildren().addAll(title, scroll, undoDeleteBtn);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -1432,6 +1565,29 @@ public class AdminMenu {
         cityField.setPromptText("New city name");
         styleInput(cityField);
 
+        Button undoLocationUpdateBtn = new Button("↩  Undo Update");
+        undoLocationUpdateBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        File locationUpdateHistoryFile = new File("src/Database/locationUpdateHistory.json");
+        boolean locationUpdateHistory = false;
+        if (locationUpdateHistoryFile.exists() && locationUpdateHistoryFile.length() > 0) {
+            try {
+                JsonNode root = new ObjectMapper().readTree(locationUpdateHistoryFile);
+                locationUpdateHistory = root.size() > 0;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        undoLocationUpdateBtn.setVisible(locationUpdateHistory);
+
+        undoLocationUpdateBtn.setOnAction(undoLocationUpdate -> {
+            editLocationCommand editLocationCommand = new editLocationCommand(location);
+            LocationControllerForAdminMenu.setCommand(editLocationCommand);
+            LocationControllerForAdminMenu.undoUpdateLocation();
+            displayLocations(scene);
+        });
+
         Button saveBtn = actionBtn("  Save Changes  ");
         saveBtn.setOnAction(e -> {
             String newCity = cityField.getText();
@@ -1451,7 +1607,7 @@ public class AdminMenu {
             saveBtn
         );
 
-        main.getChildren().addAll(title, formCard);
+        main.getChildren().addAll(title, formCard,undoLocationUpdateBtn);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -1575,6 +1731,27 @@ public class AdminMenu {
         main.setPadding(new Insets(40));
         Label title = pageTitle("All Transports");
 
+        Button undoDeleteTransportsBtn = new Button("↩  Undo Delete");
+        undoDeleteTransportsBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
+                + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
+        File transportDeleteHistoryFile = new File("src/Database/transportDeleteHistory.json");
+        boolean transportDeleteHistory = false;
+        if (transportDeleteHistoryFile.exists() && transportDeleteHistoryFile.length() > 0) {
+            try {
+                JsonNode root = new ObjectMapper().readTree(transportDeleteHistoryFile);
+                transportDeleteHistory = root.size() > 0;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        undoDeleteTransportsBtn.setVisible(transportDeleteHistory);
+        undoDeleteTransportsBtn.setOnAction(undoDeleteTransport -> {
+            deleteTransportCommand deleteTransportCommand = new deleteTransportCommand();
+            TransportControllerForAdminMenu.setCommand(deleteTransportCommand);
+            TransportControllerForAdminMenu.undoDeleteTransport();
+            displayTransports(scene);
+        });
+
         FlowPane grid = new FlowPane(14, 14);
         grid.setPadding(new Insets(4));
 
@@ -1640,7 +1817,7 @@ public class AdminMenu {
         scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        main.getChildren().addAll(title, scroll);
+        main.getChildren().addAll(title, scroll, undoDeleteTransportsBtn);
         scene.setRoot(buildShell(nav, main));
     }
 
@@ -1684,56 +1861,6 @@ public class AdminMenu {
             deleteTransportCommand deleteTransportCommand = new deleteTransportCommand(transportToRemove);
             TransportControllerForAdminMenu.setCommand(deleteTransportCommand);
             TransportControllerForAdminMenu.deleteTransport();
-            // try {
-            //     ObjectMapper mapper = new ObjectMapper();
-
-            //     File transportFile = new File("src/Database/Transport.json");
-            //     ArrayNode transports = (ArrayNode) mapper.readTree(transportFile);
-            //     for (int i = 0; i < transports.size(); i++) {
-            //         if (transportId.equals(transports.get(i).path("transportID").asText())) {
-            //             transports.remove(i);
-            //             break;
-            //         }
-            //     }
-            //     mapper.writerWithDefaultPrettyPrinter().writeValue(transportFile, transports);
-
-            //     File tripFile = new File("src/Database/Trip.json");
-            //     ArrayNode trips = (ArrayNode) mapper.readTree(tripFile);
-            //     ArrayNode removedTripIds = mapper.createArrayNode();
-            //     for (int i = trips.size() - 1; i >= 0; i--) {
-            //         if (transportId.equals(trips.get(i).path("transport").asText())) {
-            //             removedTripIds.add(trips.get(i).path("id").asText());
-            //             trips.remove(i);
-            //         }
-            //     }
-            //     mapper.writerWithDefaultPrettyPrinter().writeValue(tripFile, trips);
-
-            //     if (removedTripIds.size() > 0) {
-            //         File companyFile = new File("src/Database/Company.json");
-            //         ArrayNode companies = (ArrayNode) mapper.readTree(companyFile);
-            //         for (JsonNode company : companies) {
-            //             if (!company.has("Trips")) {
-            //                 continue;
-            //             }
-            //             ArrayNode companyTrips = (ArrayNode) company.get("Trips");
-            //             for (int i = companyTrips.size() - 1; i >= 0; i--) {
-            //                 String tripId = companyTrips.get(i).asText();
-            //                 for (JsonNode removedId : removedTripIds) {
-            //                     if (removedId.asText().equals(tripId)) {
-            //                         companyTrips.remove(i);
-            //                         break;
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //         mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
-            //     }
-            // } catch (IOException ex) {
-            //     ex.printStackTrace();
-            //     showError("Unable to delete transport.");
-            //     return;
-            // }
-
             displayTransports(scene);
         });
     }

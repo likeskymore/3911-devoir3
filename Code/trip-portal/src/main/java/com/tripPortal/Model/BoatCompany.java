@@ -7,6 +7,10 @@ public class BoatCompany extends Company {
     public BoatCompany(String name) {
         super(name);
     }
+    public BoatCompany(){
+        super();
+		//this is for undo
+	}
 
     public BoatCompany(JsonNode node) {
         super(node.get("name").asText());

@@ -36,6 +36,11 @@ public abstract class Trip {
 
 	public Trip(String id) {
 		this.id = id;
+		// this one is for delete
+	}
+
+	public Trip(){
+		// this one is for undo delete
 	}
 
 	private String randomGenerateID(Company servicedBy) {
@@ -114,14 +119,18 @@ public abstract class Trip {
 		return tripDuration;
 	}
 
-	public void delete() throws IOException {
+	public void delete() throws IOException{
+
+		ObjectMapper historyMapper = new ObjectMapper();
+		File historyFile = new File("src/Database/tripDeleteHistory.json");
+
 		ObjectMapper displayMapper = new ObjectMapper();
 		File tripFile = new File("src/Database/Trip.json");
 		ArrayNode tripArray = (ArrayNode) displayMapper.readTree(tripFile);
 		for (int i = 0; i < tripArray.size(); i++) {
-			if (tripArray.get(i).get("id").asText().equals(this.id)) {
-				tripArray.remove(i);
-				break;
+			if (tripArray.get(i).get("id").asText().equals(this.id)) { 
+				historyMapper.writerWithDefaultPrettyPrinter().writeValue(historyFile, tripArray.get(i));
+				tripArray.remove(i); break; 
 			}
 		}
 		try {
@@ -143,9 +152,7 @@ public abstract class Trip {
 				}
 			}
 			cm.writerWithDefaultPrettyPrinter().writeValue(cf, ca);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		} catch (IOException ex) { ex.printStackTrace(); }
 	}
 
 	public void updatePrice(String newPrice) {
@@ -254,12 +261,17 @@ public abstract class Trip {
 				}
 			}
 
+			File historyFile = new File("src/Database/tripUpdateHistory.json");
+			mapper.writerWithDefaultPrettyPrinter().writeValue(historyFile, tripNode);
+
 			tripNode.put("company", newCompany);
 			tripNode.put("startDate", newDepartureTime.toString());
 			tripNode.put("endDate", newArrivalTime.toString());
 			tripNode.put("duration", (int) ChronoUnit.DAYS.between(newDepartureTime, newArrivalTime));
 			tripNode.put("price", newPrice);
 			tripNode.put("transport", newTransportId);
+
+			
 
 			if (!oldCompany.equals(newCompany)) {
 				updateCompanyTrips(companies, oldCompany, newCompany, this.id);
