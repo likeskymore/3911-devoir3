@@ -34,4 +34,16 @@
   "destination" : "AJT",
   "transport" : "571308",
   "active" : 1
+}, {
+  "type" : "Flight",
+  "id" : "LGGXUD",
+  "company" : "Air Canada Test",
+  "startDate" : "2026-04-09",
+  "endDate" : "2026-04-10",
+  "price" : 1.2212122E9,
+  "duration" : 1,
+  "origin" : "AJT",
+  "destination" : "ZBY",
+  "transport" : "383386",
+  "active" : 1
 } ]

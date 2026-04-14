@@ -1094,7 +1094,15 @@ public class AdminMenu {
         undoUpdateBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " 
                 + C_TEXT + "; -fx-border-color: " + C_BORDER + "; -fx-border-radius: 6; -fx-cursor: hand;");
         File updateHistoryFile = new File("src/Database/companyUpdateNameHistory.json");
-        boolean updateHistory = updateHistoryFile.exists() && updateHistoryFile.length() > 0;
+        boolean updateHistory = false;
+        if (updateHistoryFile.exists() && updateHistoryFile.length() > 0) {
+            try {
+                JsonNode root = new ObjectMapper().readTree(updateHistoryFile);
+                updateHistory = root.size() > 0;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         undoUpdateBtn.setVisible(updateHistory);
         undoUpdateBtn.setOnAction(undoUpdate -> {
             editCompanyCommand editCompanyCommand = new editCompanyCommand();
@@ -1391,6 +1399,7 @@ public class AdminMenu {
             deleteLocationCommand deleteLocationCommand = new deleteLocationCommand();
             LocationControllerForAdminMenu.setCommand(deleteLocationCommand);
             LocationControllerForAdminMenu.undoDeleteLocation();
+            displayLocations(scene);
         });
         FlowPane grid = new FlowPane(14, 14);
         grid.setPadding(new Insets(4));

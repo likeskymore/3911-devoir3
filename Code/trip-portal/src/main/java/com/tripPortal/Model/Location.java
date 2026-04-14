@@ -184,7 +184,7 @@ public abstract class Location {
 				mapper.writerWithDefaultPrettyPrinter().writeValue(companyFile, companies);
 			}
 
-			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/Database/locationDeleteHistory.json"), tripsFromCompany);
+			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/Database/locationDeleteHistory.json"), snapShot);
 
 			return;
 		} catch (IOException ex) {
