@@ -2,17 +2,24 @@ package com.tripPortal.Observateur;
 
 import java.util.ArrayList;
 
-public class AdminStation {
+import com.tripPortal.Menu.ClientMenu;
 
-	private ArrayList<Observer> observers;
+public class AdminStation implements Subject {
+
+	private ArrayList<Observer> observers = new ArrayList<>();
+	private final ClientMenu clientMenu;
+	private String event;
+
+    public AdminStation(ClientMenu clientMenu) {
+        this.clientMenu = clientMenu;
+    }
 
 	/**
 	 * 
 	 * @param o
 	 */
 	public void addObserver(Observer o) {
-		// TODO - implement AdminStation.addObserver
-		throw new UnsupportedOperationException();
+		observers.add(o);
 	}
 
 	/**
@@ -20,17 +27,19 @@ public class AdminStation {
 	 * @param o
 	 */
 	public void removeObserver(Observer o) {
-		// TODO - implement AdminStation.removeObserver
-		throw new UnsupportedOperationException();
+		observers.remove(o);
 	}
 
-	/**
-	 * 
-	 * @param oList
-	 */
-	public void notifyObservers(ArrayList<Observer> oList) {
-		// TODO - implement AdminStation.notifyObservers
-		throw new UnsupportedOperationException();
+    public void notifyObservers(String event) {
+        for (Observer o : observers) o.update(event);
+    }
+
+	public String getUpdate(Observer obj) {
+		return this.event;
+	}
+
+	public ClientMenu getClientMenu() {
+		return clientMenu;
 	}
 
 }

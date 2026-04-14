@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.tripPortal.Mediateur.reservationController;
 import com.tripPortal.Mediateur.tripController;
 import com.tripPortal.Model.Reservation;
+import com.tripPortal.Observateur.ClientStation;
 import com.tripPortal.Visiteur.ConcreteCruiseLineVisitor;
 import com.tripPortal.Visiteur.ConcreteFlightVisitor;
 import com.tripPortal.Visiteur.ConcreteRouteVisitor;
@@ -49,6 +50,9 @@ public class ClientMenu {
 
     private tripController        tripControllerForClientMenu;
     private reservationController reservationControllerForClientMenu;
+    private ClientStation clientStation;
+    private String currentPage;
+    private Scene currentScene;
 
     // ═══════════════════════════════════════════════════════════════
     // ENTRY POINT
@@ -56,6 +60,7 @@ public class ClientMenu {
     public void start(Stage stage) {
         Stage newStage = new Stage();
         Scene scene = new Scene(new VBox(), 900, 600);
+        this.currentScene = scene;
         displayMenuClient(scene);
         newStage.setTitle("TripPortal — Client");
         newStage.setScene(scene);
@@ -207,6 +212,8 @@ public class ClientMenu {
     // MAIN MENU  — dashboard with quick-action cards
     // ═══════════════════════════════════════════════════════════════
     public void displayMenuClient(Scene scene) {
+        this.currentScene = scene;
+        this.currentPage = "dashboard";
 		 VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 
@@ -287,6 +294,8 @@ public class ClientMenu {
     // PROFILE / RESERVATIONS
     // ═══════════════════════════════════════════════════════════════
 	public void displayProfileMenu(Scene scene) {
+		this.currentScene = scene;
+        this.currentPage = "profile";
 		VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 
@@ -423,6 +432,8 @@ public class ClientMenu {
     // BROWSE / RESERVE TRIPS
     // ═══════════════════════════════════════════════════════════════
     public void displayReserveMenu(Scene scene, String message) {
+		this.currentScene = scene;
+        this.currentPage = "reserve";
 		VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 
@@ -506,6 +517,8 @@ public class ClientMenu {
     // SEAT SELECTION
     // ═══════════════════════════════════════════════════════════════
     public void displayAvailableSeats(Scene scene, JsonNode tripNode) {
+        this.currentScene = scene;
+        this.currentPage = "seats";
         VBox nav = new VBox(2);
 		nav.setPadding(new Insets(12, 0, 0, 0));
 
@@ -608,8 +621,11 @@ public class ClientMenu {
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // SETTERS
+    // SETTERS / GETTERS
     // ═══════════════════════════════════════════════════════════════
     public void setTripControllerForClientMenu(tripController t)               { this.tripControllerForClientMenu = t; }
     public void setReservationControllerForClientMenu(reservationController r) { this.reservationControllerForClientMenu = r; }
+    public void setClientStation(ClientStation s) { this.clientStation = s; }
+    public String getCurrentPage() { return currentPage; }
+    public Scene getCurrentScene() { return currentScene; }
 }
