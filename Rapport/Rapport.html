@@ -1110,7 +1110,8 @@
 
                 <li>Suppression du paquet « loginMenu ». Lors de l’implémentation, nous avons constaté dans les
                     consignes du bonus que plusieurs menus client et admin pouvaient être ouverts simultanément. Nous
-                    avons donc déduit qu’un système de comptes utilisateurs n’était pas nécessaire, et que tout devait être
+                    avons donc déduit qu’un système de comptes utilisateurs n’était pas nécessaire, et que tout devait
+                    être
                     centralisé avec seulement deux comptes un client et un administrateur.</li>
 
 
@@ -1124,7 +1125,8 @@
 
             <h3 class="subsection-title" id="Justification">Discussion et justification de la qualité du design</h3>
             <p>
-                Avec l'introduction des patrons de conceptions dans notre projet, nous avons pu améliorer la qualité de notre design.
+                Avec l'introduction des patrons de conceptions dans notre projet, nous avons pu améliorer la qualité de
+                notre design.
                 En effet, les patrons de conception nous ont permis de résoudre des problèmes de conception récurrents
                 de manière efficace et élégante, tout en respectant les principes SOLID.
                 Cette approche a transformé l'architecture de nos couches logicielles, nous permettant d'évoluer d'une
@@ -1163,11 +1165,10 @@
                     implémentations concrètes.
                     De plus, il favorise le CRP en regroupant les comportements liés aux états dans un module cohérent
                     et faiblement couplé.</li>
-                <li><strong>Observateur: </strong>L'utilisation du patron d'Observateur introduit un mécanisme de
-                    notification pour les utilisateurs ce qui n'a pas existé dans notre design auparavant,
-                    ca respecte aussi le principe de conception DIP en permettant des dépendances vers des abstractions,
-                    et le principe OCP grâce à la possibilité d'ajouter de nouveaux observateurs sans modifier le sujet.
-                </li>
+                <li><strong>Observateur : </strong>L’utilisation du patron Observateur introduit un mécanisme de
+                    notification pour les utilisateurs, qui n’était pas présent dans notre conception initiale. Cela
+                    respecte le principe DIP en favorisant des dépendances vers des abstractions, ainsi que le principe
+                    OCP, puisqu’il est possible d’ajouter de nouveaux observateurs sans modifier le sujet.</li>
                 <li><strong>Commande:</strong> En utilisant le patron de conception Commande, nous améliorons
                     l’encapsulation en séparant clairement les responsabilités entre les objets qui invoquent les
                     actions et ceux qui les exécutent. Cela permet également de
@@ -1181,7 +1182,7 @@
                     en complément du patron Commande (les deux étant étroitement liés). Le Mémento permet de sauvegarder
                     l’état d’un objet à un moment donné, ce qui facilite la gestion d’un historique des actions. Ainsi,
                     on peut facilement revenir en arrière lorsqu’une modification non désirée est effectuée.
-                    </li>
+                </li>
                 <li><strong>Visiteur: </strong> Le patron Visiteur permet de séparer les algorithmes de parcours
                     (traversal) des objets sur lesquels ils opèrent. Il contribue ainsi au respect du principe
                     ouvert/fermé (OCP),
@@ -1219,8 +1220,8 @@
             <h3 class="subsection-title" id="Implementation">Implémentation</h3>
             <div>
                 <p>
-                    Pour exécuter le projet, lisez le README. Le code de notre projet est disponible dans le repertoir Code <a href="../Code"
-                        target="_blank">ici</a>. 
+                    Pour exécuter le projet, lisez le README. Le code de notre projet est disponible dans le repertoir
+                    Code <a href="../Code" target="_blank">ici</a>.
                 <p>
                     Note : Nous avons utilisé des outils d’intelligence artificielle pour certaines parties de cette
                     section,
