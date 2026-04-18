@@ -1091,7 +1091,7 @@
 
             <p>Quelques modifications a notre diagramme de paquet :</p>
             <ul>
-                <li>Ajout d’un paquet « Commande » pour regrouper les classes Commande, appelées par le contrôleur Trip,
+                <li>Ajout d’un paquet « Commande » pour regrouper les classes Commande, appelées par le TripController,
                     qui exécute ensuite les actions sur les modèles. (d’où la
                     connexion avec le paquet TripController)</li>
                 <li>Ajout d’un paquet « Observateur » pour regrouper les classes observateur, appelées par tous les
@@ -1109,8 +1109,8 @@
                     connexion avec le paquet transport).</li>
 
                 <li>Suppression du paquet « loginMenu ». Lors de l’implémentation, nous avons constaté dans les
-                    consignes du bonus que plusieurs menus client et admin pouvaient être ouverts simultanément. Nous en
-                    avons donc déduit qu’aucun système de comptes utilisateurs n’était requis et que tout devait être
+                    consignes du bonus que plusieurs menus client et admin pouvaient être ouverts simultanément. Nous
+                    avons donc déduit qu’un système de comptes utilisateurs n’était pas nécessaire, et que tout devait être
                     centralisé avec seulement deux comptes un client et un administrateur.</li>
 
 
@@ -1124,9 +1124,7 @@
 
             <h3 class="subsection-title" id="Justification">Discussion et justification de la qualité du design</h3>
             <p>
-                <strong>Discussion du couplage et de la cohésion des modules</strong>
-                Avec l introduction des patrons de conceptions dans notre projet, nous avons pu améliorer
-                significativement la qualité de notre design.
+                Avec l'introduction des patrons de conceptions dans notre projet, nous avons pu améliorer la qualité de notre design.
                 En effet, les patrons de conception nous ont permis de résoudre des problèmes de conception récurrents
                 de manière efficace et élégante, tout en respectant les principes SOLID.
                 Cette approche a transformé l'architecture de nos couches logicielles, nous permettant d'évoluer d'une
@@ -1155,8 +1153,6 @@
                     identifiant unique pour les entités, par exemple).
                     En associant un Singleton à chaque fabrique, nous centralisons les responsabilités de création, ce
                     qui améliore la cohésion des classes concernées.
-                    De plus, ce patron fournit un point d’accès global et contrôlé à ces ressources, ce qui simplifie la
-                    gestion de l’état partagé et réduit les risques d’incohérence.
 
                 </li>
 
@@ -1185,10 +1181,7 @@
                     en complément du patron Commande (les deux étant étroitement liés). Le Mémento permet de sauvegarder
                     l’état d’un objet à un moment donné, ce qui facilite la gestion d’un historique des actions. Ainsi,
                     on peut facilement revenir en arrière lorsqu’une modification non désirée est effectuée.
-                    Ce patron présente quelques avantages : Il permet de restaurer un objet à un état précédent sans
-                    avoir à rejouer toutes les opérations une par une.
-                    Il évite d'exposer ou de rendre publiques les données internes de l’objet pour permettre le retour
-                    en arrière (bonne pratique objet orienté).</li>
+                    </li>
                 <li><strong>Visiteur: </strong> Le patron Visiteur permet de séparer les algorithmes de parcours
                     (traversal) des objets sur lesquels ils opèrent. Il contribue ainsi au respect du principe
                     ouvert/fermé (OCP),
@@ -1202,7 +1195,6 @@
                     respect du principe d’inversion des dépendances (DIP). En effet, les classes dépendent désormais
                     d’abstractions, telles que des interfaces définissant les méthodes d’acceptation des visiteurs,
                     plutôt que d’implémentations concrètes.
-
                 </li>
                 <li><strong>Médiateur: </strong>Le patron Médiateur est un modèle que nous avions en partie déjà
                     appliqué dans nos devoirs précédents à travers la structure MVC de notre diagramme.
