@@ -1,16 +1,81 @@
 [ {
   "type" : "Airport",
-  "id" : "YSJ",
-  "city" : "Montreal Airport",
-  "name" : "Montreal"
+  "id" : "WWH",
+  "city" : "New York",
+  "name" : "LaGuardia Airport"
 }, {
   "type" : "Airport",
-  "id" : "ECS",
+  "id" : "UFQ",
   "city" : "Paris",
-  "name" : "Air Paris"
+  "name" : "Paris Charles de Gaulle Airport"
+}, {
+  "type" : "Airport",
+  "id" : "FRN",
+  "city" : "Beijing",
+  "name" : "Beijing Capital International Airport"
+}, {
+  "type" : "Airport",
+  "id" : "JKU",
+  "city" : "Hanoi",
+  "name" : "Noi Bai International Airport"
+}, {
+  "type" : "Airport",
+  "id" : "OYU",
+  "city" : "Melbourne",
+  "name" : "Melbourne Airport"
 }, {
   "type" : "Port",
-  "id" : "OFF",
-  "city" : "Norwgian Cruise",
-  "name" : "Europe"
+  "id" : "TYB",
+  "city" : "Florida",
+  "name" : "Port Canaveral"
+}, {
+  "type" : "Port",
+  "id" : "TEY",
+  "city" : "Miami",
+  "name" : "Port Miami"
+}, {
+  "type" : "Port",
+  "id" : "IJG",
+  "city" : "Bergen",
+  "name" : "Port of Bergen"
+}, {
+  "type" : "Port",
+  "id" : "IAP",
+  "city" : "St. Thomas",
+  "name" : "St. Thomas"
+}, {
+  "type" : "Port",
+  "id" : "PCB",
+  "city" : "San Juan",
+  "name" : "San Juan"
+}, {
+  "type" : "Port",
+  "id" : "FAP",
+  "city" : "St. Maarten",
+  "name" : "St. Maarten"
+}, {
+  "type" : "TrainStation",
+  "id" : "LTP",
+  "city" : "Toronto",
+  "name" : "Union Station in Toronto"
+}, {
+  "type" : "TrainStation",
+  "id" : "QZH",
+  "city" : "Vancouver",
+  "name" : "Pacific Central Station"
+}, {
+  "type" : "TrainStation",
+  "id" : "RQE",
+  "city" : "Montreal Central Station",
+  "name" : "Montreal"
+}, {
+  "type" : "TrainStation",
+  "id" : "ZTL",
+  "city" : "Halifax",
+  "name" : "Halifax Station"
+}, {
+  "type" : "Airport",
+  "id" : "KSN",
+  "city" : "Montréal",
+  "name" : "Montréal-Trudeau International Airport"
 } ]

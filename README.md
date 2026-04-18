@@ -49,5 +49,5 @@ cd devoir3_3911/Code/trip-portal
 3. Lancez l'application avec Maven :
 
 ```bash
-mvn javafx:run
+mvn clean javafx:run
 ```

@@ -1,37 +1,55 @@
 [ {
   "type" : "FlightCompany",
-  "id" : "VWFDY",
-  "name" : "United Airline",
-  "tripId" : "MB",
-  "Trips" : [ ]
+  "id" : "JFWRE",
+  "name" : "Air Canada",
+  "tripId" : "YX",
+  "Trips" : [ "YXRVOJ", "YXILJN" ]
 }, {
   "type" : "FlightCompany",
-  "id" : "BVUSF",
-  "name" : "Air Belgium",
-  "tripId" : "IL",
+  "id" : "QNBKX",
+  "name" : "United Airline",
+  "tripId" : "KW",
+  "Trips" : [ "KWNSYI" ]
+}, {
+  "type" : "FlightCompany",
+  "id" : "DUWIM",
+  "name" : "WestJet",
+  "tripId" : "ZC",
   "Trips" : [ ]
 }, {
   "type" : "BoatCompany",
-  "id" : "KAIAC",
-  "name" : "Air China",
-  "tripId" : "IU",
+  "id" : "RLVNF",
+  "name" : "Royal Caribbean Group",
+  "tripId" : "HF",
+  "Trips" : [ "HFJMON", "HFZFDH" ]
+}, {
+  "type" : "BoatCompany",
+  "id" : "LFOGX",
+  "name" : "MSC Cruises",
+  "tripId" : "PY",
   "Trips" : [ ]
+}, {
+  "type" : "BoatCompany",
+  "id" : "VFASS",
+  "name" : "Norwegian Cruise Line",
+  "tripId" : "OZ",
+  "Trips" : [ "OZIEKO" ]
 }, {
   "type" : "TrainCompany",
-  "id" : "ELTMD",
-  "name" : "REM",
-  "tripId" : "GW",
-  "Trips" : [ ]
+  "id" : "ZIYWM",
+  "name" : "VIA Rail Canada",
+  "tripId" : "NO",
+  "Trips" : [ "NOLFKD", "NODZTU" ]
 }, {
-  "type" : "FlightCompany",
-  "id" : "ULJHI",
-  "name" : "Air France",
-  "tripId" : "OK",
-  "Trips" : [ ]
+  "type" : "TrainCompany",
+  "id" : "CQQRN",
+  "name" : "Canadian National Railway",
+  "tripId" : "JI",
+  "Trips" : [ "JIKFYF" ]
 }, {
-  "type" : "FlightCompany",
-  "id" : "BMLEX",
-  "name" : "Air Finland",
-  "tripId" : "WZ",
-  "Trips" : [ "WZOSJU" ]
+  "type" : "TrainCompany",
+  "id" : "XBXKI",
+  "name" : "Amtrak",
+  "tripId" : "LR",
+  "Trips" : [ ]
 } ]

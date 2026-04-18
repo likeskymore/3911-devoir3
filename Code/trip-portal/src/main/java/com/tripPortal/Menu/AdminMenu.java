@@ -1635,6 +1635,9 @@ public class AdminMenu {
             String newCity = cityField.getText();
             String newName = nameField.getText();
 
+            if (newCity.isBlank()) { showError("City cannot be empty."); return; }
+            if (newName.isBlank()) { showError("Name cannot be empty."); return; }
+
             editLocationCommand updateLocationCommand = new editLocationCommand(location, newName, newCity);
             LocationControllerForAdminMenu.setCommand(updateLocationCommand);
             LocationControllerForAdminMenu.updateLocation();
