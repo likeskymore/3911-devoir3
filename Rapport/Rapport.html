@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IFT3911 | Rapport 2</title>
+    <title>IFT3911 | Rapport 3</title>
     <link rel="shortcut icon" href="./../favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <style>
@@ -752,7 +752,7 @@
                 <p>Ce troisième rapport s’articule autour de cinquième axes majeurs :</p>
 
                 <ul>
-                    <li> L'importance des patrons de conception à travers l'implémentation de 6 patrons requis</li>
+                    <li> L'implémentation de 6 patrons requis</li>
                     <li> L'implémentation de 2 patrons de conception au choix</li>
                     <li> La création d'un diagramme de paquets pour illustrer l'architecture du projet</li>
                     <li> Une discussion approfondie sur la qualité du design, mettant en lumière les améliorations
@@ -1017,7 +1017,6 @@
                 <a href="../Rapport/Assets/EtatClass.svg"><img src="../Rapport/Assets/EtatClass.svg" alt="Patron État"
                         id="EtatClass" /></a>
                 <br>
-                <p>Diagramme de séquence pour simuler les 3 états de <b>Seat</b></p>
                 <a href="../Rapport/Assets/EtatSequence.svg"><img src="../Rapport/Assets/EtatSequence.svg"
                         alt="Patron État" id="EtatSequence" /></a>
             </div>
@@ -1028,7 +1027,6 @@
                 <a href="../Rapport/Assets/ObservateurClass.svg"><img src="../Rapport/Assets/ObservateurClass.svg"
                         alt="Patron Observateur" id="ObservateurClass" /></a>
                 <br>
-                <p>Diagramme de séquence pour la simulation de l'observateur lors qu'un événement se produit</p>
                 <a href="../Rapport/Assets/ObservateurSequence.svg"><img src="../Rapport/Assets/ObservateurSequence.svg"
                         alt="Patron Observateur" id="ObservateurSequence" /></a>
 
@@ -1043,7 +1041,7 @@
                 <p class="text-red-500">Nous avons conçu plusieurs diagrammes de séquence pour illustrer l'utilisation
                     du patron Commande, mais aussi du patron Memento, car dans l'énoncé on parle de la fonctionnalité
                     undo.</p>
-                <h3 id="CommandeSequence">Commande pour toutes les fonctionnalités trips/location/company</h3>
+                <p>Commande pour toutes les fonctionnalités trips/location/company</p>
                 <a href="../Rapport/Assets/CommandeSeq1.svg"><img src="../Rapport/Assets/CommandeSeq1.svg"
                         alt="Patron Commande" id="CommandeSeq1" /></a>
                 <p>Commande pour l’ajustement de prix</p>
@@ -1088,6 +1086,41 @@
             </div>
 
             <h3 class="subsection-title" id="Paquets">Diagramme de Paquets</h3>
+
+            <img src="../Rapport/Assets/DiagrammePaquet.svg" alt="Diagramme de Paquets" id="Paquets" width="100%" />
+
+            <p>Quelques modifications a notre diagramme de paquet :</p>
+            <ul>
+                <li>Ajout d’un paquet « Commande » pour regrouper les classes Commande, appelées par le contrôleur Trip,
+                    qui exécute ensuite les actions sur les modèles. (d’où la
+                    connexion avec le paquet TripController)</li>
+                <li>Ajout d’un paquet « Observateur » pour regrouper les classes observateur, appelées par tous les
+                    contrôleurs afin de synchroniser les changements dans les menus client et admin de notre système.
+                </li>
+                <li>Ajout d’un paquet « Visiteur » pour regrouper les classes liées au patron de conception Visiteur.
+                    Dans notre projet, le visiteur est utilisé pour parcourir les trips afin de les formater
+                    correctement pour l’affichage demandé dans le menu client (d’où la connexion avec UserMenu).</li>
+                <li>Ajout d’un paquet « Factory » pour regrouper les classes liées au patron de conception Factory. Ces
+                    classes sont responsables de la création des instances d’objets, ce qui permet de centraliser la
+                    logique de création. Dans notre projet, on y crée les différentes classes de trips, locations et
+                    compagnies (d’où la connexion avec ces trois paquets).</li>
+                <li>Ajout d’un paquet « État » pour regrouper les classes liées au patron de conception État. Ces
+                    classes sont responsables de la gestion des différents états des sièges, dans notre projet (d’où la
+                    connexion avec le paquet transport).</li>
+
+                <li>Suppression du paquet « loginMenu ». Lors de l’implémentation, nous avons constaté dans les
+                    consignes du bonus que plusieurs menus client et admin pouvaient être ouverts simultanément. Nous en
+                    avons donc déduit qu’aucun système de comptes utilisateurs n’était requis et que tout devait être
+                    centralisé avec seulement deux comptes un client et un administrateur.</li>
+
+
+                <li>Suppression du paquet « SystemController », qui assurait la gestion des comptes, puisque le système
+                    ne comporte plus de comptes utilisateurs.</li>
+            </ul>
+
+            <p>Nous n’avons pas créé un paquet pour chaque patron de conception : le Singleton est intégré à la fabrique,
+            les Médiateurs sont les contrôleurs eux-mêmes, et le Prototype est utilisé dans le modèle Transport.</p>
+
             <h3 class="subsection-title" id="Justification">Discussion et justification de la qualité du design</h3>
             <p>
                 <strong>Discussion du couplage et de la cohésion des modules</strong>
@@ -1215,7 +1248,8 @@
                     d’éléments inutiles. Nous avons donc effectué quelques ajustements pour conserver une structure
                     cohérente et efficace. Par ailleurs, les patrons ont été répartis dans différents
                     packages/répertoires afin de maintenir une bonne organisation (à l’exception du singleton, intégré
-                    dans les fonctions de fabrique concrètes, et du prototype, qui a été implémenté dans le model Transport).
+                    dans les fonctions de fabrique concrètes, et du prototype, qui a été implémenté dans le model
+                    Transport).
 
                     <a href="../Rapport/Assets/FinalDiagram.svg">clique ici</a>
                     <img src="../Rapport/Assets/finalDiagram.png" alt="Diagramme de classes final"
